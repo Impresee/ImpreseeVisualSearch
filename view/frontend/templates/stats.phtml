@@ -1,0 +1,14 @@
+<script type="text/javascript">
+require(["jquery"], function($){
+    var rankData = <?php echo $block->dataToJavascript()?>;
+    var type = rankData["type"];
+    //to send stats when someone click on a product
+    $('.item').click(function(){
+        var url = $(this).find("a").attr("href");
+        var ranking = rankData[url];
+        if (typeof ranking !== "undefined" ){
+          sendClick(type, ranking);
+        }
+    })
+});
+</script>

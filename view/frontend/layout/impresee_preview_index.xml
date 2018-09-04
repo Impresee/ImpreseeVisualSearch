@@ -1,0 +1,12 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Preview</title>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Impresee\ImpreseeVisualSearch\Block\PreviewBlock" name="preview" as="preview" template="Impresee_ImpreseeVisualSearch::preview.phtml">
+            </block>
+        </referenceContainer>
+    </body>
+</page>

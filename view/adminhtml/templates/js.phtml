@@ -1,0 +1,20 @@
+<script type="text/javascript">
+    require(
+        ['jquery'],
+        function($) {
+            $(function() {
+                $("#impresee-copy-url").click( function(){
+                  var textArea = document.createElement("textarea");
+                  textArea.value = $("#impresee-data-url").text();
+                  document.body.appendChild(textArea);
+                  textArea.select();
+                  try {
+                    var successful = document.execCommand('copy');
+                    var msg = successful ? 'successful' : 'unsuccessful';
+                  } catch (err) {
+                  }
+                  document.body.removeChild(textArea);
+                });
+            })
+        });
+</script>

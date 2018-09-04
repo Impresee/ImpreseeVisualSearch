@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="orand" translate="label" sortOrder="10">
+            <label>Impresee</label>
+        </tab>
+        <section id="impresee" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Impresee Search Engine</label>
+            <tab>orand</tab>
+            <resource>Impresee_ImpreseeVisualSearch::config</resource>
+            <group id="header" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Info</label>
+                <field id="header" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\Header</frontend_model>
+                </field>
+            </group>
+            <group id="datasource" translate="label" type="text" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
+                <label>Instructions</label>
+                <field id="datafeed_comment" translate="label" type="text" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\DatafeedComment</frontend_model>
+                </field>
+            </group>
+            <group id="general" translate="label" type="text" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
+                <label>Search Configuration</label>
+                <field id="enable_photo" translate="label" type="select" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Photo Search</label>
+                    <comment>Enable/Disable Photo Search (enable it when you have your search service URL).</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+                <field id="photo_url" translate="label" type="text" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Photo search service URL</label>
+                    <comment>URL given by Impresee to search by photo (If left blank the search by photo button won't show).</comment>
+                    <depends>
+                        <field id="enable_photo">1</field>
+                    </depends>
+                </field>
+                <field id="enable_sketch" translate="label" type="select" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Sketch Search</label>
+                    <comment>Enable/Disable Sketch Search (enable it when you have your search service URL).</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+                <field id="sketch_url" translate="label" type="text" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Sketch search service URL</label>
+                    <comment>URL given by Impresee to search by sketch (If left blank the search by sketch button won't show).</comment>
+                    <depends>
+                        <field id="enable_sketch">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="icons" translate="label" type="text" sortOrder="3" showInDefault="0" showInWebsite="0" showInStore="1">
+                <label>Icons</label>
+                <field id="module_set_buttons" translate="label" type="select" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Let Impresee display the search buttons</label>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+                <field id="icon_provider" translate="label" type="select" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Select Icons Source</label>
+                    <comment>You can choose to use Impresee buttons catalog, or upload your own icon images</comment>
+                    <source_model>Impresee\ImpreseeVisualSearch\Model\Config\DisplayButtonOption</source_model>
+                    <depends>
+                        <field id="module_set_buttons">1</field>
+                    </depends>
+                </field>
+                <field id="photo_icon_name" translate="label" type="text" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Photo Icon Name</label>
+                    <comment>
+                      <![CDATA[Write here the name of the search icon you'd like to use. The list of available names can be found on <a href="https://www.impresee.com/icons">https://www.impresee.com/icons</a> (default sketch1).]]>
+                    </comment>
+                    <depends>
+                        <field id="module_set_buttons">1</field>
+                        <field id="icon_provider">1</field>
+                    </depends>
+                </field>
+                <field id="sketch_icon_name" translate="label" type="text" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Sketch Icon Name</label>
+                    <comment>
+                      <![CDATA[Write here the name of the search icon you'd like to use. The list of available names can be found on <a href="https://www.impresee.com/icons">https://www.impresee.com/icons</a> (default sketch1).]]>
+                    </comment>
+                    <depends>
+                        <field id="module_set_buttons">1</field>
+                        <field id="icon_provider">1</field>
+                    </depends>
+                </field>
+                <field id="photo_icon" translate="label" type="image" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Search by Photo Icon</label>
+                    <backend_model>Impresee\ImpreseeVisualSearch\Model\Config\Image</backend_model>
+                    <upload_dir config="system/filesystem/media/" scope_info="1">icons</upload_dir>
+                    <base_url type="media" scope_info="1">icons</base_url>
+                    <comment><![CDATA[Allowed file types: jpeg, gif, png, svg.]]></comment>
+                    <depends>
+                        <field id="module_set_buttons">1</field>
+                        <field id="icon_provider">0</field>
+                    </depends>
+                </field>
+                <field id="sketch_icon" translate="label" type="image" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Search by Sketch Icon</label>
+                    <backend_model>Impresee\ImpreseeVisualSearch\Model\Config\Image</backend_model>
+                    <upload_dir config="system/filesystem/media/" scope_info="1">icons</upload_dir>
+                    <base_url type="media" scope_info="1">icons</base_url>
+                    <comment><![CDATA[Allowed file types: jpeg, gif, png, svg.]]></comment>
+                    <depends>
+                        <field id="module_set_buttons">1</field>
+                        <field id="icon_provider">0</field>
+                    </depends>
+                </field>
+                <field id="icons_comment" translate="label" type="text" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\IconsExample</frontend_model>
+                </field>
+                <field id="icons_remember_label" translate="label" type="label" sortOrder="3" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Remember:</label>
+                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\RememberIconHelp</frontend_model>
+                    <depends>
+                        <field id="module_set_buttons">0</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="frontend" translate="label" type="text" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
+                <label>Frontend (Optional - Advanced Users)</label>
+                <field id="javascript_comment" translate="label" type="text" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\JavascriptComment</frontend_model>
+                </field>
+                <field id="javacode" translate="label" type="textarea" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Javascript/Jquery</label>
+                    <comment>
+                      If you need to change the behavior of the buttons (e.g. move it to somewhere else), code it here!. This code will be executed on-load and on-resize.
+                    </comment>
+                </field>
+                <field id="classes" translate="label" type="text" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>CSS Classes</label>
+                    <comment>
+If you have CSS classes that you want to use in the buttons, add them here! or add new ones, but don't forget to define them below.
+                    </comment>
+                </field>
+                <field id="styles" translate="label" type="textarea" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>CSS</label>
+                    <comment>Add CSS code here!</comment>
+                </field>
+            </group>
+            <group id="help" translate="label" type="text" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
+                <label>Need Help?</label>
+                <field id="help" translate="label" type="text" sortOrder="10" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\JavascriptFinalComment</frontend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

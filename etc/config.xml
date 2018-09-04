@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+     <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+        <default>
+            <impresee>
+                <general>
+                    <enable_sketch>0</enable_sketch>
+                    <enable_photo>0</enable_photo>
+                </general>
+                <icons>
+                  <module_set_buttons>1</module_set_buttons>
+                </icons>
+            </impresee>
+        </default>
+    </config>

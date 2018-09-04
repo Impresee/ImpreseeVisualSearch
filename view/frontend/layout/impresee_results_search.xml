@@ -1,0 +1,26 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Search results</title>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Impresee\ImpreseeVisualSearch\Block\ResultBlock" name="impresee.products.list"
+              as="product_list" template="Magento_Catalog::product/list.phtml">
+                <block class="Impresee\ImpreseeVisualSearch\Block\SendStatistics" name="send.stats" as="send_stats" template="Impresee_ImpreseeVisualSearch::sendClicks.phtml"/>
+                <container name="category.product.list.additional" as="additional" />
+                <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="Magento_Catalog::product/list/toolbar.phtml">
+                    <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
+                </block>
+                <action method="setToolbarBlockName">
+                    <argument name="name" xsi:type="string">product_list_toolbar</argument>
+                </action>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="sidebar.additional">
+            <block class="Impresee\ImpreseeVisualSearch\Block\QueryImage" template="Impresee_ImpreseeVisualSearch::searchQuery.phtml" name="queryImage"/>
+            <block class="Impresee\ImpreseeVisualSearch\Block\SendStatistics" template="Impresee_ImpreseeVisualSearch::stats.phtml" name="impreseeStats"/>
+        </referenceContainer>
+        <move element="queryImage"  destination="sidebar.additional" before="-"/>
+    </body>
+</page>

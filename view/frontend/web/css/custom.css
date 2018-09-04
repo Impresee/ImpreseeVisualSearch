@@ -1,0 +1,17 @@
+.impreseeButton{
+    height:30px!important;
+    opacity: 0.5;
+    cursor: pointer;
+    float:left;
+}
+
+.impreseeButton:hover{opacity: 1;}
+.modal-inner-wrap{max-height: 100%!important}
+.modal-content{ text-align: center; padding:0!important; display: table;}
+.modal-footer{  text-align: center!important; max-height: 10%}
+.jcropClass{display: table-cell;vertical-align: middle;}
+
+.powered-by-logo{
+  width:100px!important;
+  margin-top: 2%;
+}
