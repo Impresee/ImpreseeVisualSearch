@@ -2,20 +2,20 @@
 /**
  *  Makes a product collection with the products of a Impresee serarch results
  */
-namespace Impresee\ImpreseeVisualSearch\Model;
+namespace ImpreseeAI\ImpreseeVisualSearch\Model;
 
-use Impresee\ImpreseeVisualSearch\Model\Products as ProductCollection;
+use ImpreseeAI\ImpreseeVisualSearch\Model\Products as ProductCollection;
 
 class MakeCollection
 {
   /**
    * Collection of products
-   * @var Impresee\ImpreseeVisualSearch\Model\Products
+   * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
    */
     protected $_productCollection;
   /**
    * Constructor
-   * @param Impresee\ImpreseeVisualSearch\Model\Products
+   * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products
    */
     public function __construct(ProductCollection $productCollection)
     {

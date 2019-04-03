@@ -2,7 +2,7 @@
 /**
  *   Usefull to preview changes added on config
  */
-namespace Impresee\ImpreseeVisualSearch\Block;
+namespace ImpreseeAI\ImpreseeVisualSearch\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;

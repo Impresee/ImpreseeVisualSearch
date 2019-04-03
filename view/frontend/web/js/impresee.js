@@ -2,8 +2,8 @@ var impreseeCropping = true;
 require([
     "jquery",
     'Magento_Ui/js/modal/modal',
-    'Impresee_ImpreseeVisualSearch/js/canvas',
-    'Impresee_ImpreseeVisualSearch/js/photo',
+    'ImpreseeAI_ImpreseeVisualSearch/js/canvas',
+    'ImpreseeAI_ImpreseeVisualSearch/js/photo',
 ], function ($, modal, canvas, photo) {
     'use strict';
     var impreseeCropping = true;
@@ -165,6 +165,9 @@ require([
              $('body').css("position", "fixed");
              $('html').css("overflow", "hidden");
          }
+     }
+     function alertar(){
+       alert("akertaaaa")
      }
     /**
      * Min and max size of a cropped image

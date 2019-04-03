@@ -2,14 +2,14 @@
 /**
  *  To fetch config data from DB and pass it to view (impresee.phtml)
  */
-namespace Impresee\ImpreseeVisualSearch\Block;
+namespace ImpreseeAI\ImpreseeVisualSearch\Block;
 
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-use Impresee\ImpreseeVisualSearch\Helper\Panel as PanelHelper;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Panel as PanelHelper;
 
 class SearchBlock extends Template
 {
@@ -30,7 +30,7 @@ class SearchBlock extends Template
     public $application_uuid;
     /**
      *  To get frontend config data
-     * @var Impresee\ImpreseeVisualSearch\Helper\Panel
+     * @var ImpreseeAI\ImpreseeVisualSearch\Helper\Panel
      */
     public $panelHelper;
 
@@ -53,7 +53,7 @@ class SearchBlock extends Template
      * @param Context $context
      * @param array $data
      * @param Magento\Framework\Registry $registry
-     * @param Impresee\ImpreseeVisualSearch\Helper\Panel $panelHelper
+     * @param ImpreseeAI\ImpreseeVisualSearch\Helper\Panel $panelHelper
      */
     public function __construct(
         Context $context,

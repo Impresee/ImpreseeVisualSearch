@@ -2,19 +2,19 @@
 /**
  *  Used to Preview in admin side the changes to the frontview
  */
-namespace Impresee\ImpreseeVisualSearch\Controller\Preview;
+namespace ImpreseeAI\ImpreseeVisualSearch\Controller\Preview;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Exception\NotFoundException;
-use Impresee\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
 
 class Index extends Action
 {
   /**
    *   To load client_code from db
-   * @var Impresee\ImpreseeVisualSearch\Helper\Codes
+   * @var ImpreseeAI\ImpreseeVisualSearch\Helper\Codes
    */
     public $codesHelper;
   /**

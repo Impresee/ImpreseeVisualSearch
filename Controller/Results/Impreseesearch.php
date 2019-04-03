@@ -3,7 +3,7 @@
  *  Retreive search results from Impresee
  *  using search code given in GET param.
  */
-namespace Impresee\ImpreseeVisualSearch\Controller\Results;
+namespace ImpreseeAI\ImpreseeVisualSearch\Controller\Results;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
@@ -11,7 +11,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Controller\Result\JsonFactory as MagentoJson;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Impresee\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
 
 class Impreseesearch extends Action
 {
@@ -37,7 +37,7 @@ class Impreseesearch extends Action
     protected $_resultsUrl;
   /**
    * To load Impresee codes from db
-   * @var Impresee\ImpreseeVisualSearch\Helper\Codes
+   * @var ImpreseeAI\ImpreseeVisualSearch\Helper\Codes
    */
     protected $_codesHelper;
   /**
@@ -65,7 +65,7 @@ class Impreseesearch extends Action
    * @param \Magento\Framework\App\Action\Context $context
    * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
    * @param Magento\Framework\Registry
-   * @param Impresee\ImpreseeVisualSearch\Model\MakeCollection
+   * @param ImpreseeAI\ImpreseeVisualSearch\Model\MakeCollection
    */
     public function __construct(
         Context $context,

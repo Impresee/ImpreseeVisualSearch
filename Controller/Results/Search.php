@@ -3,15 +3,15 @@
  *  Retreive a search results from impresee, with "search_uid" and "app_uuid"
  *  params given with get method. and save the data in singleton registry,
  */
-namespace Impresee\ImpreseeVisualSearch\Controller\Results;
+namespace ImpreseeAI\ImpreseeVisualSearch\Controller\Results;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Registry;
 use \Magento\Store\Model\StoreManagerInterface;
-use Impresee\ImpreseeVisualSearch\Model\MakeCollection;
-use Impresee\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use ImpreseeAI\ImpreseeVisualSearch\Model\MakeCollection;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Search extends Action
@@ -42,13 +42,13 @@ class Search extends Action
     public $productCollection;
   /**
    *   To load collections functions
-   * @var Impresee\ImpreseeVisualSearch\Model\MakeCollection
+   * @var ImpreseeAI\ImpreseeVisualSearch\Model\MakeCollection
    */
     public $makeCollection;
 
   /**
    * load codes of our app
-   * @var Impresee\ImpreseeVisualSearch\Helper\Codes
+   * @var ImpreseeAI\ImpreseeVisualSearch\Helper\Codes
    */
     protected $_codesHelper;
   /**
@@ -68,7 +68,7 @@ class Search extends Action
    * @param \Magento\Framework\App\Action\Context $context
    * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
    * @param Magento\Framework\Registry
-   * @param Impresee\ImpreseeVisualSearch\Model\MakeCollection
+   * @param ImpreseeAI\ImpreseeVisualSearch\Model\MakeCollection
    */
     public function __construct(
         Context $context,

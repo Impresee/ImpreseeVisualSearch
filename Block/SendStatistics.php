@@ -3,7 +3,7 @@
  *  Convert the results of a search to js object
  *  to use it in view (stats.php)
  */
-namespace Impresee\ImpreseeVisualSearch\Block;
+namespace ImpreseeAI\ImpreseeVisualSearch\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;

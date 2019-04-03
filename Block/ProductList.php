@@ -2,31 +2,31 @@
 /**
  * Block used to generate DataFeed
  */
-namespace Impresee\ImpreseeVisualSearch\Block;
+namespace ImpreseeAI\ImpreseeVisualSearch\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Impresee\ImpreseeVisualSearch\Model\Products;
-use Impresee\ImpreseeVisualSearch\Model\GenerateXml;
+use ImpreseeAI\ImpreseeVisualSearch\Model\Products;
+use ImpreseeAI\ImpreseeVisualSearch\Model\GenerateXml;
 
 class ProductList extends Template
 {
     /**
      *   To getCollection of products
-     * @var Impresee\ImpreseeVisualSearch\Model\Products
+     * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
      */
     public $products;
     /**
      *   To generate DataFeed xml
-     * @var Impresee\ImpreseeVisualSearch\Model\GenerateXml
+     * @var ImpreseeAI\ImpreseeVisualSearch\Model\GenerateXml
      */
     public $generate;
     /**
      *   Productlist constructor
      * @param Context $context
      * @param array $data
-     * @param Impresee\ImpreseeVisualSearch\Model\Products
-     * @param Impresee\ImpreseeVisualSearch\Model\GenerateXml
+     * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products
+     * @param ImpreseeAI\ImpreseeVisualSearch\Model\GenerateXml
      */
     public function __construct(
         Context $context,

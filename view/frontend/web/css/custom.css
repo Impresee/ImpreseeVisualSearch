@@ -1,8 +1,10 @@
 .impreseeButton{
-    height:30px!important;
+    height:20px;
     opacity: 0.5;
     cursor: pointer;
     float:left;
+    margin-right: 5px;
+    margin-top: 4px;
 }
 
 .impreseeButton:hover{opacity: 1;}

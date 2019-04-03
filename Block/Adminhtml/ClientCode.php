@@ -2,11 +2,11 @@
 /**
  *   Display client code in system configuration page
  */
-namespace Impresee\ImpreseeVisualSearch\Block\Adminhtml;
+namespace ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Impresee\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
 use Magento\Backend\Block\Template\Context;
 
 class ClientCode extends Field
@@ -18,7 +18,7 @@ class ClientCode extends Field
     public $codesHelper;
     /**
      * @param Context
-     * @param Impresee\ImpreseeVisualSearch\Helper\Codes
+     * @param ImpreseeAI\ImpreseeVisualSearch\Helper\Codes
      */
     public function __construct(
         Context $context,

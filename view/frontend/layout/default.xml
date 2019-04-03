@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
   <head>
-      <css src="Impresee_ImpreseeVisualSearch::css/custom.css"/>
-      <css src="Impresee_ImpreseeVisualSearch::css/jquery.Jcrop.min.css"/>
+      <css src="ImpreseeAI_ImpreseeVisualSearch::css/custom.css"/>
+      <css src="ImpreseeAI_ImpreseeVisualSearch::css/jquery.Jcrop.min.css"/>
   </head>
       <body>
         <referenceContainer name="top.search">
-            <block class="Impresee\ImpreseeVisualSearch\Block\SearchBlock" name="Impresee" template="Impresee_ImpreseeVisualSearch::Impresee.phtml"/>
+            <block class="ImpreseeAI\ImpreseeVisualSearch\Block\SearchBlock" name="Impresee" template="ImpreseeAI_ImpreseeVisualSearch::Impresee.phtml"/>
         </referenceContainer>
       </body>
 </page>

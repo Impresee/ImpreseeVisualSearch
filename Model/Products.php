@@ -2,7 +2,7 @@
 /**
  * Creates a product collection object
  */
-namespace Impresee\ImpreseeVisualSearch\Model;
+namespace ImpreseeAI\ImpreseeVisualSearch\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 

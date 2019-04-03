@@ -2,7 +2,7 @@
 /**
  *   Used to display query image used on search
  */
-namespace Impresee\ImpreseeVisualSearch\Block;
+namespace ImpreseeAI\ImpreseeVisualSearch\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -45,6 +45,6 @@ class QueryImage extends Template
             $queryUrl  = $data['query_url'];
             $this->queryImageUrl = $serverUrl.$queryUrl;
         }
-        $this->impreseeLogo = $this->getViewFileUrl('Impresee_ImpreseeVisualSearch::images/ImpreseeLogo.svg');
+        $this->impreseeLogo = $this->getViewFileUrl('ImpreseeAI_ImpreseeVisualSearch::images/ImpreseeLogo.svg');
     }
 }

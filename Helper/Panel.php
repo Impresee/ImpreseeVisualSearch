@@ -2,7 +2,7 @@
 /**
  *  Functions to get custom js,css,and css classes
  */
-namespace Impresee\ImpreseeVisualSearch\Helper;
+namespace ImpreseeAI\ImpreseeVisualSearch\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;

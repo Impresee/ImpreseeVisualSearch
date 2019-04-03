@@ -3,7 +3,7 @@
  *   Uses (extends) ListProduct to display the list of products
  *   provided by Impresee
  */
-namespace Impresee\ImpreseeVisualSearch\Block;
+namespace ImpreseeAI\ImpreseeVisualSearch\Block;
 
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Block\Product\Context;

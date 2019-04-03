@@ -7,17 +7,17 @@
         <section id="impresee" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Impresee Search Engine</label>
             <tab>orand</tab>
-            <resource>Impresee_ImpreseeVisualSearch::config</resource>
+            <resource>ImpreseeAI_ImpreseeVisualSearch::config</resource>
             <group id="header" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Info</label>
                 <field id="header" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\Header</frontend_model>
+                    <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\Header</frontend_model>
                 </field>
             </group>
             <group id="datasource" translate="label" type="text" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
                 <label>Instructions</label>
                 <field id="datafeed_comment" translate="label" type="text" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\DatafeedComment</frontend_model>
+                    <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\DatafeedComment</frontend_model>
                 </field>
             </group>
             <group id="general" translate="label" type="text" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
@@ -56,7 +56,7 @@
                 <field id="icon_provider" translate="label" type="select" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Select Icons Source</label>
                     <comment>You can choose to use Impresee buttons catalog, or upload your own icon images</comment>
-                    <source_model>Impresee\ImpreseeVisualSearch\Model\Config\DisplayButtonOption</source_model>
+                    <source_model>ImpreseeAI\ImpreseeVisualSearch\Model\Config\DisplayButtonOption</source_model>
                     <depends>
                         <field id="module_set_buttons">1</field>
                     </depends>
@@ -64,7 +64,7 @@
                 <field id="photo_icon_name" translate="label" type="text" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Photo Icon Name</label>
                     <comment>
-                      <![CDATA[Write here the name of the search icon you'd like to use. The list of available names can be found on <a href="https://www.impresee.com/icons">https://www.impresee.com/icons</a> (default sketch1).]]>
+                      <![CDATA[Write here the name of the search icon you'd like to use. The list of available names can be found on <a href="https://www.impresee.com/icons">https://www.impresee.com/icons</a> (default photo1).]]>
                     </comment>
                     <depends>
                         <field id="module_set_buttons">1</field>
@@ -83,7 +83,7 @@
                 </field>
                 <field id="photo_icon" translate="label" type="image" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Search by Photo Icon</label>
-                    <backend_model>Impresee\ImpreseeVisualSearch\Model\Config\Image</backend_model>
+                    <backend_model>ImpreseeAI\ImpreseeVisualSearch\Model\Config\Image</backend_model>
                     <upload_dir config="system/filesystem/media/" scope_info="1">icons</upload_dir>
                     <base_url type="media" scope_info="1">icons</base_url>
                     <comment><![CDATA[Allowed file types: jpeg, gif, png, svg.]]></comment>
@@ -94,7 +94,7 @@
                 </field>
                 <field id="sketch_icon" translate="label" type="image" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Search by Sketch Icon</label>
-                    <backend_model>Impresee\ImpreseeVisualSearch\Model\Config\Image</backend_model>
+                    <backend_model>ImpreseeAI\ImpreseeVisualSearch\Model\Config\Image</backend_model>
                     <upload_dir config="system/filesystem/media/" scope_info="1">icons</upload_dir>
                     <base_url type="media" scope_info="1">icons</base_url>
                     <comment><![CDATA[Allowed file types: jpeg, gif, png, svg.]]></comment>
@@ -104,11 +104,11 @@
                     </depends>
                 </field>
                 <field id="icons_comment" translate="label" type="text" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\IconsExample</frontend_model>
+                    <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\IconsExample</frontend_model>
                 </field>
                 <field id="icons_remember_label" translate="label" type="label" sortOrder="3" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Remember:</label>
-                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\RememberIconHelp</frontend_model>
+                    <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\RememberIconHelp</frontend_model>
                     <depends>
                         <field id="module_set_buttons">0</field>
                     </depends>
@@ -117,7 +117,7 @@
             <group id="frontend" translate="label" type="text" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
                 <label>Frontend (Optional - Advanced Users)</label>
                 <field id="javascript_comment" translate="label" type="text" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\JavascriptComment</frontend_model>
+                    <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\JavascriptComment</frontend_model>
                 </field>
                 <field id="javacode" translate="label" type="textarea" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Javascript/Jquery</label>
@@ -139,7 +139,7 @@ If you have CSS classes that you want to use in the buttons, add them here! or a
             <group id="help" translate="label" type="text" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
                 <label>Need Help?</label>
                 <field id="help" translate="label" type="text" sortOrder="10" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <frontend_model>Impresee\ImpreseeVisualSearch\Block\Adminhtml\JavascriptFinalComment</frontend_model>
+                    <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\JavascriptFinalComment</frontend_model>
                 </field>
             </group>
         </section>

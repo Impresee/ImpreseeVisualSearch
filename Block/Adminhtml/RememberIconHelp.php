@@ -2,7 +2,7 @@
 /**
  * Display comments in system configuration page, icons section
  */
-namespace Impresee\ImpreseeVisualSearch\Block\Adminhtml;
+namespace ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;

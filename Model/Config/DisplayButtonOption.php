@@ -1,5 +1,5 @@
 <?php
-namespace Impresee\ImpreseeVisualSearch\Model\Config;
+namespace ImpreseeAI\ImpreseeVisualSearch\Model\Config;
 
 class DisplayButtonOption implements \Magento\Framework\Option\ArrayInterface
 {

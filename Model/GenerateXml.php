@@ -3,9 +3,9 @@
  *  Generate datafeed xml with Impresee format
  */
 
-namespace Impresee\ImpreseeVisualSearch\Model;
+namespace ImpreseeAI\ImpreseeVisualSearch\Model;
 
-use Impresee\ImpreseeVisualSearch\Model\Products as ProductCollection;
+use ImpreseeAI\ImpreseeVisualSearch\Model\Products as ProductCollection;
 use \Magento\Catalog\Model\Category as Category;
 use \Magento\Store\Model\App\Emulation;
 use \Magento\Store\Model\StoreManagerInterface;
@@ -24,7 +24,7 @@ class GenerateXml
     const AMOUNT_IMAGES = 1;
   /**
    * Collection of Products
-   * @var Impresee\ImpreseeVisualSearch\Model\Products
+   * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
    */
     protected $_productCollection;
   /**
@@ -50,7 +50,7 @@ class GenerateXml
 
   /**
    * Constructor
-   * @var Impresee\ImpreseeVisualSearch\Model\Products $ProductCollection
+   * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products $ProductCollection
    * @var Magento\Catalog\Model\Category $category
    * @var Magento\Store\Model\App\Emulation $appEmulation
    * @var Magento\Store\Model\StoreManagerInterface $storeManagerInterface
@@ -99,7 +99,7 @@ class GenerateXml
     }
   /**
    * Return a string with the datafeed on a XML file with Impresee schemma
-   * @param Impresee\ImpreseeVisualSearch\Model\Products Collection $products collection of products
+   * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products Collection $products collection of products
    * @return string (XML like)
    */
     public function getXml($products)
@@ -117,7 +117,7 @@ class GenerateXml
     }
   /**
    * Make XML products tags for all product according to Impresee Schema
-   * @param Impresee\ImpreseeVisualSearch\Model\Products Collection $products collection of products
+   * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products Collection $products collection of products
    * @return string (XML like)
    */
     public function makeProductsTags($products)
@@ -208,7 +208,7 @@ class GenerateXml
     }
   /**
    * Creates types XML tags according Impresee XML schemma
-   * @param Impresee\ImpreseeVisualSearch\Model\Products Collection $products collection of products
+   * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products Collection $products collection of products
    * @return string (XML like)
    */
     private function makeTypeTags($products)
@@ -228,7 +228,7 @@ class GenerateXml
     }
   /**
    * Make hierarchy categories xml tags according to Impresee XML schemma
-   * @param Impresee\ImpreseeVisualSearch\Model\Products Collection $products collection of products
+   * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products Collection $products collection of products
    * @return string (XML like)
    */
     private function makeHierarchyCategoriesTags($products)

@@ -2,12 +2,12 @@
 /**
  *   Display client code in system configuration page
  */
-namespace Impresee\ImpreseeVisualSearch\Block\Adminhtml;
+namespace ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Backend\Block\Template\Context;
-use Impresee\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
 
 class JavascriptFinalComment extends Field
 {
@@ -28,7 +28,7 @@ class JavascriptFinalComment extends Field
     protected $_storeId;
     /**
      * @param Context
-     * @param Impresee\ImpreseeVisualSearch\Helper\Codes
+     * @param ImpreseeAI\ImpreseeVisualSearch\Helper\Codes
      */
     public function __construct(
         Context $context,

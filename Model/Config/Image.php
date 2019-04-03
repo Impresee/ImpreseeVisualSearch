@@ -2,7 +2,7 @@
 /**
  * Load icon images on admin side
  */
-namespace Impresee\ImpreseeVisualSearch\Model\Config;
+namespace ImpreseeAI\ImpreseeVisualSearch\Model\Config;
 
 use Magento\Config\Model\Config\Backend\File;
 

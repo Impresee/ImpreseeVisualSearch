@@ -2,7 +2,7 @@
 /**
  * To upload files
  */
-namespace Impresee\ImpreseeVisualSearch\Model\Config;
+namespace ImpreseeAI\ImpreseeVisualSearch\Model\Config;
 
 class SketchButtons implements \Magento\Framework\Option\ArrayInterface
 {

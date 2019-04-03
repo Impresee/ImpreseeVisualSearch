@@ -2,7 +2,7 @@
 /**
  *  Functions to get impresee codes
  */
-namespace Impresee\ImpreseeVisualSearch\Helper;
+namespace ImpreseeAI\ImpreseeVisualSearch\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;

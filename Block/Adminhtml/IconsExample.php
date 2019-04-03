@@ -2,7 +2,7 @@
 /**
  *   Display Impresee default icons
  */
-namespace Impresee\ImpreseeVisualSearch\Block\Adminhtml;
+namespace ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -12,7 +12,7 @@ class IconsExample extends Field
 {
     /**
      * @param Context
-     * @param Impresee\ImpreseeVisualSearch\Helper\Codes
+     * @param ImpreseeAI\ImpreseeVisualSearch\Helper\Codes
      */
     public function __construct(
         Context $context,

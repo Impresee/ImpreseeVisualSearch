@@ -28,6 +28,21 @@ require(["jquery"], function($){
       // user custom javascript/jquery code (on bind/resize to adjust on size change)
         <?php echo $javacode?>
     });
+    /**
+     * prevent display Impresee Buttons when the search features isn't enabled,
+     * or search service URL isn't configurated
+     */
+    if ( (<?php echo $sketchEnableStatus?> == 1) && (<?php echo $emptySketchUrl?> !=1 ) && (<?php echo $moduleIcons?>  == 1) ){
+        $("#ImpreseeSketch").css('display', $('input[id*="search"][name="q"]').css('display'));
+    }else{
+        $("#ImpreseeSketch").css('display', "none");
+    }
+    if ((<?php echo $photoEnableStatus?> == 1 ) && (<?php echo $emptyPhotoUrl?> !=1) && (<?php echo $moduleIcons?> == 1)){
+      $("#ImpreseePhoto").css('display', $('input[id*="search"][name="q"]').css('display'));
+    }else{
+      $("#ImpreseePhoto").css('display', "none");
+    }
+
 });
 </script>
 <!-- user custom styles -->
@@ -35,8 +50,8 @@ require(["jquery"], function($){
     <?php echo $styles?>
 </style>
     <!-- our frontend buttons -->
-    <img id="ImpreseeSketch" class="impresee-sketch-button impreseeButton <?php echo $classes?>" src="<?php echo $sketchIconUrl?>" style="height:30px!important; width: auto" />
-    <img id="ImpreseePhoto" class="impresee-photo-button impreseeButton <?php echo $classes?>" src="<?php echo $photoIconUrl?> " style="height:30px!important; width: auto" />
+    <img id="ImpreseeSketch" class="impresee-sketch-button impreseeButton <?php echo $classes?>" src="<?php echo $sketchIconUrl?>"  />
+    <img id="ImpreseePhoto" class="impresee-photo-button impreseeButton <?php echo $classes?>" src="<?php echo $photoIconUrl?> " />
     <!-- hidden file input tag-->
     <input type="file" accept="images/jpeg;capture=camera" id="imguploadphoto" style="display:none"/>
     <div id="modalDiv">
@@ -45,20 +60,6 @@ require(["jquery"], function($){
         </div>
     </div>
 <script type="text/javascript">
-    /**
-     * prevent display Impresee Buttons when the search features isn't enabled,
-     * or search service URL isn't configurated
-     */
-    if ( (<?php echo $sketchEnableStatus?> == 1) && (<?php echo $emptySketchUrl?> !=1 ) && (<?php echo $moduleIcons?>  == 1) ){
-        document.getElementById("ImpreseeSketch").style.display = document.getElementById("search").style.display;
-    }else{
-        document.getElementById("ImpreseeSketch").style.display = "none";
-    }
-    if ((<?php echo $photoEnableStatus?> == 1 ) && (<?php echo $emptyPhotoUrl?> !=1) && (<?php echo $moduleIcons?> == 1)){
-      document.getElementById("ImpreseePhoto").style.display  = document.getElementById("search").style.display;
-    }else{
-      document.getElementById("ImpreseePhoto").style.display = "none";
-    }
 
     /**
      * Make Impresee Image search

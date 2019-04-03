@@ -5,9 +5,9 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block class="Impresee\ImpreseeVisualSearch\Block\ResultBlock" name="impresee.products.list"
+            <block class="ImpreseeAI\ImpreseeVisualSearch\Block\ResultBlock" name="impresee.products.list"
               as="product_list" template="Magento_Catalog::product/list.phtml">
-                <block class="Impresee\ImpreseeVisualSearch\Block\SendStatistics" name="send.stats" as="send_stats" template="Impresee_ImpreseeVisualSearch::sendClicks.phtml"/>
+                <block class="ImpreseeAI\ImpreseeVisualSearch\Block\SendStatistics" name="send.stats" as="send_stats" template="ImpreseeAI_ImpreseeVisualSearch::sendClicks.phtml"/>
                 <container name="category.product.list.additional" as="additional" />
                 <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="Magento_Catalog::product/list/toolbar.phtml">
                     <block class="Magento\Theme\Block\Html\Pager" name="product_list_toolbar_pager"/>
@@ -18,8 +18,8 @@
             </block>
         </referenceContainer>
         <referenceContainer name="sidebar.additional">
-            <block class="Impresee\ImpreseeVisualSearch\Block\QueryImage" template="Impresee_ImpreseeVisualSearch::searchQuery.phtml" name="queryImage"/>
-            <block class="Impresee\ImpreseeVisualSearch\Block\SendStatistics" template="Impresee_ImpreseeVisualSearch::stats.phtml" name="impreseeStats"/>
+            <block class="ImpreseeAI\ImpreseeVisualSearch\Block\QueryImage" template="ImpreseeAI_ImpreseeVisualSearch::searchQuery.phtml" name="queryImage"/>
+            <block class="ImpreseeAI\ImpreseeVisualSearch\Block\SendStatistics" template="ImpreseeAI_ImpreseeVisualSearch::stats.phtml" name="impreseeStats"/>
         </referenceContainer>
         <move element="queryImage"  destination="sidebar.additional" before="-"/>
     </body>

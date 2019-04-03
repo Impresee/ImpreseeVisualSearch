@@ -2,34 +2,25 @@
 /**
  * Add our "similarity" sort criteria to result sort options
  */
-namespace Impresee\ImpreseeVisualSearch\Plugin\Model;
+namespace ImpreseeAI\ImpreseeVisualSearch\Plugin\Model;
 
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Request\Http;
 
 class Config
 {
   /**
-   * Store Context
-   * @var Magento\Store\Model\StoreManagerInterface
-   */
-    protected $_storeManager;
-  /**
    * To fetch route
-   * @var Magento\Framework\App\Action\Action
+   * @var Magento\Framework\App\Request\Http
    */
-    protected $_action;
+    protected $_request;
+
   /**
    * Constructor
-   * @param Magento\Store\Model\StoreManagerInterface
-   * @param Magento\Framework\App\Action\Action
+   * @param Magento\Framework\App\Request\Http
    */
-    public function __construct(
-        StoreManagerInterface $storeManager,
-        Action $action
-    ) {
-        $this->_storeManager = $storeManager;
-        $this->_action = $action;
+    public function __construct(Http $request)
+    {
+        $this->_request = $request;
     }
   /**
    * Adding custom option to result sort options
@@ -41,12 +32,11 @@ class Config
         \Magento\Catalog\Model\Config $catalogConfig,
         $options
     ) {
-        $store = $this->_storeManager->getStore();
         $customOption = [];
         unset($options['position']);
-        $route = $this->_action->getRequest()->getRouteName();
+        $route = $this->_request->getRouteName();
         if ((strcmp($route, 'impresee')) == 0) {
-            $customOption['similarity'] = 'Similarity';
+          $customOption['similarity'] = 'Similarity';
         }
         $options = array_merge($customOption, $options);
         return $options;

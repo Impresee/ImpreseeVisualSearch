@@ -1,8 +1,8 @@
 var config = {
    map: {
        '*': {
-                impresee: 'Impresee_ImpreseeVisualSearch/js/impresee',
-                Jcrop   : 'Impresee_ImpreseeVisualSearch/js/jquery.Jcrop.min',
+                impresee: 'ImpreseeAI_ImpreseeVisualSearch/js/impresee',
+                Jcrop   : 'ImpreseeAI_ImpreseeVisualSearch/js/jquery.Jcrop.min',
           }
    }
 };

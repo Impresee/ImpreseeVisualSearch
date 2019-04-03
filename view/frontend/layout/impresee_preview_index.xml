@@ -5,7 +5,7 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block class="Impresee\ImpreseeVisualSearch\Block\PreviewBlock" name="preview" as="preview" template="Impresee_ImpreseeVisualSearch::preview.phtml">
+            <block class="ImpreseeAI\ImpreseeVisualSearch\Block\PreviewBlock" name="preview" as="preview" template="ImpreseeAI_ImpreseeVisualSearch::preview.phtml">
             </block>
         </referenceContainer>
     </body>

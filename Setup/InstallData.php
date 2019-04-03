@@ -2,7 +2,7 @@
 /**
  *  Generates an aleatory client_code on installation
  */
-namespace Impresee\ImpreseeVisualSearch\Setup;
+namespace ImpreseeAI\ImpreseeVisualSearch\Setup;
 
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
