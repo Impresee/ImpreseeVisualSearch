@@ -69,13 +69,14 @@ class GenerateXml
     }
   /**
    * Convert an array of strings to an array of ints
-   * (usefull to generate catalog collections)
+   * (useful to generate catalog collections)
    * @param array of string (numbers of ids)
    * @return array of int (numbers of ids)
    */
     public function toIntArray($stringArray)
     {
-        return array_map(create_function('$value', 'return (int)$value;'), $stringArray);
+        return array_map(function($val) { return (int)$val; },
+          $stringArray);
     }
   /**
    * Main XML generation function
