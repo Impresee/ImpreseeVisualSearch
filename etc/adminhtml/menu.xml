@@ -7,6 +7,7 @@
             module="ImpreseeAI_ImpreseeVisualSearch"
             sortOrder="10"
             resource="Magento_Backend::content" />
+        <!-- the following action moves us to the general configuration screen -->
         <add id="ImpreseeAI_ImpreseeVisualSearch::second_level_config"
             title="Impresee Config"
             module="ImpreseeAI_ImpreseeVisualSearch"
