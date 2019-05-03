@@ -61,26 +61,6 @@
                         <field id="module_set_buttons">1</field>
                     </depends>
                 </field>
-                <field id="photo_icon_name" translate="label" type="text" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Photo Icon Name</label>
-                    <comment>
-                      <![CDATA[Write here the name of the search icon you'd like to use. The list of available names can be found on <a href="https://www.impresee.com/icons">https://www.impresee.com/icons</a> (default photo1).]]>
-                    </comment>
-                    <depends>
-                        <field id="module_set_buttons">1</field>
-                        <field id="icon_provider">1</field>
-                    </depends>
-                </field>
-                <field id="sketch_icon_name" translate="label" type="text" sortOrder="6" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Sketch Icon Name</label>
-                    <comment>
-                      <![CDATA[Write here the name of the search icon you'd like to use. The list of available names can be found on <a href="https://www.impresee.com/icons">https://www.impresee.com/icons</a> (default sketch1).]]>
-                    </comment>
-                    <depends>
-                        <field id="module_set_buttons">1</field>
-                        <field id="icon_provider">1</field>
-                    </depends>
-                </field>
                 <field id="photo_icon" translate="label" type="image" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Search by Photo Icon</label>
                     <backend_model>ImpreseeAI\ImpreseeVisualSearch\Model\Config\Image</backend_model>
