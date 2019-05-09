@@ -28,7 +28,7 @@ class Header extends Field
     {
          $html = '<div class="row impreseeHeader">';
          $html .= ' <div class="col-xs-4"><h5><strong>Powered by</strong></h5> <div><a target="_blank" href="https://impresee.com"><img src="';
-         $html .= $this->getViewFileUrl('ImpreseeAI_ImpreseeVisualSearch::images/ImpreseeLogo.svg').'" style="height:auto"/> </a></div></div>';
+         $html .= $this->getViewFileUrl('ImpreseeAI_ImpreseeVisualSearch::images/ImpreseeLogo.svg').'" style="height:auto; max-width:70%;"/> </a></div></div>';
          $html .= ' <div class="col-xs-4"><h1><strong>Need help?</strong></h1><p> contact us: <a target="_blank" href="mailto:support@impresee.com">support@impresee.com</a></p></div>';
          $html .= ' <div class="col-xs-4"><h1><strong>Remember: </Strong></h1><p>Set your configuration on each store view</p></div>';
          $html .= '</div>';
