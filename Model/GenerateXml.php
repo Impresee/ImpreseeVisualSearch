@@ -126,7 +126,7 @@ class GenerateXml
         $resultString = "";
         foreach ($products as $product) :
             {
-            $resultString .= "<product code=\"".$product->getSku()."\" url=\"".$product->getProductUrl()."\">";
+            $resultString .= "<product code=\"".htmlspecialchars(strip_tags($product->getSku()))."\" url=\"".htmlspecialchars($product->getProductUrl())."\">";
 
             $resultString .= "<categories>";
             $resultString .= $this->makeCategoriesTags($product);
@@ -157,7 +157,7 @@ class GenerateXml
         foreach ($product->getCategoryIds() as $category) :
             {
             if ($category) {
-                $resultString .= "<category ref_code=\"".$category."\"/>";
+                $resultString .= "<category ref_code=\"".htmlspecialchars(strip_tags($category))."\"/>";
             }
             }
         endforeach;
@@ -175,7 +175,7 @@ class GenerateXml
         foreach ($this->PRODUCT_ATTRIBUTES as $attribute) :
             {
             if ($info=$product->getData($attribute)) {
-                $resultString .= "<text ref_code=\"".$attribute."\">".htmlentities(strip_tags($info), ENT_XML1, "UTF-8")."</text>";
+                $resultString .= "<text ref_code=\"".htmlspecialchars(strip_tags($attribute))."\">".htmlentities(strip_tags($info), ENT_XML1, "UTF-8")."</text>";
             }
             }
         endforeach;
@@ -194,13 +194,13 @@ class GenerateXml
         foreach ($images as $image) :
             {
             if ($count <= $this::AMOUNT_IMAGES) {
-                $resultString .= "<image ref_code=\"image".$count."\" url_image=\"".strip_tags($image['url'])."\"/>";
+                $resultString .= "<image ref_code=\"image".$count."\" url_image=\"".htmlspecialchars(strip_tags($image['url']))."\"/>";
                 $count++;
                 if ($count > $this::AMOUNT_IMAGES) {
                     return $resultString;
                 }
             } else {
-                $resultString .= "<image ref_code=\"extraImage\" url_image=\"".strip_tags($image['url'])."\"/>";
+                $resultString .= "<image ref_code=\"extraImage\" url_image=\"".htmlspecialchars(strip_tags($image['url']))."\"/>";
             }
             }
         endforeach;
@@ -239,7 +239,7 @@ class GenerateXml
         $rootCategoryId = $store->getRootCategoryId();
         $rootCategory = $this->_rootCategory->load($rootCategoryId);
         $categoriesIdArray = $this->toIntArray($rootCategory->getAllChildren(true));
-        $resultString .= "<category code=\"".$rootCategoryId."\" name=\"".$rootCategory->getName()."\"/>";
+        $resultString .= "<category code=\"".htmlspecialchars(strip_tags($rootCategoryId))."\" name=\"".htmlspecialchars(strip_tags($rootCategory->getName()))."\"/>";
         foreach ($categoriesIdArray as $categoryId) :
             {
             /** ignores root category (already added)*/
@@ -248,8 +248,8 @@ class GenerateXml
             }
             $category = $this->_category->load($categoryId);
             $name = htmlspecialchars(strip_tags($category->getName()));
-            $resultString .= "<category code=\"".$category->getId()."\" name=\"".$name."\">";
-            $resultString .= "<parent ref_code=\"".$category->getParentId()."\"/>";
+            $resultString .= "<category code=\"".htmlspecialchars(strip_tags($category->getId()))."\" name=\"".htmlspecialchars(strip_tags($name))."\">";
+            $resultString .= "<parent ref_code=\"".htmlspecialchars(strip_tags($category->getParentId()))."\"/>";
             $resultString .= "</category>";
             }
         endforeach;
@@ -264,7 +264,7 @@ class GenerateXml
         $resultString = "";
         foreach ($this->PRODUCT_ATTRIBUTES as $attribute) :
             {
-            $resultString .= "<text code=\"".$attribute."\" name=\"".str_replace("_", " ", $attribute)."\"/>";
+            $resultString .= "<text code=\"".htmlspecialchars(strip_tags($attribute))."\" name=\"".str_replace("_", " ", htmlspecialchars(strip_tags($attribute)))."\"/>";
             }
         endforeach;
         return $resultString;
