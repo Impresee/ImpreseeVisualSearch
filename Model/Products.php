@@ -18,9 +18,14 @@ class Products
    * @param ProductCollectionFactory          $productCollectionFactory
    * @param ProductAttributeCollectionFactory $productAttributeCollectionFactory
    */
-    public function __construct(ProductCollectionFactory $productCollectionFactory)
+    public function __construct(ProductCollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
+        \Magento\Catalog\Model\Product\Visibility $productVisibility,
+    )
     {
         $this->productCollectionFactory = $productCollectionFactory;
+        $this->productVisibility = $productVisibility;
+        $this->productStatus = $productStatus;
     }
   /**
    * Creates a collection
@@ -29,6 +34,8 @@ class Products
     public function getCollection()
     {
         $collection = $this->productCollectionFactory->create();
+        $collection->addAttributeToFilter('status', ['in' => $this->productStatus->getVisibleStatusIds()]);
+        $collection->setVisibility($this->productVisibility->getVisibleInSiteIds());
         return $collection;
     }
 }

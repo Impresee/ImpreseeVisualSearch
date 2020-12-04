@@ -16,7 +16,7 @@ class GenerateXml
    * Product features saved on the xml file
    * @var string[]
    */
-    protected $PRODUCT_ATTRIBUTES = ["name"];
+    protected $PRODUCT_ATTRIBUTES = "*";
   /**
    * Max ammount of images added to the xml file
    * @const int
