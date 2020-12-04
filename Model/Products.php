@@ -20,7 +20,7 @@ class Products
    */
     public function __construct(ProductCollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
-        \Magento\Catalog\Model\Product\Visibility $productVisibility,
+        \Magento\Catalog\Model\Product\Visibility $productVisibility
     )
     {
         $this->productCollectionFactory = $productCollectionFactory;

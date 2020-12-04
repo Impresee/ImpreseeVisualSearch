@@ -9,6 +9,7 @@ use ImpreseeAI\ImpreseeVisualSearch\Model\Products as ProductCollection;
 use \Magento\Catalog\Model\Category as Category;
 use \Magento\Store\Model\App\Emulation;
 use \Magento\Store\Model\StoreManagerInterface;
+use \Psr\Log\LoggerInterface;
 
 class GenerateXml
 {
@@ -16,7 +17,7 @@ class GenerateXml
    * Product features saved on the xml file
    * @var string[]
    */
-    protected $PRODUCT_ATTRIBUTES = "*";
+    protected $PRODUCT_ATTRIBUTES = ["sku", "name", "price", "special_price"];
   /**
    * Max ammount of images added to the xml file
    * @const int
@@ -48,6 +49,12 @@ class GenerateXml
    */
     protected $_rootCategory;
 
+    /**
+   * Logger
+   * @var \Psr\Log\LoggerInterface
+   */
+    protected $logger;
+
   /**
    * Constructor
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products $ProductCollection
@@ -59,13 +66,15 @@ class GenerateXml
         ProductCollection $Collection,
         Category $category,
         Emulation $appEmulation,
-        StoreManagerInterface $storeManagerInterface
+        StoreManagerInterface $storeManagerInterface,
+        LoggerInterface $logger
     ) {
         $this->_productCollection = $Collection;
         $this->_category = $category;
         $this->_rootCategory = $category;
         $this->_appEmulation = $appEmulation;
         $this->_storeManagerInterface = $storeManagerInterface;
+        $this->logger = $logger;
     }
   /**
    * Convert an array of strings to an array of ints
@@ -174,8 +183,14 @@ class GenerateXml
 
         foreach ($this->PRODUCT_ATTRIBUTES as $attribute) :
             {
+            $attribute_name = $attribute;
             if ($info=$product->getData($attribute)) {
-                $resultString .= "<text ref_code=\"".htmlspecialchars(strip_tags($attribute))."\">".htmlentities(strip_tags($info), ENT_XML1, "UTF-8")."</text>";
+                if ($attribute_name == "special_price") {
+                  $attribute_name = "price";
+                } else if ($attribute_name == "price" && $product->getData("special_price")) {
+                  $attribute_name = "price_from";
+                }
+                $resultString .= "<text ref_code=\"".htmlspecialchars(strip_tags($attribute_name))."\">".htmlentities(strip_tags($info), ENT_XML1, "UTF-8")."</text>";
             }
             }
         endforeach;
@@ -263,9 +278,15 @@ class GenerateXml
     {
         $resultString = "";
         foreach ($this->PRODUCT_ATTRIBUTES as $attribute) :
-            {
-            $resultString .= "<text code=\"".htmlspecialchars(strip_tags($attribute))."\" name=\"".str_replace("_", " ", htmlspecialchars(strip_tags($attribute)))."\"/>";
-            }
+        {
+            $attribute_name = $attribute;
+            if ($attribute_name == "special_price") {
+                  $attribute_name = "price";
+            } else if ($attribute_name == "price") {
+              $attribute_name = "price_from";
+            }  
+            $resultString .= "<text code=\"".htmlspecialchars(strip_tags($attribute_name))."\" name=\"".str_replace("_", " ", htmlspecialchars(strip_tags($attribute_name)))."\"/>";
+        }
         endforeach;
         return $resultString;
     }
