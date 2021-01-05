@@ -19,11 +19,6 @@ class GenerateXml
    */
     protected $PRODUCT_ATTRIBUTES = ["sku", "name", "price", "special_price"];
   /**
-   * Max ammount of images added to the xml file
-   * @const int
-   */
-    const AMOUNT_IMAGES = 1;
-  /**
    * Collection of Products
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
    */
@@ -55,6 +50,11 @@ class GenerateXml
    */
     protected $logger;
 
+    /**
+    * max number of images found on a singfle product
+    */
+    private $_maxNumberImages;
+
   /**
    * Constructor
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products $ProductCollection
@@ -75,6 +75,7 @@ class GenerateXml
         $this->_appEmulation = $appEmulation;
         $this->_storeManagerInterface = $storeManagerInterface;
         $this->logger = $logger;
+        $this->_maxNumberImages = 0;
     }
   /**
    * Convert an array of strings to an array of ints
@@ -205,21 +206,15 @@ class GenerateXml
     {
         $resultString = "";
         $images = $this->getImageUrl($product);
+        if(!$images) { return; }
         $count = 1;
         foreach ($images as $image) :
             {
-            if ($count <= $this::AMOUNT_IMAGES) {
-                $resultString .= "<image ref_code=\"image".$count."\" url_image=\"".htmlspecialchars(strip_tags($image['url']))."\"/>";
-                $count++;
-                if ($count > $this::AMOUNT_IMAGES) {
-                    return $resultString;
-                }
-            } else {
-                $resultString .= "<image ref_code=\"extraImage\" url_image=\"".htmlspecialchars(strip_tags($image['url']))."\"/>";
-            }
+              $resultString .= "<image ref_code=\"image".$count."\" url_image=\"".htmlspecialchars(strip_tags($image['url']))."\"/>";
+              $count++;
             }
         endforeach;
-
+        $this->_maxNumberImages = max($this->_maxNumberImages, $count);
         return $resultString;
     }
   /**
@@ -298,10 +293,9 @@ class GenerateXml
     {
         $resultString = "";
         $resultString .= "<image code=\"image1\" name=\"Main Image \"/>";
-        for ($i = 2; $i <= $this::AMOUNT_IMAGES; $i++) {
+        for ($i = 2; $i <= $this->_maxNumberImages; $i++) {
             $resultString .= "<image code=\"image".$i."\" name=\"Image ".$i."\"/>";
         }
-        $resultString .= "<image code=\"extraImage\" name=\"Extra Image\"/>";
         return $resultString;
     }
     /**
