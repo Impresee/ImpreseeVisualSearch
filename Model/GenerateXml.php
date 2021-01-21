@@ -10,6 +10,7 @@ use \Magento\Catalog\Model\Category as Category;
 use \Magento\Store\Model\App\Emulation;
 use \Magento\Store\Model\StoreManagerInterface;
 use \Psr\Log\LoggerInterface;
+use \Magento\Catalog\Api\ProductAttributeRepositoryInterface as ProductAttributeRepositoryInterface;
 
 class GenerateXml
 {
@@ -54,6 +55,10 @@ class GenerateXml
     * max number of images found on a singfle product
     */
     private $_maxNumberImages;
+    /**
+    * attributes ids (we use them for the configurable products)
+    */
+    private $attributesIds;
 
   /**
    * Constructor
@@ -61,21 +66,29 @@ class GenerateXml
    * @var Magento\Catalog\Model\Category $category
    * @var Magento\Store\Model\App\Emulation $appEmulation
    * @var Magento\Store\Model\StoreManagerInterface $storeManagerInterface
+   * @var Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
    */
     public function __construct(
-        ProductCollection $Collection,
+        ProductCollection $collection,
         Category $category,
         Emulation $appEmulation,
         StoreManagerInterface $storeManagerInterface,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
-        $this->_productCollection = $Collection;
+        $this->_productCollection = $collection;
         $this->_category = $category;
         $this->_rootCategory = $category;
         $this->_appEmulation = $appEmulation;
         $this->_storeManagerInterface = $storeManagerInterface;
         $this->logger = $logger;
         $this->_maxNumberImages = 0;
+        $this->attributesIds = array();
+        foreach ($this->PRODUCT_ATTRIBUTES as $attributeCode) {
+          $attribute = $productAttributeRepository->get($attributeCode);
+          $attributeId = $attribute->getAttributeId();
+          array_push($this->attributesIds, $attributeId);
+        }
     }
   /**
    * Convert an array of strings to an array of ints
@@ -136,25 +149,44 @@ class GenerateXml
         $resultString = "";
         foreach ($products as $product) :
             {
-            $resultString .= "<product code=\"".htmlspecialchars(strip_tags($product->getSku()))."\" url=\"".htmlspecialchars($product->getProductUrl())."\">";
-
-            $resultString .= "<categories>";
-            $resultString .= $this->makeCategoriesTags($product);
-            $resultString .= "</categories>";
-
-            $resultString .= "<texts>";
-            $resultString .= $this->makeAttributesTags($product);
-            $resultString .= "</texts>";
-
-            $resultString .= "<images>";
-            $resultString .= $this->makeImageTags($product);
-            $resultString .= "</images>";
-
-            $resultString .= "</product>";
+              if($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
+              {
+                $productTypeInstance = $product->getTypeInstance();
+                $usedProducts = $productTypeInstance->getUsedProducts($product, $this->attributesIds);
+                foreach ($usedProducts  as $child) {
+                    $resultString .= $this->parseSimpleProduct($child);
+                }
+              }
+              else
+              {
+                $resultString .= $this->parseSimpleProduct($product);
+              }
+              
             }
         endforeach;
         return $resultString;
     }
+
+   private function parseSimpleProduct($product)
+   {
+      $resultString = "";
+      $resultString .= "<product code=\"".htmlspecialchars(strip_tags($product->getSku()))."\" url=\"".htmlspecialchars($product->getProductUrl())."\">";
+      $resultString .= "<categories>";
+      $resultString .= $this->makeCategoriesTags($product);
+      $resultString .= "</categories>";
+
+      $resultString .= "<texts>";
+      $resultString .= $this->makeAttributesTags($product);
+      $resultString .= "</texts>";
+
+      $resultString .= "<images>";
+      $resultString .= $this->makeImageTags($product);
+      $resultString .= "</images>";
+
+      $resultString .= "</product>";
+      return $resultString;
+
+   }
   /**
    * Make categories XML tags for a single product according to Impresee XML
    * schemma
