@@ -149,17 +149,18 @@ class GenerateXml
         $resultString = "";
         foreach ($products as $product) :
             {
+              $product_url = $product->getProductUrl();
               if($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
               {
                 $productTypeInstance = $product->getTypeInstance();
                 $usedProducts = $productTypeInstance->getUsedProducts($product, $this->attributesIds);
                 foreach ($usedProducts  as $child) {
-                    $resultString .= $this->parseSimpleProduct($child);
+                    $resultString .= $this->parseSimpleProduct($child, $product_url);
                 }
               }
               else
               {
-                $resultString .= $this->parseSimpleProduct($product);
+                $resultString .= $this->parseSimpleProduct($product, $product_url);
               }
               
             }
@@ -167,10 +168,10 @@ class GenerateXml
         return $resultString;
     }
 
-   private function parseSimpleProduct($product)
+   private function parseSimpleProduct($product, $product_url)
    {
       $resultString = "";
-      $resultString .= "<product code=\"".htmlspecialchars(strip_tags($product->getSku()))."\" url=\"".htmlspecialchars($product->getProductUrl())."\">";
+      $resultString .= "<product code=\"".htmlspecialchars(strip_tags($product->getSku()))."\" url=\"".htmlspecialchars($product_url)."\">";
       $resultString .= "<categories>";
       $resultString .= $this->makeCategoriesTags($product);
       $resultString .= "</categories>";
