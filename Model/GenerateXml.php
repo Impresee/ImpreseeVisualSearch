@@ -11,6 +11,7 @@ use \Magento\Store\Model\App\Emulation;
 use \Magento\Store\Model\StoreManagerInterface;
 use \Psr\Log\LoggerInterface;
 use \Magento\Catalog\Api\ProductAttributeRepositoryInterface as ProductAttributeRepositoryInterface;
+use \Magento\Framework\Stdlib\DateTime\TimezoneInterface  as Timezone;
 
 class GenerateXml
 {
@@ -18,7 +19,7 @@ class GenerateXml
    * Product features saved on the xml file
    * @var string[]
    */
-    protected $PRODUCT_ATTRIBUTES = ["sku", "name", "price", "special_price"];
+    protected $PRODUCT_ATTRIBUTES = ["sku", "name", "price", "special_price", "special_from_date", "special_to_date"];
   /**
    * Collection of Products
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
@@ -59,6 +60,10 @@ class GenerateXml
     * attributes ids (we use them for the configurable products)
     */
     private $attributesIds;
+    /*
+    Used to get the current date for the store
+    */
+    private $timezone;
 
   /**
    * Constructor
@@ -74,7 +79,8 @@ class GenerateXml
         Emulation $appEmulation,
         StoreManagerInterface $storeManagerInterface,
         LoggerInterface $logger,
-        ProductAttributeRepositoryInterface $productAttributeRepository
+        ProductAttributeRepositoryInterface $productAttributeRepository,
+        Timezone $timezone
     ) {
         $this->_productCollection = $collection;
         $this->_category = $category;
@@ -83,6 +89,7 @@ class GenerateXml
         $this->_storeManagerInterface = $storeManagerInterface;
         $this->logger = $logger;
         $this->_maxNumberImages = 0;
+        $this->timezone = $timezone;
         $this->attributesIds = array();
         foreach ($this->PRODUCT_ATTRIBUTES as $attributeCode) {
           $attribute = $productAttributeRepository->get($attributeCode);
@@ -206,6 +213,20 @@ class GenerateXml
         endforeach;
         return $resultString;
     }
+
+   private function productHasSpecialPriceAvailable($product)
+   {
+        $product_special_price_from = $product->getData("special_from_date");
+        $product_special_price_to = $product->getData("special_to_date");
+        $current_date = $this->timezone->date()->format('Y-m-d H:i:s');
+        $special_from = strtotime($product_special_price_from);
+        $special_to = strtotime($product_special_price_to);
+        $current = strtotime($current_date);
+        $check_from = !$special_from || $current >= $special_from;
+        $check_to = !$special_to || $current <= $special_to;
+        $is_special_price_available = $check_from && $check_to;
+        return $is_special_price_available;
+   } 
   /**
    * Make text XML tags for a single product according to Impresee XML schema
    * @param Magento\Catalog\Model\Product
@@ -214,14 +235,18 @@ class GenerateXml
     private function makeAttributesTags($product)
     {
         $resultString = "";
-
+        $in_sale = $this->productHasSpecialPriceAvailable($product);
         foreach ($this->PRODUCT_ATTRIBUTES as $attribute) :
             {
             $attribute_name = $attribute;
+            if ($attribute_name == "special_from_date" || $attribute_name == "special_to_date"){
+              continue;
+            }
             if ($info=$product->getData($attribute)) {
-                if ($attribute_name == "special_price") {
+                if ($attribute_name == "special_price" && !$in_sale) continue;
+                if ($attribute_name == "special_price" && $in_sale ) {
                   $attribute_name = "price";
-                } else if ($attribute_name == "price" && $product->getData("special_price")) {
+                } else if ($attribute_name == "price" && $product->getData("special_price") && $in_sale) {
                   $attribute_name = "price_from";
                 }
                 $resultString .= "<text ref_code=\"".htmlspecialchars(strip_tags($attribute_name))."\">".htmlentities(strip_tags($info), ENT_XML1, "UTF-8")."</text>";
