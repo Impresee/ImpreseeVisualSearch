@@ -186,9 +186,25 @@ class GenerateXml
       $resultString .= $this->makeAttributesTags($product);
       // Get categories and extra attributes
       $resultString .= $this->makeCategoriesTags($product, $categories);
+      $resultString .= $this->makeAttributes($product);
       return $resultString;
 
    }
+
+   private function makeAttributes($product)
+   {
+      $resultString = "";
+      $attributes = $product->getAttributes();
+      foreach($attributes as $a)
+      {
+          $attribute_code = $a->getAttributeCode();
+          $attribute_name = $a->getName();
+          $attribute_value = $product->getData($attribute_code);
+          $resultString .= '<'.htmlspecialchars(strip_tags($attribute_name)).'>'.htmlspecialchars(strip_tags($attribute_value)).'</'.htmlspecialchars(strip_tags($attribute_name)).'>';
+      }
+      return $resultString;
+   }
+
   /**
    * Make categories XML tags for a single product according to Impresee XML
    * schemma
