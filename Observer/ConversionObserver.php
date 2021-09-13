@@ -30,7 +30,7 @@ class ConversionObserver implements ObserverInterface
             $event_type = 'magento_2_0';
             $order = $observer->getEvent()->getOrder();
             $server_data = $_SERVER;
-            $order_id = $order->getId();
+            $order_id = $order->getIncrementId();
             $parsed_items = $this->parseItems($order->getAllItems());
             $parsed_customer = $this->parseCustomer($order);
             $parsed_client = $this->parseClient($server_data);
@@ -38,8 +38,6 @@ class ConversionObserver implements ObserverInterface
             $discount = $order->getDiscountAmount() != null ? $order->getDiscountAmount()() : 0;
             $url_data = 'a='.urlencode($action).'&evt='.urlencode($event_type).'&ref='.urlencode($order_id).'&'.$parsed_items.'&'.$parsed_customer.'&'.$parsed_client.'&tdis='.urlencode($discount).'&tord='.urlencode($order->getTotalDue()).'&curr='.urlencode($currency);
             $photo_app = $this->_codesHelper->getPhotoUrl(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-            $this->logger->info($url_data);
-            $this->logger->info($photo_app);
             $this->callConversionUrl($photo_app, $url_data);
         } catch (\Exception $e) {
             $this->logger->debug($e->getMessage());
@@ -61,7 +59,6 @@ class ConversionObserver implements ObserverInterface
         $prices = array();
         $skus = array();
         $types = array();
-
         foreach ($items as $item) {
             array_push($product_ids, $item->getProductId());
             array_push($product_names, $item->getProductName());
@@ -69,9 +66,8 @@ class ConversionObserver implements ObserverInterface
             array_push($prices, $item->getPriceInclTax());
             array_push($skus, $item->getSku());
             array_push($types,$item->getProductType());
-            array_push($attributes, serialize($item->getProductOptions()));
         }
-        return 'prodids='.urlencode(join('|', $product_ids)).'types='.urlencode(join('|', $types)).'&attrids='.urlencode(join('|', $attributes)).'&qtys='.urlencode(join('|', $quantities)).'&ps='.urlencode(join('|', $prices)).'&skus='.urlencode(join('|', $skus));
+        return 'prodids='.urlencode(join('|', $product_ids)).'types='.urlencode(join('|', $types)).'&qtys='.urlencode(join('|', $quantities)).'&ps='.urlencode(join('|', $prices)).'&skus='.urlencode(join('|', $skus));
     }
 
     private function parseCustomer(\Magento\Sales\Model\Order $order)

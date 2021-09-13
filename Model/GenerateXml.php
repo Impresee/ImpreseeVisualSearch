@@ -151,7 +151,7 @@ class GenerateXml
               if($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
               {
                 $productTypeInstance = $product->getTypeInstance();
-                $usedProducts = $productTypeInstance->getUsedProducts($product, $this->attributesIds);
+                $usedProducts = $productTypeInstance->getUsedProducts($product);
                 foreach ($usedProducts  as $child) {
                     $resultString.= "<product>";
                     $resultString.= "<parent_id>".$product->getSku()."</parent_id>";
@@ -172,12 +172,10 @@ class GenerateXml
 
    private function parseSimpleProduct($product, $product_url, $categories)
    {
+      $resultString = "";
       $resultString .= "<id>";
       $resultString .= htmlspecialchars(strip_tags($product->getSku()));
       $resultString .= "</id>";
-      $resultString .= "<sku>";
-      $resultString .= htmlspecialchars(strip_tags($product->getSku()));
-      $resultString .= "</sku>";
       $resultString .= "<url>";
       $resultString .= htmlspecialchars(strip_tags($product_url));
       $resultString .= "</url>";
@@ -214,7 +212,7 @@ class GenerateXml
                     $first = false;
                     $resultString .= "<main_category>".htmlspecialchars(strip_tags($categories[$category_id]['name']))."</main_category>";
                   }
-                  else if ($pos === false && !first) {
+                  else if ($pos === false && !$first) {
                     $resultString .= "<secondary_category".$count.">".htmlspecialchars(strip_tags($categories[$category_id]['name']))."</secondary_category".$count.">";
                     $count++;
                   }
@@ -224,6 +222,10 @@ class GenerateXml
                 } 
               }
               else {
+                $pos = strpos(strtolower($categories[$category_id]['name']), 'marca');
+                if ($pos !== false) {
+                 continue;
+                }
                 $resultString .= "<secondary_category".$count.">".htmlspecialchars(strip_tags($categories[$category_id]['name']))."</secondary_category".$count.">";
                 $count++;
               }
