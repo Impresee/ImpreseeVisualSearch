@@ -20,6 +20,7 @@ class ConversionObserver implements ObserverInterface
     public function __construct(LoggerInterface $logger, CodesHelper $codes)
     {
         $this->logger = $logger;
+        $this->_codesHelper = $codes;
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -29,16 +30,19 @@ class ConversionObserver implements ObserverInterface
             $event_type = 'magento_2_0';
             $order = $observer->getEvent()->getOrder();
             $server_data = $_SERVER;
-            $order_id = $order->getIncrementId();
-            $parsed_items = $this->parseItems($order->getItems());
+            $order_id = $order->getId();
+            $parsed_items = $this->parseItems($order->getAllItems());
             $parsed_customer = $this->parseCustomer($order);
             $parsed_client = $this->parseClient($server_data);
-            $url_data = 'a='.urlencode($action).'&evt='.urlencode($event_type).'&ref='.urlencode($order_id).'&'.$parsed_items.'&'.$parsed_customer.'&'.$parsed_client.'&tdis='.urlencode($order->total_discounts_tax_incl).'&tord='.urlencode($order->total_paid_tax_incl);
-            $url = $this->_codesHelper->getPhotoUrl(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-            $impresee_app = $this->_codesHelper->getCode($url);
-            $this->callConversionUrl($impresee_app, $url_data);
+            $currency = $order->getOrderCurrencyCode() != null ? $order->getOrderCurrencyCode() : '';
+            $discount = $order->getDiscountAmount() != null ? $order->getDiscountAmount()() : 0;
+            $url_data = 'a='.urlencode($action).'&evt='.urlencode($event_type).'&ref='.urlencode($order_id).'&'.$parsed_items.'&'.$parsed_customer.'&'.$parsed_client.'&tdis='.urlencode($discount).'&tord='.urlencode($order->getTotalDue()).'&curr='.urlencode($currency);
+            $photo_app = $this->_codesHelper->getPhotoUrl(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+            $this->logger->info($url_data);
+            $this->logger->info($photo_app);
+            $this->callConversionUrl($photo_app, $url_data);
         } catch (\Exception $e) {
-            $this->logger->info($e->getMessage());
+            $this->logger->debug($e->getMessage());
         }
     }
 
@@ -59,19 +63,13 @@ class ConversionObserver implements ObserverInterface
         $types = array();
 
         foreach ($items as $item) {
-            array_push($product_ids, $item->id);
-            array_push($product_names, $item->product_name);
-            array_push($attributes_id, $product['product_attribute_id']);
-            array_push($quantities, $item->quantity_invoiced);
-            array_push($prices, $item->product_sale_price);
-            array_push($skus, $item->product_sku);
-            array_push($types,$item->product_type);
-            $product_attributes = array();
-            foreach ($item->selected_options as $option) {
-                array_push($product_attributes, $option->label.'-'.$option->value);
-            }
-            $str_attributes = join('*', $product_attributes);
-            array_push($attributes, $str_attributes);
+            array_push($product_ids, $item->getProductId());
+            array_push($product_names, $item->getProductName());
+            array_push($quantities, $item->getQtyOrdered());
+            array_push($prices, $item->getPriceInclTax());
+            array_push($skus, $item->getSku());
+            array_push($types,$item->getProductType());
+            array_push($attributes, serialize($item->getProductOptions()));
         }
         return 'prodids='.urlencode(join('|', $product_ids)).'types='.urlencode(join('|', $types)).'&attrids='.urlencode(join('|', $attributes)).'&qtys='.urlencode(join('|', $quantities)).'&ps='.urlencode(join('|', $prices)).'&skus='.urlencode(join('|', $skus));
     }
@@ -80,7 +78,7 @@ class ConversionObserver implements ObserverInterface
     {
         $id = $order->getCustomerId();
         $firstname = $order->getCustomerFirstname() != null ? $order->getCustomerFirstname() : '';
-        $lastaname = $order->getCustomerLastname() != null ? $order->getCustomerLastname() : '';
+        $lastname = $order->getCustomerLastname() != null ? $order->getCustomerLastname() : '';
         $email = $order->getCustomerEmail();
         return 'cid='.urlencode($id).'&cfn='.urlencode($firstname).'&cln='.urlencode($lastname).'&cem='.urlencode($email);
     }

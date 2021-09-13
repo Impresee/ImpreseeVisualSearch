@@ -53,10 +53,6 @@ class GenerateXml
     protected $logger;
 
     /**
-    * max number of images found on a singfle product
-    */
-    private $_maxNumberImages;
-    /**
     * attributes ids (we use them for the configurable products)
     */
     private $attributesIds;
@@ -88,7 +84,6 @@ class GenerateXml
         $this->_appEmulation = $appEmulation;
         $this->_storeManagerInterface = $storeManagerInterface;
         $this->logger = $logger;
-        $this->_maxNumberImages = 0;
         $this->timezone = $timezone;
         $this->attributesIds = array();
         foreach ($this->PRODUCT_ATTRIBUTES as $attributeCode) {
@@ -136,14 +131,9 @@ class GenerateXml
     public function getXml($products)
     {
         $resultString  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
-        $resultString .= "<catalog>";
-        $resultString .= "<products>";
+        $resultString .= "<feed>";
         $resultString .= $this->makeProductsTags($products);
-        $resultString .= "</products>";
-        $resultString .= "<types>";
-        $resultString .= $this->makeTypeTags($products);
-        $resultString .= "</types>";
-        $resultString .= "</catalog>";
+        $resultString .= "</feed>";
         return $resultString;
     }
   /**
@@ -153,6 +143,7 @@ class GenerateXml
    */
     public function makeProductsTags($products)
     {
+      $categories = $this->makeHierarchyCategories($products);
         $resultString = "";
         foreach ($products as $product) :
             {
@@ -162,36 +153,41 @@ class GenerateXml
                 $productTypeInstance = $product->getTypeInstance();
                 $usedProducts = $productTypeInstance->getUsedProducts($product, $this->attributesIds);
                 foreach ($usedProducts  as $child) {
-                    $resultString .= $this->parseSimpleProduct($child, $product_url);
+                    $resultString.= "<product>";
+                    $resultString.= "<parent_id>".$product->getSku()."</parent_id>";
+                    $resultString .= $this->parseSimpleProduct($child, $product_url, $categories);
+                    $resultString.= "</product>";
                 }
               }
               else
               {
-                $resultString .= $this->parseSimpleProduct($product, $product_url);
+                $resultString.= "<product>";
+                $resultString .= $this->parseSimpleProduct($product, $product_url, $categories);
+                $resultString.= "</product>";
               }
-              
             }
         endforeach;
         return $resultString;
     }
 
-   private function parseSimpleProduct($product, $product_url)
+   private function parseSimpleProduct($product, $product_url, $categories)
    {
-      $resultString = "";
-      $resultString .= "<product code=\"".htmlspecialchars(strip_tags($product->getSku()))."\" url=\"".htmlspecialchars($product_url)."\">";
-      $resultString .= "<categories>";
-      $resultString .= $this->makeCategoriesTags($product);
-      $resultString .= "</categories>";
+      $resultString .= "<id>";
+      $resultString .= htmlspecialchars(strip_tags($product->getSku()));
+      $resultString .= "</id>";
+      $resultString .= "<sku>";
+      $resultString .= htmlspecialchars(strip_tags($product->getSku()));
+      $resultString .= "</sku>";
+      $resultString .= "<url>";
+      $resultString .= htmlspecialchars(strip_tags($product_url));
+      $resultString .= "</url>";
 
-      $resultString .= "<texts>";
-      $resultString .= $this->makeAttributesTags($product);
-      $resultString .= "</texts>";
-
-      $resultString .= "<images>";
+      // Get images
       $resultString .= $this->makeImageTags($product);
-      $resultString .= "</images>";
-
-      $resultString .= "</product>";
+      // Get Texts
+      $resultString .= $this->makeAttributesTags($product);
+      // Get categories and extra attributes
+      $resultString .= $this->makeCategoriesTags($product, $categories);
       return $resultString;
 
    }
@@ -201,15 +197,38 @@ class GenerateXml
    * @param Magento\Catalog\Model\Product
    * @return string (XML like)
    */
-    private function makeCategoriesTags($product)
+    private function makeCategoriesTags($product, $categories)
     {
         $resultString = "";
-        foreach ($product->getCategoryIds() as $category) :
+        $first = true;
+        $count = 0;
+        foreach ($product->getCategoryIds() as $category_id) :
             {
-            if ($category) {
-                $resultString .= "<category ref_code=\"".htmlspecialchars(strip_tags($category))."\"/>";
+            if ($category_id && array_key_exists($category_id, $categories)) {
+              if ( array_key_exists('parent', $categories[$category_id])){
+                $parent_id = $categories[$category_id]['parent'];
+                if (array_key_exists($parent_id, $categories)) {
+                  $parent_name = strtolower($categories[$parent_id]['name']);
+                  $pos = strpos($parent_name, 'marca');
+                  if ($pos === false && $first) {
+                    $first = false;
+                    $resultString .= "<main_category>".htmlspecialchars(strip_tags($categories[$category_id]['name']))."</main_category>";
+                  }
+                  else if ($pos === false && !first) {
+                    $resultString .= "<secondary_category".$count.">".htmlspecialchars(strip_tags($categories[$category_id]['name']))."</secondary_category".$count.">";
+                    $count++;
+                  }
+                  else {
+                    $resultString .= "<brand>".htmlspecialchars(strip_tags($categories[$category_id]['name']))."</brand>";
+                  }
+                } 
+              }
+              else {
+                $resultString .= "<secondary_category".$count.">".htmlspecialchars(strip_tags($categories[$category_id]['name']))."</secondary_category".$count.">";
+                $count++;
+              }
             }
-            }
+          }
         endforeach;
         return $resultString;
     }
@@ -249,7 +268,7 @@ class GenerateXml
                 } else if ($attribute_name == "price" && $product->getData("special_price") && $in_sale) {
                   $attribute_name = "price_from";
                 }
-                $resultString .= "<text ref_code=\"".htmlspecialchars(strip_tags($attribute_name))."\">".htmlentities(strip_tags($info), ENT_XML1, "UTF-8")."</text>";
+                $resultString .= "<".htmlspecialchars(strip_tags($attribute_name)).">".htmlentities(strip_tags($info), ENT_XML1, "UTF-8")."</".htmlspecialchars(strip_tags($attribute_name)).">";
             }
             }
         endforeach;
@@ -266,33 +285,19 @@ class GenerateXml
         $images = $this->getImageUrl($product);
         if(!$images) { return; }
         $count = 1;
+        $first = true;
         foreach ($images as $image) :
             {
-              $resultString .= "<image ref_code=\"image".$count."\" url_image=\"".htmlspecialchars(strip_tags($image['url']))."\"/>";
-              $count++;
+              if ($first) {
+                $first = false;
+                $resultString .= "<main_image>". htmlspecialchars(strip_tags($image['url']))."</main_image>";
+              }
+              else {
+                $resultString .= "<secondary_image".$count.">".htmlspecialchars(strip_tags($image['url']))."</secondary_image".$count.">";
+                $count++;
+              }
             }
         endforeach;
-        $this->_maxNumberImages = max($this->_maxNumberImages, $count);
-        return $resultString;
-    }
-  /**
-   * Creates types XML tags according Impresee XML schemma
-   * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products Collection $products collection of products
-   * @return string (XML like)
-   */
-    private function makeTypeTags($products)
-    {
-        $resultString  = "<categories>";
-        $resultString .= $this->makeHierarchyCategoriesTags($products);
-        $resultString .= "</categories>";
-
-        $resultString .= "<texts>";
-        $resultString .= $this->makeValidTextsTag();
-        $resultString .= "</texts>";
-
-        $resultString .= "<images>";
-        $resultString .= $this->makeValidImagesTag();
-        $resultString .= "</images>";
         return $resultString;
     }
   /**
@@ -300,14 +305,13 @@ class GenerateXml
    * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products Collection $products collection of products
    * @return string (XML like)
    */
-    private function makeHierarchyCategoriesTags($products)
+    private function makeHierarchyCategories($products)
     {
-        $resultString = "";
+        $categories = array();
         $store = $this->_storeManagerInterface->getStore();
         $rootCategoryId = $store->getRootCategoryId();
         $rootCategory = $this->_rootCategory->load($rootCategoryId);
         $categoriesIdArray = $this->toIntArray($rootCategory->getAllChildren(true));
-        $resultString .= "<category code=\"".htmlspecialchars(strip_tags($rootCategoryId))."\" name=\"".htmlspecialchars(strip_tags($rootCategory->getName()))."\"/>";
         foreach ($categoriesIdArray as $categoryId) :
             {
             /** ignores root category (already added)*/
@@ -316,46 +320,16 @@ class GenerateXml
             }
             $category = $this->_category->load($categoryId);
             $name = htmlspecialchars(strip_tags($category->getName()));
-            $resultString .= "<category code=\"".htmlspecialchars(strip_tags($category->getId()))."\" name=\"".htmlspecialchars(strip_tags($name))."\">";
-            $resultString .= "<parent ref_code=\"".htmlspecialchars(strip_tags($category->getParentId()))."\"/>";
-            $resultString .= "</category>";
+            $categories[$category->getId()] = array('name' => htmlspecialchars(strip_tags($category->getName())));
+            if ($rootCategoryId != $category->getParentId()){
+              $categories[$category->getId()]['parent'] = $category->getParentId();
+            }
             }
         endforeach;
-        return $resultString;
+        return $categories;
     }
-  /**
-   * Make text xml types tags according to Impresee XML schemma
-   * @return string (XML like)
-   */
-    private function makeValidTextsTag()
-    {
-        $resultString = "";
-        foreach ($this->PRODUCT_ATTRIBUTES as $attribute) :
-        {
-            $attribute_name = $attribute;
-            if ($attribute_name == "special_price") {
-                  $attribute_name = "price";
-            } else if ($attribute_name == "price") {
-              $attribute_name = "price_from";
-            }  
-            $resultString .= "<text code=\"".htmlspecialchars(strip_tags($attribute_name))."\" name=\"".str_replace("_", " ", htmlspecialchars(strip_tags($attribute_name)))."\"/>";
-        }
-        endforeach;
-        return $resultString;
-    }
-  /**
-   * Make image xml types tags according to Impresee XML schemma
-   * @return string (XML like)
-   */
-    private function makeValidImagesTag()
-    {
-        $resultString = "";
-        $resultString .= "<image code=\"image1\" name=\"Main Image \"/>";
-        for ($i = 2; $i <= $this->_maxNumberImages; $i++) {
-            $resultString .= "<image code=\"image".$i."\" name=\"Image ".$i."\"/>";
-        }
-        return $resultString;
-    }
+ 
+
     /**
      * To get images from a single product
      * @param Magento\Catalog\Model\Product
