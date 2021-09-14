@@ -176,6 +176,9 @@ class GenerateXml
       $resultString .= "<id>";
       $resultString .= htmlspecialchars(strip_tags($product->getSku()));
       $resultString .= "</id>";
+      $resultString .= "<entity_id>";
+      $resultString .= htmlspecialchars(strip_tags($product->getId()));
+      $resultString .= "</entity_id>";
       $resultString .= "<url>";
       $resultString .= htmlspecialchars(strip_tags($product_url));
       $resultString .= "</url>";
@@ -210,10 +213,8 @@ class GenerateXml
           	$resultString .= '<attribute_text_'.htmlspecialchars(strip_tags($attribute_id)).'>'.htmlspecialchars(strip_tags($text)).'</attribute_text_'.htmlspecialchars(strip_tags($attribute_id)).'>';
       	  }
       	  catch (\Throwable $t)
-		  {
-			   // Executed only in PHP 7, will not match in PHP 5
-		  }
-
+          {
+          }
       }
       return $resultString;
    }
