@@ -32,13 +32,6 @@ class Config
         \Magento\Catalog\Model\Config $catalogConfig,
         $options
     ) {
-        $customOption = [];
-        unset($options['position']);
-        $route = $this->_request->getRouteName();
-        if ((strcmp($route, 'impresee')) == 0) {
-          $customOption['similarity'] = 'Similarity';
-        }
-        $options = array_merge($customOption, $options);
         return $options;
     }
 }
