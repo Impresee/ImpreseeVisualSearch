@@ -60,6 +60,7 @@ class GenerateXml
     Used to get the current date for the store
     */
     private $timezone;
+    private $request;
 
   /**
    * Constructor
@@ -76,7 +77,8 @@ class GenerateXml
         StoreManagerInterface $storeManagerInterface,
         LoggerInterface $logger,
         ProductAttributeRepositoryInterface $productAttributeRepository,
-        Timezone $timezone
+        Timezone $timezone,
+        \Magento\Framework\App\Request\Http $request
     ) {
         $this->_productCollection = $collection;
         $this->_category = $category;
@@ -84,6 +86,7 @@ class GenerateXml
         $this->_appEmulation = $appEmulation;
         $this->_storeManagerInterface = $storeManagerInterface;
         $this->logger = $logger;
+        $this->request = $request;
         $this->timezone = $timezone;
         $this->attributesIds = array();
         foreach ($this->PRODUCT_ATTRIBUTES as $attributeCode) {
@@ -110,6 +113,8 @@ class GenerateXml
    */
     public function generateXmlByStore($store)
     {
+        $page = (int)$this->request->getParam('page', '1');
+        $pagesize = (int)$this->request->getParam('page_size', '100');
         $resultString = "";
         $initialEnvironmentInfo = $this->_appEmulation
         ->startEnvironmentEmulation($store);
@@ -119,6 +124,17 @@ class GenerateXml
         ->addStoreFilter($store)
         ->addAttributeToSelect(array('*'))
         ->addMediaGalleryData();
+        $count = $collection->getSize();
+        $number_pages = (int) ceil($count * 1.0 /  $pagesize);
+        if ($page > $number_pages) return "<feed></feed>";
+        $collection->clear();
+        $collection = $collection
+        ->setStore($store)
+        ->addStoreFilter($store)
+        ->addAttributeToSelect(array('*'))
+        ->addMediaGalleryData()
+        ->setCurPage($page)
+        ->setPageSize($pagesize);
         $resultString = $this->getXml($collection);
         $this->_appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
         return $resultString;
