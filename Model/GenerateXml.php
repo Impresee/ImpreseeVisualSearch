@@ -117,7 +117,7 @@ class GenerateXml
         ->getCollection()
         ->setStore($store)
         ->addStoreFilter($store)
-        ->addAttributeToSelect($this->PRODUCT_ATTRIBUTES)
+        ->addAttributeToSelect(array('*'))
         ->addMediaGalleryData();
         $resultString = $this->getXml($collection);
         $this->_appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
@@ -197,10 +197,23 @@ class GenerateXml
       $attributes = $product->getAttributes();
       foreach($attributes as $a)
       {
+
           $attribute_code = $a->getAttributeCode();
+          $attribute_id = $a->getAttributeId();
           $attribute_name = $a->getName();
-          $attribute_value = $product->getData($attribute_code);
-          $resultString .= '<'.htmlspecialchars(strip_tags($attribute_name)).'>'.htmlspecialchars(strip_tags($attribute_value)).'</'.htmlspecialchars(strip_tags($attribute_name)).'>';
+          try {
+          	$data = $product->getData($attribute_code);
+          	$text = $product->getAttributeText($attribute_code);
+          	if (is_array($data) || is_object($data) || $attribute_code == null || $attribute_id == null || $text == null || $data == null) continue; 
+          	$resultString .= '<attribute_'.htmlspecialchars(strip_tags($attribute_id)).'>'.htmlspecialchars(strip_tags($attribute_name)).'</attribute_'.htmlspecialchars(strip_tags($attribute_id)).'>';
+          	$resultString .= '<attribute_data_'.htmlspecialchars(strip_tags($attribute_id)).'>'.htmlspecialchars(strip_tags($data)).'</attribute_data_'.htmlspecialchars(strip_tags($attribute_id)).'>';
+          	$resultString .= '<attribute_text_'.htmlspecialchars(strip_tags($attribute_id)).'>'.htmlspecialchars(strip_tags($text)).'</attribute_text_'.htmlspecialchars(strip_tags($attribute_id)).'>';
+      	  }
+      	  catch (\Throwable $t)
+		  {
+			   // Executed only in PHP 7, will not match in PHP 5
+		  }
+
       }
       return $resultString;
    }
