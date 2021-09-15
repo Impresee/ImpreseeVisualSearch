@@ -113,6 +113,7 @@ class GenerateXml
    */
     public function generateXmlByStore($store)
     {
+        if ($this->request->isHead()) return "";
         $page = (int)$this->request->getParam('page', '1');
         $pagesize = (int)$this->request->getParam('page_size', '100');
         $resultString = "";
