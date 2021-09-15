@@ -90,9 +90,13 @@ class GenerateXml
         $this->timezone = $timezone;
         $this->attributesIds = array();
         foreach ($this->PRODUCT_ATTRIBUTES as $attributeCode) {
-          $attribute = $productAttributeRepository->get($attributeCode);
-          $attributeId = $attribute->getAttributeId();
-          array_push($this->attributesIds, $attributeId);
+          try {
+            $attribute = $productAttributeRepository->get($attributeCode);
+            $attributeId = $attribute->getAttributeId();
+            array_push($this->attributesIds, $attributeId);
+          } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+              //  attribute does not exist
+          }
         }
     }
   /**
