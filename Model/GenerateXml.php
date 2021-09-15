@@ -19,7 +19,7 @@ class GenerateXml
    * Product features saved on the xml file
    * @var string[]
    */
-    protected $PRODUCT_ATTRIBUTES = ["sku", "name", "price", "special_price", "special_from_date", "special_to_date"];
+    protected $PRODUCT_ATTRIBUTES = ["sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","description","short_description","weight","visibility","meta_title","meta_keywords","meta_description","qty","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto"];
   /**
    * Collection of Products
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
@@ -122,7 +122,7 @@ class GenerateXml
         ->getCollection()
         ->setStore($store)
         ->addStoreFilter($store)
-        ->addAttributeToSelect(array('*'))
+        ->addAttributeToSelect($this->PRODUCT_ATTRIBUTES)
         ->addMediaGalleryData();
         $count = $collection->getSize();
         $number_pages = (int) ceil($count * 1.0 /  $pagesize);
@@ -131,7 +131,7 @@ class GenerateXml
         $collection = $collection
         ->setStore($store)
         ->addStoreFilter($store)
-        ->addAttributeToSelect(array('*'))
+        ->addAttributeToSelect($this->PRODUCT_ATTRIBUTES)
         ->addMediaGalleryData()
         ->setCurPage($page)
         ->setPageSize($pagesize);
@@ -168,10 +168,12 @@ class GenerateXml
               {
                 $productTypeInstance = $product->getTypeInstance();
                 $usedProducts = $productTypeInstance->getUsedProducts($product);
+                $attributes = $productTypeInstance->getConfigurableAttributes($product);
                 foreach ($usedProducts  as $child) {
                     $resultString.= "<product>";
                     $resultString.= "<parent_id>".$product->getSku()."</parent_id>";
                     $resultString .= $this->parseSimpleProduct($child, $product_url, $categories);
+                    $resultString .= $this->makeAttributes($product, $attributes);
                     $resultString.= "</product>";
                 }
               }
@@ -205,21 +207,20 @@ class GenerateXml
       $resultString .= $this->makeAttributesTags($product);
       // Get categories and extra attributes
       $resultString .= $this->makeCategoriesTags($product, $categories);
-      $resultString .= $this->makeAttributes($product);
+      
       return $resultString;
 
    }
 
-   private function makeAttributes($product)
+   private function makeAttributes($product, $attributes)
    {
       $resultString = "";
-      $attributes = $product->getAttributes();
-      foreach($attributes as $a)
+      foreach($attributes as $attribute)
       {
-
-          $attribute_code = $a->getAttributeCode();
-          $attribute_id = $a->getAttributeId();
-          $attribute_name = $a->getName();
+          $product_attribue = $attribute->getProductAttribute();
+          $attribute_code = $product_attribue->getAttributeCode();
+          $attribute_id = $product_attribue->getAttributeId();
+          $attribute_name = $product_attribue->getName();
           try {
           	$data = $product->getData($attribute_code);
           	$text = $product->getAttributeText($attribute_code);
