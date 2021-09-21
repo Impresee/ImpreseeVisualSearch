@@ -61,6 +61,7 @@ class GenerateXml
     */
     private $timezone;
     private $request;
+    private $reviewFactory;
 
   /**
    * Constructor
@@ -78,7 +79,8 @@ class GenerateXml
         LoggerInterface $logger,
         ProductAttributeRepositoryInterface $productAttributeRepository,
         Timezone $timezone,
-        \Magento\Framework\App\Request\Http $request
+        \Magento\Framework\App\Request\Http $request,
+        \Magento\Review\Model\ReviewFactory $reviewFactory
     ) {
         $this->_productCollection = $collection;
         $this->_category = $category;
@@ -88,6 +90,7 @@ class GenerateXml
         $this->logger = $logger;
         $this->request = $request;
         $this->timezone = $timezone;
+        $this->reviewFactory = $reviewFactory;
         $this->attributesIds = array();
         foreach ($this->PRODUCT_ATTRIBUTES as $attributeCode) {
           try {
@@ -140,7 +143,7 @@ class GenerateXml
         ->addMediaGalleryData()
         ->setCurPage($page)
         ->setPageSize($pagesize);
-        $resultString = $this->getXml($collection);
+        $resultString = $this->getXml($collection, $store);
         $this->_appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
         return $resultString;
     }
@@ -149,11 +152,11 @@ class GenerateXml
    * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products Collection $products collection of products
    * @return string (XML like)
    */
-    public function getXml($products)
+    public function getXml($products, $storeId)
     {
         $resultString  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
         $resultString .= "<feed>";
-        $resultString .= $this->makeProductsTags($products);
+        $resultString .= $this->makeProductsTags($products, $storeId);
         $resultString .= "</feed>";
         return $resultString;
     }
@@ -162,12 +165,14 @@ class GenerateXml
    * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products Collection $products collection of products
    * @return string (XML like)
    */
-    public function makeProductsTags($products)
+    public function makeProductsTags($products, $storeId)
     {
       $categories = $this->makeHierarchyCategories($products);
         $resultString = "";
         foreach ($products as $product) :
             {
+              //reviews
+              $reviewData = $this->makeReviewData($product, $storeId);
               $product_url = $product->getProductUrl();
               if($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
               {
@@ -179,6 +184,7 @@ class GenerateXml
                     $resultString.= "<parent_id>".$product->getSku()."</parent_id>";
                     $resultString .= $this->parseSimpleProduct($child, $product_url, $categories);
                     $resultString .= $this->makeAttributes($product, $attributes);
+                    $resultString .= $reviewData;
                     $resultString.= "</product>";
                 }
               }
@@ -186,6 +192,7 @@ class GenerateXml
               {
                 $resultString.= "<product>";
                 $resultString .= $this->parseSimpleProduct($product, $product_url, $categories);
+                $resultString .= $reviewData;
                 $resultString.= "</product>";
               }
             }
@@ -212,8 +219,22 @@ class GenerateXml
       $resultString .= $this->makeAttributesTags($product);
       // Get categories and extra attributes
       $resultString .= $this->makeCategoriesTags($product, $categories);
-      
       return $resultString;
+
+   }
+
+   private function makeReviewData($product, $storeId) {
+    $resultString = '';
+    $this->reviewFactory->create()->getEntitySummary($product, $storeId);
+    $ratingSummary = $product->getRatingSummary();
+    if ($ratingSummary == null) return;
+    $resultString .= "<rating_summary>";
+    $resultString .= htmlspecialchars(strip_tags($ratingSummary->getRatingSummary()));
+    $resultString .= "</rating_summary>";
+    $resultString .= "<rating_count>";
+    $resultString .= htmlspecialchars(strip_tags($ratingSummary->getReviewsCount()));
+    $resultString .= "</rating_count>";
+    return $resultString;
 
    }
 
