@@ -254,7 +254,6 @@ class GenerateXml
         foreach ($product->getCategoryIds() as $category_id) :
             {
             if ($category_id && array_key_exists($category_id, $categories)) {
-              $this->logger->info($categories[$category_id]['name']);
               if ($categories[$category_id]['name'] != null
                    && trim(strtolower(htmlspecialchars(strip_tags($categories[$category_id]['name'])))) === 'pasillo infinito') {
                      continue;
