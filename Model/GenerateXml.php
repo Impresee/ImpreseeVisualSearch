@@ -19,7 +19,7 @@ class GenerateXml
    * Product features saved on the xml file
    * @var string[]
    */
-  protected $PRODUCT_ATTRIBUTES = ["sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","qty","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto"];
+  protected $PRODUCT_ATTRIBUTES = ["sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","qty","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto", "is_new"];
   /**
    * Collection of Products
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
@@ -178,12 +178,14 @@ class GenerateXml
               {
                 $productTypeInstance = $product->getTypeInstance();
                 $usedProducts = $productTypeInstance->getUsedProducts($product);
+                $parentAttributes = $this->makeAttributesTags($product, ["is_cyberday", "is_new"]);
                 $attributes = $productTypeInstance->getConfigurableAttributes($product);
                 foreach ($usedProducts  as $child) {
                     $resultString.= "<product>";
                     $resultString.= "<parent_id>".$product->getSku()."</parent_id>";
+
                     $resultString .= $this->parseSimpleProduct($child, $product_url, $categories);
-                    $resultString .= $this->makeAttributes($product, $attributes);
+                    $resultString .= $parentAttributes;
                     $resultString .= $reviewData;
                     $resultString.= "</product>";
                 }
@@ -216,7 +218,7 @@ class GenerateXml
       // Get images
       $resultString .= $this->makeImageTags($product);
       // Get Texts
-      $resultString .= $this->makeAttributesTags($product);
+      $resultString .= $this->makeAttributesTags($product, $this->PRODUCT_ATTRIBUTES);
       // Get categories and extra attributes
       $resultString .= $this->makeCategoriesTags($product, $categories);
       return $resultString;
@@ -238,30 +240,6 @@ class GenerateXml
 
    }
 
-   private function makeAttributes($product, $attributes)
-   {
-      $resultString = "";
-      foreach($attributes as $attribute)
-      {
-          $product_attribue = $attribute->getProductAttribute();
-          $attribute_code = $product_attribue->getAttributeCode();
-          $attribute_id = $product_attribue->getAttributeId();
-          $attribute_name = $product_attribue->getName();
-          try {
-          	$data = $product->getData($attribute_code);
-          	$text = $product->getAttributeText($attribute_code);
-          	if (is_array($data) || is_object($data) || $attribute_code == null || $attribute_id == null || $text == null || $data == null) continue; 
-          	$resultString .= '<attribute_'.htmlspecialchars(strip_tags($attribute_id)).'>'.htmlspecialchars(strip_tags($attribute_name)).'</attribute_'.htmlspecialchars(strip_tags($attribute_id)).'>';
-          	$resultString .= '<attribute_data_'.htmlspecialchars(strip_tags($attribute_id)).'>'.htmlspecialchars(strip_tags($data)).'</attribute_data_'.htmlspecialchars(strip_tags($attribute_id)).'>';
-          	$resultString .= '<attribute_text_'.htmlspecialchars(strip_tags($attribute_id)).'>'.htmlspecialchars(strip_tags($text)).'</attribute_text_'.htmlspecialchars(strip_tags($attribute_id)).'>';
-      	  }
-      	  catch (\Throwable $t)
-          {
-          }
-      }
-      return $resultString;
-   }
-
   /**
    * Make categories XML tags for a single product according to Impresee XML
    * schemma
@@ -276,6 +254,11 @@ class GenerateXml
         foreach ($product->getCategoryIds() as $category_id) :
             {
             if ($category_id && array_key_exists($category_id, $categories)) {
+              $this->logger->info($categories[$category_id]['name']);
+              if ($categories[$category_id]['name'] != null
+                   && trim(strtolower(htmlspecialchars(strip_tags($categories[$category_id]['name'])))) === 'pasillo infinito') {
+                     continue;
+                  }
               if ( array_key_exists('parent', $categories[$category_id])){
                 $parent_id = $categories[$category_id]['parent'];
                 if (array_key_exists($parent_id, $categories)) {
@@ -326,11 +309,11 @@ class GenerateXml
    * @param Magento\Catalog\Model\Product
    * @return string (XML like)
    */
-    private function makeAttributesTags($product)
+    private function makeAttributesTags($product, $attributes)
     {
         $resultString = "";
         $in_sale = $this->productHasSpecialPriceAvailable($product);
-        foreach ($this->PRODUCT_ATTRIBUTES as $attribute) :
+        foreach ($attributes as $attribute) :
             {
             $attribute_name = $attribute;
             if ($attribute_name == "special_from_date" || $attribute_name == "special_to_date"){
@@ -356,6 +339,7 @@ class GenerateXml
         endforeach;
         return $resultString;
     }
+    
   /**
    * Make image XML tags for a single product according to Impresee XML schema
    * @param Magento\Catalog\Model\Product
