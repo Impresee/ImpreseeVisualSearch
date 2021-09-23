@@ -344,6 +344,13 @@ class GenerateXml
                   $attribute_name = "price_from";
                 }
                 $resultString .= "<".htmlspecialchars(strip_tags($attribute_name)).">".htmlentities(strip_tags($info), ENT_XML1, "UTF-8")."</".htmlspecialchars(strip_tags($attribute_name)).">";
+                if ($attribute_name == "price" || $attribute_name == "price_from") {
+                  continue;
+                }
+                $textual_data = $product->getAttributeText($attribute);
+                if($textual_data){
+                  $resultString .= "<".htmlspecialchars(strip_tags($attribute_name))."_text>".htmlentities(strip_tags($textual_data), ENT_XML1, "UTF-8")."</".htmlspecialchars(strip_tags($attribute_name))."_text>";
+                }
             }
             }
         endforeach;
