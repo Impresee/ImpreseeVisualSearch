@@ -193,6 +193,7 @@ class GenerateXml
               else
               {
                 $resultString.= "<product>";
+                $product->load('media_gallery');
                 $resultString .= $this->parseSimpleProduct($product, $product_url, $categories);
                 $resultString .= $reviewData;
                 $resultString.= "</product>";
