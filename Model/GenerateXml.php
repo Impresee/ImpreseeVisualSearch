@@ -19,7 +19,7 @@ class GenerateXml
    * Product features saved on the xml file
    * @var string[]
    */
-  protected $PRODUCT_ATTRIBUTES = ["quantity_and_stock_status", "status", "summary_description", "sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","qty","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto", "is_new"];
+  protected $PRODUCT_ATTRIBUTES = ["status", "summary_description", "sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","qty","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto", "is_new"];
   /**
    * Collection of Products
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
@@ -113,6 +113,35 @@ class GenerateXml
         return array_map(function($val) { return (int)$val; },
           $stringArray);
     }
+    function stripInvalidXml($value)
+{
+    $ret = "";
+    $current;
+    if (empty($value)) 
+    {
+        return $ret;
+    }
+ 
+    $length = strlen($value);
+    for ($i=0; $i < $length; $i++)
+    {
+        $current = ord($value[$i]);
+        if (($current == 0x9) ||
+            ($current == 0xA) ||
+            ($current == 0xD) ||
+            (($current >= 0x20) && ($current <= 0xD7FF)) ||
+            (($current >= 0xE000) && ($current <= 0xFFFD)) ||
+            (($current >= 0x10000) && ($current <= 0x10FFFF)))
+        {
+            $ret .= chr($current);
+        }
+        else
+        {
+            $ret .= " ";
+        }
+    }
+    return $ret;
+}
   /**
    * Main XML generation function
    * @param store id (int)
@@ -123,7 +152,6 @@ class GenerateXml
         if ($this->request->isHead()) return "";
         $page = (int)$this->request->getParam('page', '1');
         $use_out_of_stock = (int)$this->request->getParam('out_stock', '0');
-        $this->logger->info($use_out_of_stock);
         $pagesize = (int)$this->request->getParam('page_size', '100');
         $resultString = "";
         $initialEnvironmentInfo = $this->_appEmulation
@@ -328,13 +356,18 @@ class GenerateXml
                 } else if ($attribute_name == "price" && $product->getData("special_price") && $in_sale) {
                   $attribute_name = "price_from";
                 }
-                $resultString .= "<".htmlspecialchars(strip_tags($attribute_name)).">".htmlentities(strip_tags($info), ENT_XML1, "UTF-8")."</".htmlspecialchars(strip_tags($attribute_name)).">";
+                $info = preg_replace(
+				    '/[\x00-\x08\x0B\x0C\x0E-\x1F]|\xED[\xA0-\xBF].|\xEF\xBF[\xBE\xBF]/',
+				    "\xEF\xBF\xBD",
+				    $info
+				);
+                $resultString .= "<".htmlspecialchars(strip_tags($attribute_name))."><![CDATA[".$this->stripInvalidXml(htmlentities(strip_tags($info), ENT_XML1, "UTF-8"))."]]></".htmlspecialchars(strip_tags($attribute_name)).">";
                 if ($attribute_name == "price" || $attribute_name == "price_from") {
                   continue;
                 }
                 $textual_data = $product->getAttributeText($attribute);
                 if($textual_data){
-                  $resultString .= "<".htmlspecialchars(strip_tags($attribute_name))."_text>".htmlentities(strip_tags($textual_data), ENT_XML1, "UTF-8")."</".htmlspecialchars(strip_tags($attribute_name))."_text>";
+                  $resultString .= "<".htmlspecialchars(strip_tags($attribute_name))."_text><![CDATA[".$this->stripInvalidXml(htmlentities(strip_tags($textual_data), ENT_XML1, "UTF-8"))."]]></".htmlspecialchars(strip_tags($attribute_name))."_text>";
                 }
             }
             }
