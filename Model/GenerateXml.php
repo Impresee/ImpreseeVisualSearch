@@ -19,7 +19,7 @@ class GenerateXml
    * Product features saved on the xml file
    * @var string[]
    */
-  protected $PRODUCT_ATTRIBUTES = ["status", "summary_description", "sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","qty","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto", "is_new"];
+  protected $PRODUCT_ATTRIBUTES = ["quantity_and_stock_status","status", "summary_description", "sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","qty","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto", "is_new"];
   /**
    * Collection of Products
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products

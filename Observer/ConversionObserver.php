@@ -67,7 +67,7 @@ class ConversionObserver implements ObserverInterface
             array_push($skus, $item->getSku());
             array_push($types,$item->getProductType());
         }
-        return 'prodids='.urlencode(join('|', $product_ids)).'types='.urlencode(join('|', $types)).'&qtys='.urlencode(join('|', $quantities)).'&ps='.urlencode(join('|', $prices)).'&skus='.urlencode(join('|', $skus));
+        return 'prodids='.urlencode(join('|', $product_ids)).'&types='.urlencode(join('|', $types)).'&qtys='.urlencode(join('|', $quantities)).'&ps='.urlencode(join('|', $prices)).'&skus='.urlencode(join('|', $skus));
     }
 
     private function parseCustomer(\Magento\Sales\Model\Order $order)
