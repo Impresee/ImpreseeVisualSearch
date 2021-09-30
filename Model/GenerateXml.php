@@ -19,7 +19,7 @@ class GenerateXml
    * Product features saved on the xml file
    * @var string[]
    */
-  protected $PRODUCT_ATTRIBUTES = ["status", "summary_description", "sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","qty","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto", "is_new"];
+  protected $PRODUCT_ATTRIBUTES = ["quantity_and_stock_status", "status", "summary_description", "sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","qty","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto", "is_new"];
   /**
    * Collection of Products
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
@@ -123,6 +123,7 @@ class GenerateXml
         if ($this->request->isHead()) return "";
         $page = (int)$this->request->getParam('page', '1');
         $use_out_of_stock = (int)$this->request->getParam('out_stock', '0');
+        $this->logger->info($use_out_of_stock);
         $pagesize = (int)$this->request->getParam('page_size', '100');
         $resultString = "";
         $initialEnvironmentInfo = $this->_appEmulation
@@ -132,7 +133,6 @@ class GenerateXml
         ->setStore($store)
         ->addStoreFilter($store)
         ->addAttributeToSelect($this->PRODUCT_ATTRIBUTES)
-        ->setFlag('has_stock_status_filter', $use_out_of_stock ? false : true)
         ->addMediaGalleryData();
         $count = $collection->getSize();
         $number_pages = (int) ceil($count * 1.0 /  $pagesize);
@@ -143,10 +143,9 @@ class GenerateXml
         ->addStoreFilter($store)
         ->addAttributeToSelect($this->PRODUCT_ATTRIBUTES)
         ->addMediaGalleryData()
-        ->setFlag('has_stock_status_filter', $use_out_of_stock ? false : true)
         ->setCurPage($page)
         ->setPageSize($pagesize);
-        $resultString = $this->getXml($collection, $store);
+        $resultString = $this->getXml($collection, $store, $use_out_of_stock);
         $this->_appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
         return $resultString;
     }
@@ -155,11 +154,11 @@ class GenerateXml
    * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products Collection $products collection of products
    * @return string (XML like)
    */
-    public function getXml($products, $storeId)
+    public function getXml($products, $storeId, $use_out_of_stock)
     {
         $resultString  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
         $resultString .= "<feed>";
-        $resultString .= $this->makeProductsTags($products, $storeId);
+        $resultString .= $this->makeProductsTags($products, $storeId, $use_out_of_stock);
         $resultString .= "</feed>";
         return $resultString;
     }
@@ -168,7 +167,7 @@ class GenerateXml
    * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products Collection $products collection of products
    * @return string (XML like)
    */
-    public function makeProductsTags($products, $storeId)
+    public function makeProductsTags($products, $storeId, $use_out_of_stock)
     {
       $categories = $this->makeHierarchyCategories($products);
         $resultString = "";
@@ -187,7 +186,7 @@ class GenerateXml
                     $resultString.= "<product>";
                     $resultString.= "<parent_id>".$product->getSku()."</parent_id>";
 
-                    $resultString .= $this->parseSimpleProduct($child, $product_url, $categories);
+                    $resultString .= $this->parseSimpleProduct($child, $product_url, $categories, $use_out_of_stock);
                     $resultString .= $parentAttributes;
                     $resultString .= $reviewData;
                     $resultString.= "</product>";
@@ -197,7 +196,7 @@ class GenerateXml
               {
                 $resultString.= "<product>";
                 $product->load('media_gallery');
-                $resultString .= $this->parseSimpleProduct($product, $product_url, $categories);
+                $resultString .= $this->parseSimpleProduct($product, $product_url, $categories, $use_out_of_stock);
                 $resultString .= $reviewData;
                 $resultString.= "</product>";
               }
@@ -319,7 +318,7 @@ class GenerateXml
         foreach ($attributes as $attribute) :
             {
             $attribute_name = $attribute;
-            if ($attribute_name == "special_from_date" || $attribute_name == "special_to_date"){
+            if ($attribute_name == "special_from_date" || $attribute_name == "special_to_date" || $attribute_name == "quantity_and_stock_status"){
               continue;
             }
             if ($info=$product->getData($attribute)) {
