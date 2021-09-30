@@ -19,7 +19,7 @@ class GenerateXml
    * Product features saved on the xml file
    * @var string[]
    */
-  protected $PRODUCT_ATTRIBUTES = ["sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","qty","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto", "is_new"];
+  protected $PRODUCT_ATTRIBUTES = ["status", "summary_description", "sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","qty","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto", "is_new"];
   /**
    * Collection of Products
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
@@ -122,6 +122,7 @@ class GenerateXml
     {
         if ($this->request->isHead()) return "";
         $page = (int)$this->request->getParam('page', '1');
+        $use_out_of_stock = (int)$this->request->getParam('out_stock', '0');
         $pagesize = (int)$this->request->getParam('page_size', '100');
         $resultString = "";
         $initialEnvironmentInfo = $this->_appEmulation
@@ -131,6 +132,7 @@ class GenerateXml
         ->setStore($store)
         ->addStoreFilter($store)
         ->addAttributeToSelect($this->PRODUCT_ATTRIBUTES)
+        ->setFlag('has_stock_status_filter', $use_out_of_stock ? false : true)
         ->addMediaGalleryData();
         $count = $collection->getSize();
         $number_pages = (int) ceil($count * 1.0 /  $pagesize);
@@ -141,6 +143,7 @@ class GenerateXml
         ->addStoreFilter($store)
         ->addAttributeToSelect($this->PRODUCT_ATTRIBUTES)
         ->addMediaGalleryData()
+        ->setFlag('has_stock_status_filter', $use_out_of_stock ? false : true)
         ->setCurPage($page)
         ->setPageSize($pagesize);
         $resultString = $this->getXml($collection, $store);
@@ -207,7 +210,7 @@ class GenerateXml
    {
       $resultString = "";
       $resultString .= "<id>";
-      $resultString .= htmlspecialchars(strip_tags($product->getSku()));
+      $resultString .= htmlspecialchars(strip_tags($product->getId()));
       $resultString .= "</id>";
       $resultString .= "<entity_id>";
       $resultString .= htmlspecialchars(strip_tags($product->getId()));
