@@ -50,7 +50,7 @@ class DatafeedUrl extends Field
         $html  = '<tr>';
         $html .= '  <td class="label">Datasource URL for this store</td>';
         $html .= '  <td class="value" style="color:red">';
-        $html .=       $this->_storeManagerInterface->getStore($this->_storeId)->getBaseUrl() . "/impresee/Feed/?client_code=" . $this->codesHelper->getClientCode();
+        $html .=       $this->_storeManagerInterface->getStore($this->_storeId)->getBaseUrl() . "/impresee/Feed/?client_code=" . $this->codesHelper->getClientCode().'&page=1';
         $html .= '     <p class="note">';
         $html .= '         <span>Sign-in/Register in <a href="http://www.impresee.com" target="_blank">Impresee</a> and create a new catalog with this URL</span>';
         $html .= '     </p>';

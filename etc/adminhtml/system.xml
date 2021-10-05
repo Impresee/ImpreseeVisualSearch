@@ -28,14 +28,14 @@
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
                 <field id="photo_url" translate="label" type="text" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Photo search service URL</label>
-                    <comment>URL given by Impresee to search by photo (If left blank the search by photo button won't show).</comment>
+                    <label>Photo search UUID</label>
+                    <comment>UUID given by Impresee, used to track performance metrics for the store and search bar.</comment>
                     <depends>
                         <field id="enable_photo">1</field>
                     </depends>
                 </field>
                 <field id="enable_sketch" translate="label" type="select" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Sketch Search</label>
+                    <label>Sketch Search [deprecated]</label>
                     <comment>Enable/Disable Sketch Search (enable it when you have your search service URL).</comment>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
@@ -48,13 +48,13 @@
                 </field>
             </group>
             <group id="icons" translate="label" type="text" sortOrder="3" showInDefault="0" showInWebsite="0" showInStore="1">
-                <label>Icons</label>
+                <label>Icons [deprecated]</label>
                 <field id="module_set_buttons" translate="label" type="select" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
                     <label>Let Impresee display the search buttons</label>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
                 <field id="icon_provider" translate="label" type="select" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Select Icons Source</label>
+                    <label>Select Icons Source Icons [deprecated]</label>
                     <comment>You can choose to use Impresee buttons catalog, or upload your own icon images</comment>
                     <source_model>ImpreseeAI\ImpreseeVisualSearch\Model\Config\DisplayButtonOption</source_model>
                     <depends>
@@ -62,7 +62,7 @@
                     </depends>
                 </field>
                 <field id="photo_icon" translate="label" type="image" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Search by Photo Icon</label>
+                    <label>Search by Photo Icon [deprecated]</label>
                     <backend_model>ImpreseeAI\ImpreseeVisualSearch\Model\Config\Image</backend_model>
                     <upload_dir config="system/filesystem/media/" scope_info="1">icons</upload_dir>
                     <base_url type="media" scope_info="1">icons</base_url>
@@ -73,7 +73,7 @@
                     </depends>
                 </field>
                 <field id="sketch_icon" translate="label" type="image" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Search by Sketch Icon</label>
+                    <label>Search by Sketch Icon [deprecated]</label>
                     <backend_model>ImpreseeAI\ImpreseeVisualSearch\Model\Config\Image</backend_model>
                     <upload_dir config="system/filesystem/media/" scope_info="1">icons</upload_dir>
                     <base_url type="media" scope_info="1">icons</base_url>
@@ -95,24 +95,24 @@
                 </field>
             </group>
             <group id="frontend" translate="label" type="text" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
-                <label>Frontend (Optional - Advanced Users)</label>
+                <label>Frontend (Optional - Advanced Users) [deprecated]</label>
                 <field id="javascript_comment" translate="label" type="text" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
                     <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\JavascriptComment</frontend_model>
                 </field>
                 <field id="javacode" translate="label" type="textarea" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Javascript/Jquery</label>
+                    <label>Javascript/Jquery [deprecated]</label>
                     <comment>
                       If you need to change the behavior of the buttons (e.g. move it to somewhere else), code it here!. This code will be executed on-load and on-resize.
                     </comment>
                 </field>
                 <field id="classes" translate="label" type="text" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>CSS Classes</label>
+                    <label>CSS Classes [deprecated]</label>
                     <comment>
 If you have CSS classes that you want to use in the buttons, add them here! or add new ones, but don't forget to define them below.
                     </comment>
                 </field>
                 <field id="styles" translate="label" type="textarea" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>CSS</label>
+                    <label>CSS [deprecated]</label>
                     <comment>Add CSS code here!</comment>
                 </field>
             </group>
