@@ -47,7 +47,7 @@ class JavascriptComment extends Field
      */
     public function render(AbstractElement $element)
     {
-        $url   = $this->_storeManagerInterface->getStore($this->_storeId)->getBaseUrl() . "impresee/preview?client_code=" . $this->codesHelper->getClientCode();
+        $url   = $this->_storeManagerInterface->getStore($this->_storeId)->getBaseUrl() . "impresee/preview?client_code=" . $this->codesHelper->getClientCode().'&page=1';
         $html  = '<div class="comment">';
         $html .=  '<ul>';
         $html .=    '<li>Add javascript/Jquery and/or CSS to customize the behavior and look of the visual search buttons. Make sure to set their classes to <strong>impresee-photo-button</strong> and <strong>impresee-sketch-button</strong>.</li>';

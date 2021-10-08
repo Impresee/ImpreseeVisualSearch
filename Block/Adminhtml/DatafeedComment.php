@@ -66,6 +66,6 @@ class DatafeedComment extends Field
      */
     private function getDataSourceUrl()
     {
-        return $this->_storeManagerInterface->getStore($this->_storeId)->getBaseUrl() . "impresee/DataFeed/?client_code=" . $this->codesHelper->getClientCode();
+        return $this->_storeManagerInterface->getStore($this->_storeId)->getBaseUrl() . "impresee/DataFeed/?client_code=" . $this->codesHelper->getClientCode().'&page=1';
     }
 }

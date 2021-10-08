@@ -41,7 +41,7 @@ class Preview extends Field
      */
     public function render(AbstractElement $element)
     {
-        $url   = $this->_storeManager->getStore($this->_storeId)->getBaseUrl() . "impresee/preview?client_code=" . $this->codesHelper->getClientCode();
+        $url   = $this->_storeManager->getStore($this->_storeId)->getBaseUrl() . "impresee/preview?client_code=" . $this->codesHelper->getClientCode().'&page=1';
         $html = '   <td></td>';
         $html .= '     <span>A preview of your frontend store can be visited <a href="'.$url.'">here</a> (don\'t forget to see it on mobile)</span>';
         return $html;

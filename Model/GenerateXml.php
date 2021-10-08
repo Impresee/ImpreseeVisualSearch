@@ -190,6 +190,11 @@ class GenerateXml
         $resultString .= "</feed>";
         return $resultString;
     }
+
+  private function getProductImages($product) {
+    $images = $this->getImageUrl($product);
+    return $images;
+  }
   /**
    * Make XML products tags for all product according to Impresee Schema
    * @param ImpreseeAI\ImpreseeVisualSearch\Model\Products Collection $products collection of products
@@ -204,6 +209,8 @@ class GenerateXml
               //reviews
               $reviewData = $this->makeReviewData($product, $storeId);
               $product_url = $product->getProductUrl();
+              $product->load('media_gallery');
+              $main_product_images = $this->getProductImages($product);
               if($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
               {
                 $productTypeInstance = $product->getTypeInstance();
@@ -211,9 +218,15 @@ class GenerateXml
                 $parentAttributes = $this->makeAttributesTags($product, ["is_cyberday", "is_new"]);
                 $attributes = $productTypeInstance->getConfigurableAttributes($product);
                 foreach ($usedProducts  as $child) {
+                    $child_images = $this->getProductImages($child);
                     $resultString.= "<product>";
                     $resultString.= "<parent_id>".$product->getSku()."</parent_id>";
-
+                    if ($child_images != null){
+                      $resultString .= $this->makeImageTags($main_product_images);
+                    }
+                    else {
+                      $resultString .= $this->makeImageTags($child_images);
+                    }
                     $resultString .= $this->parseSimpleProduct($child, $product_url, $categories, $use_out_of_stock);
                     $resultString .= $parentAttributes;
                     $resultString .= $reviewData;
@@ -223,8 +236,9 @@ class GenerateXml
               else
               {
                 $resultString.= "<product>";
-                $product->load('media_gallery');
                 $resultString .= $this->parseSimpleProduct($product, $product_url, $categories, $use_out_of_stock);
+                // Get images
+                $resultString .= $this->makeImageTags($main_product_images);
                 $resultString .= $reviewData;
                 $resultString.= "</product>";
               }
@@ -245,9 +259,6 @@ class GenerateXml
       $resultString .= "<url>";
       $resultString .= htmlspecialchars(strip_tags($product_url));
       $resultString .= "</url>";
-
-      // Get images
-      $resultString .= $this->makeImageTags($product);
       // Get Texts
       $resultString .= $this->makeAttributesTags($product, $this->PRODUCT_ATTRIBUTES);
       // Get categories and extra attributes
@@ -380,10 +391,9 @@ class GenerateXml
    * @param Magento\Catalog\Model\Product
    * @return string (XML like)
    */
-    private function makeImageTags($product)
+    private function makeImageTags($images)
     {
         $resultString = "";
-        $images = $this->getImageUrl($product);
         if(!$images) { return; }
         $count = 1;
         $first = true;
