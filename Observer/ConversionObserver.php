@@ -34,11 +34,12 @@ class ConversionObserver implements ObserverInterface
             $real_order_id = $order->getRealOrderId();
             $status_label = $order->getStatusLabel();
             $parsed_items = $this->parseItems($order->getAllItems());
+            $payment_method = $this->parsePaymentMethod($order);
             $parsed_customer = $this->parseCustomer($order);
             $parsed_client = $this->parseClient($server_data);
             $currency = $order->getOrderCurrencyCode() != null ? $order->getOrderCurrencyCode() : '';
             $discount = $order->getDiscountAmount() != null ? $order->getDiscountAmount()() : 0;
-            $url_data = 'a='.urlencode($action).'&evt='.urlencode($event_type).'&ref='.urlencode($order_id).'&roi='.urlencode($real_order_id).'&sta='.urlencode($status_label).'&'.$parsed_items.'&'.$parsed_customer.'&'.$parsed_client.'&tdis='.urlencode($discount).'&tord='.urlencode($order->getTotalDue()).'&curr='.urlencode($currency);
+            $url_data = 'a='.urlencode($action).'&evt='.urlencode($event_type).'&'.$payment_method.'&ref='.urlencode($order_id).'&roi='.urlencode($real_order_id).'&sta='.urlencode($status_label).'&'.$parsed_items.'&'.$parsed_customer.'&'.$parsed_client.'&tdis='.urlencode($discount).'&tord='.urlencode($order->getTotalDue()).'&curr='.urlencode($currency);
             $photo_app = $this->_codesHelper->getPhotoUrl(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
             $this->callConversionUrl($photo_app, $url_data);
         } catch (\Exception $e) {
@@ -46,10 +47,18 @@ class ConversionObserver implements ObserverInterface
         }
     }
 
+    
+
     private function callConversionUrl($app, $url_data) {
 
         $register_conversion_endpoint = 'https://api.impresee.com/ImpreseeSearch/api/v3/search/register_magento/';
         $content = file($register_conversion_endpoint.$app.'?'.$url_data);
+    }
+
+    private function parsePaymentMethod($order) {
+        $payment = $order->getPayment();
+        $method = $payment->getMethodInstance();
+        return 'pmt='.urlencode($method->getTitle()).'&pmc='.urlencode($method->getCode());
     }
 
     private function parseItems(array $items)
