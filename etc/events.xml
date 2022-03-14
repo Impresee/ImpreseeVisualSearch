@@ -4,6 +4,6 @@
         <observer name="impreseeConversionObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ConversionObserver" />
     </event>
     <event name="sales_order_save_after">
-        <observer name="impreseeUpdateConversionObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ConversionObserver" />
+        <observer name="impreseeConversionObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ConversionObserver" />
     </event>
 </config>
