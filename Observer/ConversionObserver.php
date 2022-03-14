@@ -38,7 +38,7 @@ class ConversionObserver implements ObserverInterface
             $parsed_customer = $this->parseCustomer($order);
             $parsed_client = $this->parseClient($server_data);
             $currency = $order->getOrderCurrencyCode() != null ? $order->getOrderCurrencyCode() : '';
-            $discount = $order->getDiscountAmount() != null ? $order->getDiscountAmount()() : 0;
+            $discount = $order->getDiscountAmount() != null ? $order->getDiscountAmount() : 0;
             $url_data = 'a='.urlencode($action).'&evt='.urlencode($event_type).'&'.$payment_method.'&ref='.urlencode($order_id).'&roi='.urlencode($real_order_id).'&sta='.urlencode($status_label).'&'.$parsed_items.'&'.$parsed_customer.'&'.$parsed_client.'&tdis='.urlencode($discount).'&tord='.urlencode($order->getTotalDue()).'&curr='.urlencode($currency);
             $photo_app = $this->_codesHelper->getPhotoUrl(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
             $this->callConversionUrl($photo_app, $url_data);
