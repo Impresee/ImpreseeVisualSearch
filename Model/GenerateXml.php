@@ -430,6 +430,7 @@ class GenerateXml
                 continue;
             }
             $category = $this->_category->load($categoryId);
+            if (!$category->getIsActive() || !$category->getIncludeInMenu()) continue;
             $name = htmlspecialchars(strip_tags($category->getName()));
             $categories[$category->getId()] = array('name' => htmlspecialchars(strip_tags($category->getName())));
             if ($rootCategoryId != $category->getParentId()){
