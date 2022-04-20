@@ -163,7 +163,7 @@ class GenerateXml
         ->addMediaGalleryData();
         $count = $collection->getSize();
         $number_pages = (int) ceil($count * 1.0 /  $pagesize);
-        if ($page > $number_pages) return "<feed></feed>";
+        if ($page > $number_pages) return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><?xml-stylesheet href=\"#style\" type=\"text/css\"?><feed></feed>";
         $collection->clear();
         $collection = $this->_productCollection
         ->getCollection($use_out_of_stock)
@@ -186,6 +186,7 @@ class GenerateXml
     public function getXml($products, $storeId, $use_out_of_stock)
     {
         $resultString  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
+        $resultString = '<?xml-stylesheet href="#style" type="text/css"?>';
         $resultString .= "<feed>";
         $resultString .= $this->makeProductsTags($products, $storeId, $use_out_of_stock);
         $resultString .= "</feed>";

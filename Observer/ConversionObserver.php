@@ -26,6 +26,8 @@ class ConversionObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         try {
+            $photo_app = $this->_codesHelper->getPhotoUrl(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+            if (!$photo_app) return;
             $action = 'CONVERSION';
             $event_type = 'magento_2_0';
             $order = $observer->getEvent()->getOrder();
@@ -40,7 +42,6 @@ class ConversionObserver implements ObserverInterface
             $currency = $order->getOrderCurrencyCode() != null ? $order->getOrderCurrencyCode() : '';
             $discount = $order->getDiscountAmount() != null ? $order->getDiscountAmount() : 0;
             $url_data = 'a='.urlencode($action).'&evt='.urlencode($event_type).'&'.$payment_method.'&ref='.urlencode($order_id).'&roi='.urlencode($real_order_id).'&sta='.urlencode($status_label).'&'.$parsed_items.'&'.$parsed_customer.'&'.$parsed_client.'&tdis='.urlencode($discount).'&tord='.urlencode($order->getTotalDue()).'&curr='.urlencode($currency);
-            $photo_app = $this->_codesHelper->getPhotoUrl(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
             $this->callConversionUrl($photo_app, $url_data);
         } catch (\Exception $e) {
             $this->logger->debug($e->getMessage());
