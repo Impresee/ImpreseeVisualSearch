@@ -13,6 +13,7 @@ use \Psr\Log\LoggerInterface;
 use \Magento\Catalog\Api\ProductAttributeRepositoryInterface as ProductAttributeRepositoryInterface;
 use \Magento\Framework\Stdlib\DateTime\TimezoneInterface  as Timezone;
 use \Magento\CatalogInventory\Api\StockRegistryInterface as StockRegistryInterface;
+use \Magento\Catalog\Model\ResourceModel\Eav\Attribute as AttributeFactory;
 
 class GenerateXml
 {
@@ -20,7 +21,7 @@ class GenerateXml
    * Product features saved on the xml file
    * @var string[]
    */
-  protected $PRODUCT_ATTRIBUTES = ["status", "summary_description", "visibility", "sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","out_of_stock_qty","is_cyberday","color_principal","guia_talla","marca_producto", "is_new","velocidades","vision_nocturna","grupo_0_plus","con_cierre","control_a_distancia","juguetes_extraibles","acolchado_removible","volante","abatible","guia_talla","altura_regulable","tela_impermeable","cabeza_de_acero_inoxidable","estatico","material","bolsillos_exteriores","vibracion","orientacion","incluye_bolso_de_traslado","para_pieles_sensibles","apertura_bidireccional","cantidad_de_bolsillos","bateria_volts","caracteristica_especial","incluye_control_remoto","correas_ajustables","apto_menores_3_anos","cargador","grupo_2","incluye_ventosas","calidad_de_pantalla","numero_de_ruedas","enchufe","incluye_ruedas","incluye_barra_de_juguetes","apto_para_microondas","textura","apto_para_camas","tela_lavable","con_velcro","apto_para_cuna","sonido","bolsillos_termicos","boquilla_dura","sistema_de_instalacion","tapa_anti_fugas","valvula_antiderrame","incluye_tapa","sistema_de_seguridad","ergonometrico","audio_bidireccional","precaucion","bolsillos_interiores","tamano_ruedas","requiere_supervision_adulto","cantidad_de_juguetes","bebidas_calientes","alto_producto_abierto","musica","tipo_centro_actividad","luces_led","con_olor","indicador_de_bateria","bombilla_de_silicona","grupo_1","alto_producto_plegado","tamano_de_pantalla","control_de_volumen","timer","bebidas_frias","alcance","apto_para_playard","incluye_mp3","incluye_radio","grupo_3","tipo_de_prenda","material_lavable","bocina","litros","incluye_hebilla","apoya_cabeza","temporizador","cantidad_de_piezas","contramarcha"];
+  protected $PRODUCT_ATTRIBUTES = ["status", "small_image", "summary_description", "visibility", "sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","is_cyberday","color_principal","guia_talla","marca_producto", "is_new","velocidades","vision_nocturna","grupo_0_plus","con_cierre","control_a_distancia","juguetes_extraibles","acolchado_removible","volante","abatible","guia_talla","altura_regulable","tela_impermeable","cabeza_de_acero_inoxidable","estatico","material","bolsillos_exteriores","vibracion","orientacion","incluye_bolso_de_traslado","para_pieles_sensibles","apertura_bidireccional","cantidad_de_bolsillos","bateria_volts","caracteristica_especial","incluye_control_remoto","correas_ajustables","apto_menores_3_anos","cargador","grupo_2","incluye_ventosas","calidad_de_pantalla","numero_de_ruedas","enchufe","incluye_ruedas","incluye_barra_de_juguetes","apto_para_microondas","textura","apto_para_camas","tela_lavable","con_velcro","apto_para_cuna","sonido","bolsillos_termicos","boquilla_dura","sistema_de_instalacion","tapa_anti_fugas","valvula_antiderrame","incluye_tapa","sistema_de_seguridad","ergonometrico","audio_bidireccional","precaucion","bolsillos_interiores","tamano_ruedas","requiere_supervision_adulto","cantidad_de_juguetes","bebidas_calientes","alto_producto_abierto","musica","tipo_centro_actividad","luces_led","con_olor","indicador_de_bateria","bombilla_de_silicona","grupo_1","alto_producto_plegado","tamano_de_pantalla","control_de_volumen","timer","bebidas_frias","alcance","apto_para_playard","incluye_mp3","incluye_radio","grupo_3","tipo_de_prenda","material_lavable","bocina","litros","incluye_hebilla","apoya_cabeza","temporizador","cantidad_de_piezas","contramarcha"];
   /**
    * Collection of Products
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
@@ -61,6 +62,7 @@ class GenerateXml
     private $reviewFactory;
     private $stockRegistry;
     private $attributes_types;
+    protected $attributeFactory;
 
   /**
    * Constructor
@@ -80,7 +82,8 @@ class GenerateXml
         Timezone $timezone,
         StockRegistryInterface $stockRegistry,
         \Magento\Framework\App\Request\Http $request,
-        \Magento\Review\Model\ReviewFactory $reviewFactory
+        \Magento\Review\Model\ReviewFactory $reviewFactory,
+        AttributeFactory $attributeFactory
     ) {
         $this->_productCollection = $collection;
         $this->_category = $category;
@@ -92,6 +95,9 @@ class GenerateXml
         $this->timezone = $timezone;
         $this->reviewFactory = $reviewFactory;
         $this->stockRegistry = $stockRegistry;
+        // TODO: use attribute factory instead
+        $this->attributeFactory = $attributeFactory;
+        
         foreach ($this->PRODUCT_ATTRIBUTES as $attributeCode) {
           try {
             $attribute = $productAttributeRepository->get($attributeCode);
@@ -158,9 +164,7 @@ class GenerateXml
         $collection = $this->_productCollection
         ->getCollection($use_out_of_stock)
         ->setStore($store)
-        ->addStoreFilter($store)
-        ->addAttributeToSelect($this->PRODUCT_ATTRIBUTES)
-        ->addMediaGalleryData();
+        ->addStoreFilter($store);
         $count = $collection->getSize();
         $number_pages = (int) ceil($count * 1.0 /  $pagesize);
         if ($page > $number_pages) return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><?xml-stylesheet href=\"#style\" type=\"text/css\"?><feed></feed>";
@@ -170,7 +174,6 @@ class GenerateXml
         ->setFlag("has_stock_status_filter", !$use_out_of_stock)
         ->setStore($store)
         ->addStoreFilter($store)
-        ->addAttributeToSelect($this->PRODUCT_ATTRIBUTES)
         ->addMediaGalleryData()
         ->setCurPage($page)
         ->setPageSize($pagesize);
@@ -204,7 +207,8 @@ class GenerateXml
    */
     public function makeProductsTags($products, $storeId, $use_out_of_stock)
     {
-      $categories = $this->makeHierarchyCategories($products);
+        $categories = $this->makeHierarchyCategories($products);
+        $store = $this->_storeManagerInterface->getStore($storeId);
         $resultString = "";
         foreach ($products as $product) :
             {
@@ -217,24 +221,24 @@ class GenerateXml
               {
                 $productTypeInstance = $product->getTypeInstance();
                 $usedProducts = $productTypeInstance->getUsedProducts($product);
-                $parentAttributes = $this->makeAttributesTags($product, ["is_cyberday", "is_new"]);
+                $parentAttributes = $this->makeAttributesTags($product, ["is_cyberday", "is_new"], $store);
                 $attributes = $productTypeInstance->getConfigurableAttributes($product);
                 // Add configurable product
                 $resultString.= "<product>";
-                $resultString .= $this->parseSimpleProduct($product, $product_url, $categories); 
+                $resultString .= $this->parseSimpleProduct($product, $product_url, $categories, $store); 
                 $resultString .= $reviewData;
                 $resultString.= "</product>";
                 foreach ($usedProducts  as $child) {
                     $child_images = $this->getProductImages($child);
                     $resultString.= "<product>";
                     $resultString.= "<parent_id>".$product->getSku()."</parent_id>";
-                    if ($child_images != null){
+                    if ($child_images == null){
                       $resultString .= $this->makeImageTags($main_product_images);
                     }
                     else {
                       $resultString .= $this->makeImageTags($child_images);
                     }
-                    $resultString .= $this->parseSimpleProduct($child, $product_url, $categories);
+                    $resultString .= $this->parseSimpleProduct($child, $product_url, $categories, $store);
                     $resultString .= $parentAttributes;
                     $resultString .= $reviewData;
                     $resultString.= "</product>";
@@ -243,7 +247,7 @@ class GenerateXml
               else
               {
                 $resultString.= "<product>";
-                $resultString .= $this->parseSimpleProduct($product, $product_url, $categories);
+                $resultString .= $this->parseSimpleProduct($product, $product_url, $categories, $store);
                 // Get images
                 $resultString .= $this->makeImageTags($main_product_images);
                 $resultString .= $reviewData;
@@ -254,7 +258,7 @@ class GenerateXml
         return $resultString;
     }
 
-   private function parseSimpleProduct($product, $product_url, $categories)
+   private function parseSimpleProduct($product, $product_url, $categories, $store)
    {
       $resultString = "";
       $resultString .= "<product_type>";
@@ -274,7 +278,7 @@ class GenerateXml
       $resultString .= htmlspecialchars(strip_tags($productStock->getQty()));
       $resultString .= "</stock>";
       // Get Texts
-      $resultString .= $this->makeAttributesTags($product, $this->PRODUCT_ATTRIBUTES);
+      $resultString .= $this->makeAttributesTags($product, $this->PRODUCT_ATTRIBUTES, $store);
       // Get categories and extra attributes
       $resultString .= $this->makeCategoriesTags($product, $categories);
       return $resultString;
@@ -364,7 +368,7 @@ class GenerateXml
    * @param Magento\Catalog\Model\Product
    * @return string (XML like)
    */
-    private function makeAttributesTags($product, $attributes)
+    private function makeAttributesTags($product, $attributes, $store)
     {
         $resultString = "";
         $in_sale = $this->productHasSpecialPriceAvailable($product);
@@ -378,6 +382,11 @@ class GenerateXml
             $attribute_type = '';
             if (array_key_exists($attribute, $this->attributes_types)) {
               $attribute_type = $this->attributes_types[$attribute];
+            }
+            if($attribute_name == 'small_image' && $info)
+            {
+              $attribute_name = 'thumbnail';
+              $info = $store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' . $info;
             }
             
             if ($info || $attribute_type == 'boolean') {
@@ -398,7 +407,20 @@ class GenerateXml
                 }
                 $textual_data = $product->getAttributeText($attribute);
                 if($textual_data){
-                  $resultString .= "<".htmlspecialchars(strip_tags($attribute_name))."_text><![CDATA[".$this->stripInvalidXml(htmlentities(strip_tags($textual_data), ENT_XML1, "UTF-8"))."]]></".htmlspecialchars(strip_tags($attribute_name))."_text>";
+                  if (gettype($textual_data) == 'array'){
+                    $index = 0;
+                    foreach ($textual_data as $value) { 
+                      $attribute_label = htmlspecialchars(strip_tags($attribute_name))."_text".$index;
+                      if ($index == 0){
+                        $attribute_label = htmlspecialchars(strip_tags($attribute_name))."_text";
+                      }
+                      $resultString .= "<".$attribute_label."><![CDATA[".$this->stripInvalidXml(htmlentities(strip_tags($value), ENT_XML1, "UTF-8"))."]]></".$attribute_label.">";
+                      $index++;
+                    }
+                  }
+                  else{
+                    $resultString .= "<".htmlspecialchars(strip_tags($attribute_name))."_text><![CDATA[".$this->stripInvalidXml(htmlentities(strip_tags($textual_data), ENT_XML1, "UTF-8"))."]]></".htmlspecialchars(strip_tags($attribute_name))."_text>";
+                  }
                 }
             }
             }
@@ -471,4 +493,5 @@ class GenerateXml
     {
         return $product->getMediaGalleryImages();
     }
+    
 }
