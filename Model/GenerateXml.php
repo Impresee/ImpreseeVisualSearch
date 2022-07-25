@@ -21,7 +21,7 @@ class GenerateXml
    * Product features saved on the xml file
    * @var string[]
    */
-  protected $PRODUCT_ATTRIBUTES = ["status", "small_image", "summary_description", "visibility", "sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","is_cyberday","color_principal","guia_talla","marca_producto", "is_new","velocidades","vision_nocturna","grupo_0_plus","con_cierre","control_a_distancia","juguetes_extraibles","acolchado_removible","volante","abatible","guia_talla","altura_regulable","tela_impermeable","cabeza_de_acero_inoxidable","estatico","material","bolsillos_exteriores","vibracion","orientacion","incluye_bolso_de_traslado","para_pieles_sensibles","apertura_bidireccional","cantidad_de_bolsillos","bateria_volts","caracteristica_especial","incluye_control_remoto","correas_ajustables","apto_menores_3_anos","cargador","grupo_2","incluye_ventosas","calidad_de_pantalla","numero_de_ruedas","enchufe","incluye_ruedas","incluye_barra_de_juguetes","apto_para_microondas","textura","apto_para_camas","tela_lavable","con_velcro","apto_para_cuna","sonido","bolsillos_termicos","boquilla_dura","sistema_de_instalacion","tapa_anti_fugas","valvula_antiderrame","incluye_tapa","sistema_de_seguridad","ergonometrico","audio_bidireccional","precaucion","bolsillos_interiores","tamano_ruedas","requiere_supervision_adulto","cantidad_de_juguetes","bebidas_calientes","alto_producto_abierto","musica","tipo_centro_actividad","luces_led","con_olor","indicador_de_bateria","bombilla_de_silicona","grupo_1","alto_producto_plegado","tamano_de_pantalla","control_de_volumen","timer","bebidas_frias","alcance","apto_para_playard","incluye_mp3","incluye_radio","grupo_3","tipo_de_prenda","material_lavable","bocina","litros","incluye_hebilla","apoya_cabeza","temporizador","cantidad_de_piezas","contramarcha"];
+  protected $PRODUCT_ATTRIBUTES = ["status", "small_image", "visibility", "sku", "name", "price", "special_price", "special_from_date", "special_to_date", "color", "size","short_description","meta_keywords","is_cyberday","color_principal","marca_producto", "is_new"];
   /**
    * Collection of Products
    * @var ImpreseeAI\ImpreseeVisualSearch\Model\Products
@@ -167,7 +167,7 @@ class GenerateXml
         ->addStoreFilter($store);
         $count = $collection->getSize();
         $number_pages = (int) ceil($count * 1.0 /  $pagesize);
-        if ($page > $number_pages) return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><?xml-stylesheet href=\"#style\" type=\"text/css\"?><feed></feed>";
+        if ($page > $number_pages) return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><feed></feed>";
         $collection->clear();
         $collection = $this->_productCollection
         ->getCollection($use_out_of_stock)
@@ -189,7 +189,6 @@ class GenerateXml
     public function getXml($products, $storeId, $use_out_of_stock)
     {
         $resultString  = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
-        $resultString = '<?xml-stylesheet href="#style" type="text/css"?>';
         $resultString .= "<feed>";
         $resultString .= $this->makeProductsTags($products, $storeId, $use_out_of_stock);
         $resultString .= "</feed>";
