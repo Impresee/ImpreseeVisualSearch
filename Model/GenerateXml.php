@@ -162,7 +162,7 @@ class GenerateXml
         $initialEnvironmentInfo = $this->_appEmulation
         ->startEnvironmentEmulation($store);
         $collection = $this->_productCollection
-        ->getCollection($use_out_of_stock)
+        ->getCollection()
         ->setStore($store)
         ->addStoreFilter($store);
         $count = $collection->getSize();
@@ -211,6 +211,10 @@ class GenerateXml
         $resultString = "";
         foreach ($products as $product) :
             {
+              if(!$use_out_of_stock && !$product->isSaleable())
+              {
+                continue;
+              }
               //reviews
               $reviewData = $this->makeReviewData($product, $storeId);
               $product_url = $product->getProductUrl();
@@ -230,7 +234,8 @@ class GenerateXml
                 foreach ($usedProducts  as $child) {
                     $child_images = $this->getProductImages($child);
                     $resultString.= "<product>";
-                    $resultString.= "<parent_id>".$product->getSku()."</parent_id>";
+                    $resultString.= "<parent_id>".htmlspecialchars(strip_tags($product->getId()))."</parent_id>";
+                    $resultString.= "<parent_sku>".htmlspecialchars(strip_tags($product->getSku()))."</parent_sku>";
                     if ($child_images == null){
                       $resultString .= $this->makeImageTags($main_product_images);
                     }
