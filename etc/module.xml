@@ -3,6 +3,7 @@
     <module name="ImpreseeAI_ImpreseeVisualSearch" setup_version="1.0.5">
         <sequence>
             <module name="Magento_Catalog"/>
+            <module name="Magento_Webapi" />
         </sequence>
     </module>
 </config>
