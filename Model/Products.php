@@ -13,6 +13,8 @@ class Products
    * @var Magento\Catalog\Model\ResourceModel\Product\Collection
    */
     protected $productCollectionFactory;
+    private $productVisibility;
+    private $productStatus;
   /**
    * Constructor.
    */

@@ -234,8 +234,8 @@ class GenerateXml
                 foreach ($usedProducts  as $child) {
                     $child_images = $this->getProductImages($child);
                     $resultString.= "<product>";
-                    $resultString.= "<parent_id>".htmlspecialchars(strip_tags($product->getId()))."</parent_id>";
-                    $resultString.= "<parent_sku>".htmlspecialchars(strip_tags($product->getSku()))."</parent_sku>";
+                    $resultString.= "<parent_id>".$this->writeToXMLValid($product->getId())."</parent_id>";
+                    $resultString.= "<parent_sku>".$this->writeToXMLValid($product->getSku())."</parent_sku>";
                     if ($child_images == null){
                       $resultString .= $this->makeImageTags($main_product_images);
                     }
@@ -262,6 +262,13 @@ class GenerateXml
         return $resultString;
     }
 
+  private function writeToXMLValid($data) {
+    if ($data != null) {
+      return htmlspecialchars(strip_tags($data), ENT_XML1, "UTF-8"); 
+    }
+    return "";
+  }
+
    private function parseSimpleProduct($product, $product_url, $categories, $store)
    {
       $resultString = "";
@@ -269,17 +276,17 @@ class GenerateXml
       $resultString .= $product->getTypeId();
       $resultString .= "</product_type>";
       $resultString .= "<id>";
-      $resultString .= htmlspecialchars(strip_tags($product->getId()));
+      $resultString .= $this->writeToXMLValid($product->getId());
       $resultString .= "</id>";
       $resultString .= "<entity_id>";
-      $resultString .= htmlspecialchars(strip_tags($product->getId()));
+      $resultString .= $this->writeToXMLValid($product->getId());
       $resultString .= "</entity_id>";
       $resultString .= "<url>";
-      $resultString .= htmlspecialchars(strip_tags($product_url));
+      $resultString .= $this->writeToXMLValid($product_url);
       $resultString .= "</url>";
       $resultString .= "<stock>";
       $productStock = $this->stockRegistry->getStockItem($product->getId());
-      $resultString .= htmlspecialchars(strip_tags($productStock->getQty()));
+      $resultString .= $this->writeToXMLValid($product->getQty());
       $resultString .= "</stock>";
       // Get Texts
       $resultString .= $this->makeAttributesTags($product, $this->PRODUCT_ATTRIBUTES, $store);
@@ -294,12 +301,15 @@ class GenerateXml
     $this->reviewFactory->create()->getEntitySummary($product, $storeId);
     $ratingSummary = $product->getRatingSummary();
     if ($ratingSummary == null) return;
+    $summary = $ratingSummary->getRatingSummary();
     $resultString .= "<rating_summary>";
-    $resultString .= htmlspecialchars(strip_tags($ratingSummary->getRatingSummary()));
+    $resultString .= $this->writeToXMLValid($summary);
     $resultString .= "</rating_summary>";
+    $reviewCount = $ratingSummary->getReviewsCount();
     $resultString .= "<rating_count>";
-    $resultString .= htmlspecialchars(strip_tags($ratingSummary->getReviewsCount()));
+    $resultString .= $this->writeToXMLValid($reviewCount);
     $resultString .= "</rating_count>";
+    
     return $resultString;
 
    }
@@ -319,7 +329,7 @@ class GenerateXml
             {
             if ($category_id && array_key_exists($category_id, $categories)) {
               if ($categories[$category_id]['name'] != null
-                   && trim(strtolower(htmlspecialchars(strip_tags($categories[$category_id]['name'])))) === 'pasillo infinito') {
+                   && trim(strtolower($this->writeToXMLValid($categories[$category_id]['name']))) === 'pasillo infinito') {
                      continue;
                   }
               if ( array_key_exists('parent', $categories[$category_id])){
@@ -329,14 +339,14 @@ class GenerateXml
                   $pos = strpos($parent_name, 'marca');
                   if ($pos === false && $first) {
                     $first = false;
-                    $resultString .= "<main_category>".htmlspecialchars(strip_tags($categories[$category_id]['name']))."</main_category>";
+                    $resultString .= "<main_category>".$this->writeToXMLValid($categories[$category_id]['name'])."</main_category>";
                   }
                   else if ($pos === false && !$first) {
-                    $resultString .= "<secondary_category".$count.">".htmlspecialchars(strip_tags($categories[$category_id]['name']))."</secondary_category".$count.">";
+                    $resultString .= "<secondary_category".$count.">".$this->writeToXMLValid($categories[$category_id]['name'])."</secondary_category".$count.">";
                     $count++;
                   }
                   else {
-                    $resultString .= "<brand>".htmlspecialchars(strip_tags($categories[$category_id]['name']))."</brand>";
+                    $resultString .= "<brand>".$this->writeToXMLValid($categories[$category_id]['name'])."</brand>";
                   }
                 } 
               }
@@ -345,7 +355,7 @@ class GenerateXml
                 if ($pos !== false) {
                  continue;
                 }
-                $resultString .= "<secondary_category".$count.">".htmlspecialchars(strip_tags($categories[$category_id]['name']))."</secondary_category".$count.">";
+                $resultString .= "<secondary_category".$count.">".$this->writeToXMLValid($categories[$category_id]['name'])."</secondary_category".$count.">";
                 $count++;
               }
             }
@@ -359,12 +369,22 @@ class GenerateXml
         $product_special_price_from = $product->getData("special_from_date");
         $product_special_price_to = $product->getData("special_to_date");
         $current_date = $this->timezone->date()->format('Y-m-d H:i:s');
-        $special_from = strtotime($product_special_price_from);
-        $special_to = strtotime($product_special_price_to);
         $current = strtotime($current_date);
-        $check_from = !$special_from || $current >= $special_from;
-        $check_to = !$special_to || $current <= $special_to;
-        $is_special_price_available = $check_from && $check_to;
+        if($product_special_price_from == null) {
+          $check_from = true;
+        }
+        else {
+          $special_from = strtotime($product_special_price_from);
+          $check_from = $current >= $special_from;
+        }
+
+        if($product_special_price_to == null) {
+          $check_to = true;
+        }
+        else {
+          $special_to = strtotime($product_special_price_to);
+          $check_to = $current <= $special_to;
+        }
         return $is_special_price_available;
    } 
   /**
@@ -405,7 +425,7 @@ class GenerateXml
 				    "\xEF\xBF\xBD",
 				    $info
 				);
-                $resultString .= "<".htmlspecialchars(strip_tags($attribute_name))."><![CDATA[".$this->stripInvalidXml(htmlentities(strip_tags($info ? $info : '0'), ENT_XML1, "UTF-8"))."]]></".htmlspecialchars(strip_tags($attribute_name)).">";
+                $resultString .= "<".$this->writeToXMLValid($attribute_name)."><![CDATA[".$this->stripInvalidXml($this->writeToXMLValid($info ? $info : '0'))."]]></".$this->writeToXMLValid($attribute_name).">";
                 if ($attribute_name == "price" || $attribute_name == "price_from") {
                   continue;
                 }
@@ -414,16 +434,16 @@ class GenerateXml
                   if (gettype($textual_data) == 'array'){
                     $index = 0;
                     foreach ($textual_data as $value) { 
-                      $attribute_label = htmlspecialchars(strip_tags($attribute_name))."_text".$index;
+                      $attribute_label = $this->writeToXMLValid($attribute_name)."_text".$index;
                       if ($index == 0){
-                        $attribute_label = htmlspecialchars(strip_tags($attribute_name))."_text";
+                        $attribute_label = $this->writeToXMLValid($attribute_name)."_text";
                       }
-                      $resultString .= "<".$attribute_label."><![CDATA[".$this->stripInvalidXml(htmlentities(strip_tags($value), ENT_XML1, "UTF-8"))."]]></".$attribute_label.">";
+                      $resultString .= "<".$attribute_label."><![CDATA[".$this->stripInvalidXml($this->writeToXMLValid($value))."]]></".$attribute_label.">";
                       $index++;
                     }
                   }
                   else{
-                    $resultString .= "<".htmlspecialchars(strip_tags($attribute_name))."_text><![CDATA[".$this->stripInvalidXml(htmlentities(strip_tags($textual_data), ENT_XML1, "UTF-8"))."]]></".htmlspecialchars(strip_tags($attribute_name))."_text>";
+                    $resultString .= "<".$this->writeToXMLValid($attribute_name)."_text><![CDATA[".$this->stripInvalidXml($this->writeToXMLValid($textual_data))."]]></".$this->writeToXMLValid($attribute_name)."_text>";
                   }
                 }
             }
@@ -447,10 +467,10 @@ class GenerateXml
             {
               if ($first) {
                 $first = false;
-                $resultString .= "<main_image>". htmlspecialchars(strip_tags($image['url']))."</main_image>";
+                $resultString .= "<main_image>". $this->writeToXMLValid($image['url'])."</main_image>";
               }
               else {
-                $resultString .= "<secondary_image".$count.">".htmlspecialchars(strip_tags($image['url']))."</secondary_image".$count.">";
+                $resultString .= "<secondary_image".$count.">".$this->writeToXMLValid($image['url'])."</secondary_image".$count.">";
                 $count++;
               }
             }
@@ -477,8 +497,8 @@ class GenerateXml
             }
             $category = $this->_category->load($categoryId);
             if (!$category->getIsActive() || !$category->getIncludeInMenu()) continue;
-            $name = htmlspecialchars(strip_tags($category->getName()));
-            $categories[$category->getId()] = array('name' => htmlspecialchars(strip_tags($category->getName())));
+            $name = $this->writeToXMLValid($category->getName());
+            $categories[$category->getId()] = array('name' => $this->writeToXMLValid($category->getName()));
             if ($rootCategoryId != $category->getParentId()){
               $categories[$category->getId()]['parent'] = $category->getParentId();
             }
