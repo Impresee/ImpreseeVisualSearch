@@ -6,4 +6,23 @@
     <event name="sales_order_save_after">
         <observer name="impreseeConversionObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ConversionObserver" />
     </event>
+    <!--Changes in attribute or stock-->
+    <event name="catalog_product_save_after">
+        <observer name="impreseeChangeAttributesObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductStockChangeObserver" />
+    </event>
+    <!--Changes in stock-->
+    <event name="checkout_submit_all_after">
+        <observer name="impreseeChangeStockObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductStockChangeObserver" />
+    </event>
+    <event name="cataloginventory_stock_revert_products_sale">
+        <observer name="impreseeChangeStockObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductStockChangeObserver" />
+    </event>
+    <event name="sales_order_item_cancel">
+        <observer name="impreseeChangeStockObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductStockChangeObserver" />
+    </event>
+    <!--Add new product-->
+    <event name="catalog_product_new_action">
+        <observer name="impreseeCreateProductObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductCreateObserver" />
+    </event>
+
 </config>

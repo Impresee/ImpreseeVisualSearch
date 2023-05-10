@@ -3,6 +3,9 @@
     <type name="Magento\Catalog\Model\Config">
         <plugin name="ImpreseeAI_ImpreseeVisualSearch::addCustomOptions" type="ImpreseeAI\ImpreseeVisualSearch\Plugin\Model\Config" />
     </type>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="impreseeUpdateAttributes" type="ImpreseeAI\ImpreseeVisualSearch\Model\Plugin\UpdateAttributes" />
+    </type>
     <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\CustomerRepositoryInterface"
             type="ImpreseeAI\ImpreseeVisualSearch\Model\Api\CustomerRepository" />
     <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\ResponseCustomerInterface"
