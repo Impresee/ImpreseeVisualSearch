@@ -55,8 +55,9 @@ class DatafeedComment extends Field
         $html .=      '<strong id="impresee-data-url" style="color:red">' . $this->getDataSourceUrl();
         $html .= '     </strong></h4>';
         $html .= '<a id="impresee-copy-url" style="padding-left:2.8rem; cursor:pointer">Copy to clipboard.</a><br><br>';
-        $html .= '4. Once your catalog is ready, you must return to this page and go to the search configuration section for the following steps:<br>';
-        $html .= '<ul style="margin-left:5%;"><li>Enable the search types available for this catalog (defined in <a href="https://console.impresee.com/Console\" target=\"_blank\">Impresee Console</a>).</li><li>For each type, paste the search service URL.</li></ul>';
+        $html .= '4. Once your catalog is ready, you need to visit the <a href="https://console.impresee.com/Console\" target=\"_blank\">catalog panel</a>, <br>';
+        $html .= 'click on details and copy the application UUID.<br>';
+        $html .= '5. Paste the application UUID in the search configuration section below.'; 
         $html .= '</div>';
         return $html;
     }
