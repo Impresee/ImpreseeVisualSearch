@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Catalog\Model\Config">
-        <plugin name="ImpreseeAI_ImpreseeVisualSearch::addCustomOptions" type="ImpreseeAI\ImpreseeVisualSearch\Plugin\Model\Config" />
+        <plugin name="ImpreseeAI_ImpreseeVisualSearch::addCustomOptions" type="ImpreseeAI\ImpreseeVisualSearch\Plugin\Model\Config" disabled="false"/>
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
-        <plugin name="impreseeUpdateAttributes" type="ImpreseeAI\ImpreseeVisualSearch\Model\Plugin\UpdateAttributes" />
+        <plugin name="impreseeUpdateAttributes" type="ImpreseeAI\ImpreseeVisualSearch\Model\Plugin\UpdateAttributes" disabled="false"/>
     </type>
     <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\CustomerRepositoryInterface"
             type="ImpreseeAI\ImpreseeVisualSearch\Model\Api\CustomerRepository" />

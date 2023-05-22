@@ -2,6 +2,7 @@
 namespace ImpreseeAI\ImpreseeVisualSearch\Model\Plugin;
 
 use Magento\Catalog\Model\Product\Action\Interceptor;
+use Psr\Log\LoggerInterface;
 
 class UpdateAttributes
 {
@@ -31,7 +32,7 @@ class UpdateAttributes
         //execute the original method and remember the result;
         $result = $closure($productIds, $attrData, $storeId);
         //do something with $productIds here
-        $this->logger->debug(print_r($attrData, true));
+        $this->logger->debug("Changed attributes");
         return $result;
     }
 }

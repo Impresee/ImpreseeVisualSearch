@@ -8,6 +8,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Psr\Log\LoggerInterface;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use Magento\Store\Model\StoreManagerInterface;
 
 class ProductStockChangeObserver implements ObserverInterface
 {
@@ -18,12 +19,16 @@ class ProductStockChangeObserver implements ObserverInterface
    */
     protected $_codesHelper;
     protected $_stockItemRepository;
+    protected $_storeManager;
 
-    public function __construct(LoggerInterface $logger, CodesHelper $codes, StockItemRepository $stockItemRepository)
+    public function __construct(LoggerInterface $logger, CodesHelper $codes,
+         StockItemRepository $stockItemRepository,
+         StoreManagerInterface $storeManager)
     {
         $this->logger = $logger;
         $this->_codesHelper = $codes;
         $this->_stockItemRepository = $stockItemRepository;
+        $this->_storeManager = $storeManager;
     }
 
     private function getStockItem($productId)
@@ -34,14 +39,16 @@ class ProductStockChangeObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         try {
+            $store = $this->storeManager->getStore();
             $_product = $observer->getProduct();
-            $photo_app = $this->_codesHelper->getPhotoUrl(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+            $photo_app = $this->_codesHelper->getPhotoUrl($store);
+            // $photo_app es NULL
             if (!$photo_app) return;
-            $action = 'CONVERSION';
+            $action = 'CHANGE_PRODUCT';
             $event_type = 'magento_2_0';
             $id = $_product->getId();
             $_productStock = $this->getStockItem($id);
-            $this->logger->debug('Product: '.$id.' is in stock: '.($_productStock->getIsInStock() ? 'yes':'no'));
+            $this->callUpdateProductUrl($photo_app, $_product, $_productStock);
         } catch (\Exception $e) {
             $this->logger->debug($e->getMessage());
         }
@@ -49,29 +56,9 @@ class ProductStockChangeObserver implements ObserverInterface
 
     
 
-    private function callConversionUrl($app, $url_data) {
-
-        $register_conversion_endpoint = 'https://api.impresee.com/ImpreseeSearch/api/v3/search/register_magento/';
-        $content = file($register_conversion_endpoint.$app.'?'.$url_data);
+    private function callUpdateProductUrl($app, $product, $productStock) {
+        // TODO: Register change
+       
     }
 
-    private function parseItems(array $items)
-    {
-        $attributes = array();
-        $product_ids = array();
-        $product_names = array();
-        $quantities = array();
-        $prices = array();
-        $skus = array();
-        $types = array();
-        foreach ($items as $item) {
-            array_push($product_ids, $item->getProductId());
-            array_push($product_names, $item->getProductName());
-            array_push($quantities, $item->getQtyOrdered());
-            array_push($prices, $item->getPriceInclTax());
-            array_push($skus, $item->getSku());
-            array_push($types,$item->getProductType());
-        }
-        return 'prodids='.urlencode(join('|', $product_ids)).'&types='.urlencode(join('|', $types)).'&qtys='.urlencode(join('|', $quantities)).'&ps='.urlencode(join('|', $prices)).'&skus='.urlencode(join('|', $skus));
-    }
 }
