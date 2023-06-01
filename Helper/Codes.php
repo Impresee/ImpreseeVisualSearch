@@ -42,7 +42,7 @@ class Codes extends AbstractHelper
      * @param string with the storeid
      * @return string with the photo search code for a store
      */
-    public function getPhotoUrl($store)
+    public function getImpreseeUuid($store)
     {
         return $this->scopeConfig->getValue("impresee/general/photo_url", $store);
     }
@@ -59,5 +59,21 @@ class Codes extends AbstractHelper
             return $code[1];
         }
         return "error";
+    }
+    public function getConsumerKey($store)
+    {
+        return $this->scopeConfig->getValue("impresee/api_access/consumer_key", $store);
+    }
+    public function getConsumerSecret($store)
+    {
+        return $this->scopeConfig->getValue("impresee/api_access/consumer_secret", $store);
+    }
+    public function getAccessToken($store)
+    {
+        return $this->scopeConfig->getValue("impresee/api_access/access_token", $store);
+    }
+    public function getAccessTokenSecret($store)
+    {
+        return $this->scopeConfig->getValue("impresee/api_access/access_token_secret", $store);
     }
 }

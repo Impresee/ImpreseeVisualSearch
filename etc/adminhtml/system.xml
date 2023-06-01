@@ -20,108 +20,30 @@
                     <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\DatafeedComment</frontend_model>
                 </field>
             </group>
+            <group id="api_access" translate="label" type="text" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
+                <label>Access to Magento API</label>
+                <comment>Add Impresee as a new integration to have your search bar and insights updated with little delay. We'll use Magento's API thus reducing manual access to the database.</comment>
+                <field id="consumer_key" translate="label" type="text" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Consumer key</label>
+                </field>
+                <field id="consumer_secret" translate="label" type="obscure" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Consumer Secret</label>
+                </field>
+                <field id="access_token" translate="label" type="text" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Access token</label>
+                </field>
+                <field id="access_token_secret" translate="label" type="obscure" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
+                    <label>Access token secret</label>
+                </field>
+            </group>
             <group id="general" translate="label" type="text" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
-                <label>Search Configuration</label>
-                <field id="enable_photo" translate="label" type="select" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Photo Search</label>
-                    <comment>Enable/Disable Photo Search (enable it when you have your search service URL).</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
-                </field>
+                <label>Impresee configuration</label>
                 <field id="photo_url" translate="label" type="text" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Photo search UUID</label>
+                    <label>Impresee UUID</label>
                     <comment>UUID given by Impresee, used to track performance metrics for the store and search bar.</comment>
-                    <depends>
-                        <field id="enable_photo">1</field>
-                    </depends>
-                </field>
-                <field id="enable_sketch" translate="label" type="select" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Sketch Search [deprecated]</label>
-                    <comment>Enable/Disable Sketch Search (enable it when you have your search service URL).</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
-                </field>
-                <field id="sketch_url" translate="label" type="text" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Sketch search service URL</label>
-                    <comment>URL given by Impresee to search by sketch (If left blank the search by sketch button won't show).</comment>
-                    <depends>
-                        <field id="enable_sketch">1</field>
-                    </depends>
                 </field>
             </group>
-            <group id="icons" translate="label" type="text" sortOrder="3" showInDefault="0" showInWebsite="0" showInStore="1">
-                <label>Icons [deprecated]</label>
-                <field id="module_set_buttons" translate="label" type="select" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Let Impresee display the search buttons</label>
-                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
-                </field>
-                <field id="icon_provider" translate="label" type="select" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Select Icons Source Icons [deprecated]</label>
-                    <comment>You can choose to use Impresee buttons catalog, or upload your own icon images</comment>
-                    <source_model>ImpreseeAI\ImpreseeVisualSearch\Model\Config\DisplayButtonOption</source_model>
-                    <depends>
-                        <field id="module_set_buttons">1</field>
-                    </depends>
-                </field>
-                <field id="photo_icon" translate="label" type="image" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Search by Photo Icon [deprecated]</label>
-                    <backend_model>ImpreseeAI\ImpreseeVisualSearch\Model\Config\Image</backend_model>
-                    <upload_dir config="system/filesystem/media/" scope_info="1">icons</upload_dir>
-                    <base_url type="media" scope_info="1">icons</base_url>
-                    <comment><![CDATA[Allowed file types: jpeg, gif, png, svg.]]></comment>
-                    <depends>
-                        <field id="module_set_buttons">1</field>
-                        <field id="icon_provider">0</field>
-                    </depends>
-                </field>
-                <field id="sketch_icon" translate="label" type="image" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Search by Sketch Icon [deprecated]</label>
-                    <backend_model>ImpreseeAI\ImpreseeVisualSearch\Model\Config\Image</backend_model>
-                    <upload_dir config="system/filesystem/media/" scope_info="1">icons</upload_dir>
-                    <base_url type="media" scope_info="1">icons</base_url>
-                    <comment><![CDATA[Allowed file types: jpeg, gif, png, svg.]]></comment>
-                    <depends>
-                        <field id="module_set_buttons">1</field>
-                        <field id="icon_provider">0</field>
-                    </depends>
-                </field>
-                <field id="icons_comment" translate="label" type="text" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\IconsExample</frontend_model>
-                </field>
-                <field id="icons_remember_label" translate="label" type="label" sortOrder="3" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Remember:</label>
-                    <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\RememberIconHelp</frontend_model>
-                    <depends>
-                        <field id="module_set_buttons">0</field>
-                    </depends>
-                </field>
-            </group>
-            <group id="frontend" translate="label" type="text" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
-                <label>Frontend (Optional - Advanced Users) [deprecated]</label>
-                <field id="javascript_comment" translate="label" type="text" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\JavascriptComment</frontend_model>
-                </field>
-                <field id="javacode" translate="label" type="textarea" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>Javascript/Jquery [deprecated]</label>
-                    <comment>
-                      If you need to change the behavior of the buttons (e.g. move it to somewhere else), code it here!. This code will be executed on-load and on-resize.
-                    </comment>
-                </field>
-                <field id="classes" translate="label" type="text" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>CSS Classes [deprecated]</label>
-                    <comment>
-If you have CSS classes that you want to use in the buttons, add them here! or add new ones, but don't forget to define them below.
-                    </comment>
-                </field>
-                <field id="styles" translate="label" type="textarea" sortOrder="5" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <label>CSS [deprecated]</label>
-                    <comment>Add CSS code here!</comment>
-                </field>
-            </group>
-            <group id="help" translate="label" type="text" sortOrder="4" showInDefault="0" showInWebsite="0" showInStore="1">
-                <label>Need Help?</label>
-                <field id="help" translate="label" type="text" sortOrder="10" showInDefault="0" showInWebsite="0" showInStore="1">
-                    <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\JavascriptFinalComment</frontend_model>
-                </field>
-            </group>
+            
         </section>
     </system>
 </config>
