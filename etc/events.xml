@@ -22,7 +22,7 @@
     </event>
     <!--Add new product-->
     <event name="catalog_product_new_action">
-        <observer name="impreseeCreateProductObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductCreateObserver" />
+        <observer name="impreseeCreateProductObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductStockChangeObserver" />
     </event>
 
 </config>

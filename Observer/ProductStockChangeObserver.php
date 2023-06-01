@@ -4,29 +4,29 @@
  *   provided by Impresee
  */
 namespace ImpreseeAI\ImpreseeVisualSearch\Observer;
-use Magento\Framework\Event\ObserverInterface;
+use ImpreseeAI\ImpreseeVisualSearch\ImpreseeObserver;
+use GuzzleHttp\ClientFactory;
+use GuzzleHttp\Psr7\ResponseFactory;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Psr\Log\LoggerInterface;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
 use Magento\Store\Model\StoreManagerInterface;
 
-class ProductStockChangeObserver implements ObserverInterface
+class ProductStockChangeObserver extends ImpreseeObserver
 {
-    protected $logger;
-    /**
-   * load codes of our app
-   * @var ImpreseeAI\ImpreseeVisualSearch\Helper\Codes
-   */
-    protected $_codesHelper;
+    const API_REQUEST_URI = '';
     protected $_stockItemRepository;
     protected $_storeManager;
 
-    public function __construct(LoggerInterface $logger, CodesHelper $codes,
-         StockItemRepository $stockItemRepository,
-         StoreManagerInterface $storeManager)
+    public function __construct(
+        LoggerInterface $logger,
+        CodesHelper $codes,
+        StockItemRepository $stockItemRepository,
+        StoreManagerInterface $storeManager,
+        ClientFactory $clientFactory,
+        ResponseFactory $responseFactory)
     {
-        $this->logger = $logger;
-        $this->_codesHelper = $codes;
+        parent::__construct($logger, $codes, $clientFactory, $responseFactory);
         $this->_stockItemRepository = $stockItemRepository;
         $this->_storeManager = $storeManager;
     }
@@ -39,25 +39,32 @@ class ProductStockChangeObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         try {
+            $event = $observer->getEvent();
+            $event_name = $event->getName();
             $store = $this->storeManager->getStore();
-            $_product = $observer->getProduct();
-            $photo_app = $this->_codesHelper->getPhotoUrl($store);
+            $product = $observer->getProduct();
+            $impresee_uuid = $this->_codesHelper->getImpreseeUuid($store);
             // $photo_app es NULL
-            if (!$photo_app) return;
+            if (!$impresee_uuid) return;
             $action = 'CHANGE_PRODUCT';
             $event_type = 'magento_2_0';
-            $id = $_product->getId();
-            $_productStock = $this->getStockItem($id);
-            $this->callUpdateProductUrl($photo_app, $_product, $_productStock);
+            $id = $product->getId();
+            $productStock = $this->getStockItem($id);
+            $this->callUpdateProductUrl($photo_app, $product, $productStock);
         } catch (\Exception $e) {
-            $this->logger->debug($e->getMessage());
+            $this->_logger->debug($e->getMessage());
         }
     }
 
-    
-
     private function callUpdateProductUrl($app, $product, $productStock) {
-        // TODO: Register change
+        $response = $this->doJsonRequest(static::API_REQUEST_ENDPOINT . $app, array(
+            'product_id' => $product->getId(),
+            'product_sku' => $product->getSku(),
+            'in_stock' => $productStock->getIsInStock()
+        ));
+        $status = $response->getStatusCode(); // 200 status code
+        $responseBody = $response->getBody();
+        $responseContent = $responseBody->getContents(); // here you will have the API response in JSON format
        
     }
 

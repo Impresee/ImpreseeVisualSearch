@@ -44,7 +44,7 @@ class Codes extends AbstractHelper
      */
     public function getImpreseeUuid($store)
     {
-        return $this->scopeConfig->getValue("impresee/general/photo_url", $store);
+        return $this->scopeConfig->getValue("impresee/general/impresee_app_uuid", $store);
     }
     /**
      * Fetch the Impresee app code from a Impresee service url
