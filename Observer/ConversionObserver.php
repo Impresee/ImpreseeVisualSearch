@@ -4,51 +4,32 @@
  *   provided by Impresee
  */
 namespace ImpreseeAI\ImpreseeVisualSearch\Observer;
-use Magento\Framework\Event\ObserverInterface;
+use ImpreseeAI\ImpreseeVisualSearch\Observer\ImpreseeRegisterStoreEventObserver;
 use Psr\Log\LoggerInterface;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
 
-class ConversionObserver implements ObserverInterface
+class ConversionObserver extends ImpreseeRegisterStoreEventObserver
 {
-    protected $logger;
-    /**
-   * load codes of our app
-   * @var ImpreseeAI\ImpreseeVisualSearch\Helper\Codes
-   */
-    protected $_codesHelper;
 
     public function __construct(LoggerInterface $logger, CodesHelper $codes)
     {
-        $this->logger = $logger;
-        $this->_codesHelper = $codes;
+        parent::__construct($logger, $codes, 'CONVERSION');
     }
 
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    protected function buildEventUrl(\Magento\Framework\Event\Observer $observer)
     {
-        try {
-            $photo_app = $this->_codesHelper->getImpreseeUuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
-            if (!$photo_app) return;
-            $action = 'CONVERSION';
-            $event_type = 'magento_2_0';
-            $order = $observer->getEvent()->getOrder();
-            $server_data = $_SERVER;
-            $order_id = $order->getIncrementId();
-            $real_order_id = $order->getRealOrderId();
-            $status_label = $order->getStatusLabel();
-            $parsed_items = $this->parseItems($order->getAllItems());
-            $payment_method = $this->parsePaymentMethod($order);
-            $parsed_customer = $this->parseCustomer($order);
-            $parsed_client = $this->parseClient($server_data);
-            $currency = $order->getOrderCurrencyCode() != null ? $order->getOrderCurrencyCode() : '';
-            $discount = $order->getDiscountAmount() != null ? $order->getDiscountAmount() : 0;
-            $url_data = 'a='.urlencode($action).'&evt='.urlencode($event_type).'&'.$payment_method.'&ref='.urlencode($order_id).'&roi='.urlencode($real_order_id).'&sta='.urlencode($status_label).'&'.$parsed_items.'&'.$parsed_customer.'&'.$parsed_client.'&tdis='.urlencode($discount).'&tord='.urlencode($order->getTotalDue()).'&curr='.urlencode($currency);
-            $this->callConversionUrl($photo_app, $url_data);
-        } catch (\Exception $e) {
-            $this->logger->debug($e->getMessage());
-        }
+        $order = $observer->getEvent()->getOrder();
+        $order_id = $order->getIncrementId();
+        $real_order_id = $order->getRealOrderId();
+        $status_label = $order->getStatusLabel();
+        $parsed_items = $this->parseItems($order->getAllItems());
+        $payment_method = $this->parsePaymentMethod($order);
+        $parsed_customer = $this->parseCustomer($order);
+        $currency = $order->getOrderCurrencyCode() != null ? $order->getOrderCurrencyCode() : '';
+        $discount = $order->getDiscountAmount() != null ? $order->getDiscountAmount() : 0;
+        $url_data = $payment_method.'&ref='.urlencode($order_id).'&roi='.urlencode($real_order_id).'&sta='.urlencode($status_label).'&'.$parsed_items.'&'.$parsed_customer.'&tdis='.urlencode($discount).'&tord='.urlencode($order->getTotalDue()).'&curr='.urlencode($currency);
+        return $url_data;
     }
-
-    
 
     private function callConversionUrl($app, $url_data) {
 
@@ -91,7 +72,4 @@ class ConversionObserver implements ObserverInterface
         return 'cid='.urlencode($id).'&cfn='.urlencode($firstname).'&cln='.urlencode($lastname).'&cem='.urlencode($email);
     }
 
-    private function parseClient($server_data) {
-        return 'ip='.urlencode($server_data['REMOTE_ADDR']).'&ua='.urlencode($server_data['HTTP_USER_AGENT']).'&store='.urlencode($server_data['HTTP_HOST']);
-    }
 }

@@ -1,10 +1,23 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <!-- Conversion event-->
     <event name="sales_order_place_after">
         <observer name="impreseeConversionObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ConversionObserver" />
     </event>
     <event name="sales_order_save_after">
         <observer name="impreseeConversionObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ConversionObserver" />
+    </event>
+    <!-- Add to cart event-->
+    <event name="checkout_cart_add_product_complete">
+        <observer name="impreseeAddToCartObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\AddToCartObserver" />
+    </event>
+    <!-- Remove item from cart event-->
+    <event name="sales_quote_remove_item">
+        <observer name="impreseeRemoveFromCartObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\RemoveFromCartObserver" />
+    </event>
+    <!-- Add to cart event-->
+    <event name="customer_login">
+        <observer name="impreseeLoginObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\CustomerLoginObserver" />
     </event>
     <!--Changes in attribute or stock-->
     <event name="catalog_product_save_after">
