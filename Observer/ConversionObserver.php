@@ -31,12 +31,6 @@ class ConversionObserver extends ImpreseeRegisterStoreEventObserver
         return $url_data;
     }
 
-    private function callConversionUrl($app, $url_data) {
-
-        $register_conversion_endpoint = 'https://api.impresee.com/ImpreseeSearch/api/v3/search/register_magento/';
-        $content = file($register_conversion_endpoint.$app.'?'.$url_data);
-    }
-
     private function parsePaymentMethod($order) {
         $payment = $order->getPayment();
         $method = $payment->getMethodInstance();

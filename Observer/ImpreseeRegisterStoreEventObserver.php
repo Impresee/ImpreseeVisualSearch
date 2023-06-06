@@ -10,7 +10,6 @@ use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
 
 abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
 {
-    const EVENT_TYPE = 'magento_2_0';
     protected $logger;
     /**
    * load codes of our app
@@ -36,7 +35,7 @@ abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
             $server_data = $_SERVER;
             $url_data = $this->buildEventUrl($observer);
             $parsed_client = $this->parseClient($server_data);
-            $url_data .= '&a='.urlencode($this->_action).'&evt='.urlencode(static::EVENT_TYPE).'&'.$parsed_client;
+            $url_data .= '&a='.urlencode($this->_action).'&evt='.urlencode($this->_codesHelper->getRegisterEventsAction()).'&'.$parsed_client;
             $this->logger->debug($url_data);
             $this->callRegisterEventUrl($photo_app, $url_data);
         } catch (\Exception $e) {
@@ -46,8 +45,7 @@ abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
 
     private function callRegisterEventUrl($app, $url_data) {
 
-        $register_conversion_endpoint = 'https://api.impresee.com/ImpreseeSearch/api/v3/search/register_magento/';
-        $content = file($register_conversion_endpoint.$app.'?'.$url_data);
+        $content = file($$this->_codesHelper->getRegisterEventsUrl().$app.'?'.$url_data);
     }
 
     private function parseClient($server_data) {

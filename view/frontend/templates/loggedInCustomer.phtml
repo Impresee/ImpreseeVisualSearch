@@ -1,9 +1,44 @@
 <script type="text/javascript">
     window._wsee_logged_customer = {
-        'name': '<?php echo $block->customerData->getName(); ?>' || '',
         'id':'<?php echo $block->customerData->getId(); ?>' || '',
-        'email': '<?php echo $block->customerData->getEmail(); ?>' || ''
     }
+    window._wsse_page_type_event = '<?php echo $block->getCurrentPageEvent(); ?>';
+    
+    function _wsse_register_event() {
+        const impreseeRegisterUrl = '<?php echo $block->codesHelper->getRegisterEventsUrl(); ?>';
+        const impreseeCode = '<?php echo $block->codesHelper->getImpreseeUuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE) ?  $block->codesHelper->getImpreseeUuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE) : ''; ?>';
+        
+        let impreseeAction = '<?php echo $block->codesHelper->getRegisterEventsAction(); ?>';
+        let urlParams = new URLSearchParams(window.location.search || '?' + window.location.hash.split('?')[1]);
+        let from_impresee_text = urlParams.get('source_impresee') || '';
+        let from_impresee_visual = urlParams.get('seecd') || '';
+        let data = 'a=' + encodeURIComponent(impreseeAction);
+        data += '&evt=' + encodeURIComponent(_wsse_page_type_event);
+        data += '&fi=' + encodeURIComponent(from_impresee_text);
+        data += '&fiv=' + encodeURIComponent(from_impresee_visual);
+        data += '&cusid=' + encodeURIComponent(_wsee_logged_customer.id);
+        if (window._wsse_page_type_event === 'VIEW_PRODUCT') {
+            const productSku = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getSku() : ''; ?>';
+            const productId = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getId() : ''; ?>';
+            const productName = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getName() : ''; ?>';
+            data += '&pid=' + encodeURIComponent(productId);
+            data += '&sku=' + encodeURIComponent(productSku);
+            data += '&pna=' + encodeURIComponent(productName);
+        }
+        else if (window._wsse_page_type_event === 'VIEW_CATEGORY') {
+            const category = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getName() : ''; ?>';
+            const categoryId = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getId() : ''; ?>';
+            const categoryUrl = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getUrl() : ''; ?>';
+            data += '&cat=' + encodeURIComponent(category);
+            data += '&catid=' + encodeURIComponent(categoryId);
+            data += '&caturl=' + encodeURIComponent(categoryUrl);
+        }
+        if (impreseeCode) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.withCredentials = true;
+            xmlHttp.open( "GET", impreseeRegisterUrl + impreseeCode + '?' + data, true );
+            xmlHttp.send( null );
+        }
+    }
+    _wsse_register_event();
 </script>
-
-
