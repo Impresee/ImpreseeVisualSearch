@@ -19,10 +19,13 @@ class AddToCartObserver extends ImpreseeRegisterStoreEventObserver
     protected function buildEventUrl(\Magento\Framework\Event\Observer $observer)
     {
         $product = $observer->getProduct();
-        $qty = $observer->getEvent()->getRequest()->getQty();
+        $sku = $product->getSku() ? $product->getSku() : '';
+        $product_id = $product->getId() ? $product->getId() : '';
+        $price = $product->getPrice() ? $product->getPrice() : '';
+        $qty = $product->getQty() ? $product->getQty() : '';
         $from_impresee_text = isset($_GET['source_impresee']) ? $_GET['source_impresee'] : '';
         $from_impresee_visual = isset($_GET['seecd']) ? $_GET['seecd'] : '';
-        $url_data = 'fi='.urlencode($from_impresee_text).'&fiv='.urlencode($from_impresee_visual).'&qty='.urlencode($qty).'&sku='.urlencode($product->getSku()).'&pid='.urlencode($product->getProductId()).'&p='.urlencode($product->getPriceInclTax());
+        $url_data = 'fi='.urlencode($from_impresee_text).'&fiv='.urlencode($from_impresee_visual).'&qty='.urlencode($qty).'&sku='.urlencode($sku).'&pid='.urlencode($product_id).'&p='.urlencode($price);
         return $url_data;
     }
 

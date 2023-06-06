@@ -12,6 +12,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\ResponseFactory;
 use Magento\Framework\Webapi\Rest\Request;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
 
 abstract class ImpreseeObserver implements ObserverInterface
 {

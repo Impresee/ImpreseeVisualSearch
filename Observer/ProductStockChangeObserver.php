@@ -4,7 +4,7 @@
  *   provided by Impresee
  */
 namespace ImpreseeAI\ImpreseeVisualSearch\Observer;
-use ImpreseeAI\ImpreseeVisualSearch\ImpreseeObserver;
+use ImpreseeAI\ImpreseeVisualSearch\Observer\ImpreseeObserver;
 use GuzzleHttp\ClientFactory;
 use GuzzleHttp\Psr7\ResponseFactory;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;

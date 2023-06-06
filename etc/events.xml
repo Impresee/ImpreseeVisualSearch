@@ -15,9 +15,13 @@
     <event name="sales_quote_remove_item">
         <observer name="impreseeRemoveFromCartObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\RemoveFromCartObserver" />
     </event>
-    <!-- Add to cart event-->
+    <!-- Login event-->
     <event name="customer_login">
         <observer name="impreseeLoginObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\CustomerLoginObserver" />
+    </event>
+    <!-- Create account -->
+    <event name="customer_register_success">
+        <observer name="impreseeRegisterObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\CustomerCreateAccountObserver" />
     </event>
     <!--Changes in attribute or stock-->
     <event name="catalog_product_save_after">

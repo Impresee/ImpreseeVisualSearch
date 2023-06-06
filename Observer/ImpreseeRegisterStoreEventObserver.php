@@ -36,7 +36,7 @@ abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
             $server_data = $_SERVER;
             $url_data = $this->buildEventUrl($observer);
             $parsed_client = $this->parseClient($server_data);
-            $url_data .= '&a='.urlencode($self->_action).'&evt='.urlencode(static::EVENT_TYPE).'&'.$parsed_client;
+            $url_data .= '&a='.urlencode($this->_action).'&evt='.urlencode(static::EVENT_TYPE).'&'.$parsed_client;
             $this->logger->debug($url_data);
             $this->callRegisterEventUrl($photo_app, $url_data);
         } catch (\Exception $e) {

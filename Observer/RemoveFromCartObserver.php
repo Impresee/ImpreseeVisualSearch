@@ -18,8 +18,11 @@ class RemoveFromCartObserver extends ImpreseeRegisterStoreEventObserver
 
     protected function buildEventUrl(\Magento\Framework\Event\Observer $observer)
     {
-        $product = $observer->getProduct();
-        $url_data ='sku='.urlencode($product->getSku()).'&pid='.urlencode($product->getProductId()).'&p='.urlencode($product->getPriceInclTax());
+        $product = $observer->getQuoteItem()->getProduct();
+        $sku = $product->getSku() ? $product->getSku() : '';
+        $product_id = $product->getId() ? $product->getId() : '';
+        $price = $product->getPrice() ? $product->getPrice() : '';
+        $url_data ='sku='.urlencode($sku).'&pid='.urlencode($product_id).'&p='.urlencode($price);
         return $url_data;
     }
 
