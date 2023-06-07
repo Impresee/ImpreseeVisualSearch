@@ -1,7 +1,10 @@
 var config = {
-   map: {
-       '*': {
-               currentustomer: 'ImpreseeAI_ImpreseeVisualSearch/js/current-customer',
-          }
+   config: {
+      mixins: {
+         'Magento_Search/js/form-mini': {
+               'ImpreseeAI_ImpreseeVisualSearch/js/mixins/form-mini': true
+         }
+
+      }
    }
 };
