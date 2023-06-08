@@ -7,13 +7,14 @@ namespace ImpreseeAI\ImpreseeVisualSearch\Observer;
 use ImpreseeAI\ImpreseeVisualSearch\Observer\ImpreseeRegisterStoreEventObserver;
 use Psr\Log\LoggerInterface;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Requests as RequestsHelper;
 
 class RemoveFromCartObserver extends ImpreseeRegisterStoreEventObserver
 {
 
-    public function __construct(LoggerInterface $logger, CodesHelper $codes)
+    public function __construct(LoggerInterface $logger, CodesHelper $codes, RequestsHelper $requests)
     {
-        parent::__construct($logger, $codes, 'REMOVE_FROM_CART');
+        parent::__construct($logger, $codes, $requests, 'REMOVE_FROM_CART');
     }
 
     protected function buildEventUrl(\Magento\Framework\Event\Observer $observer)

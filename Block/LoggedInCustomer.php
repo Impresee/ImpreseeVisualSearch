@@ -1,6 +1,7 @@
 <?php
 namespace ImpreseeAI\ImpreseeVisualSearch\Block;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Requests as RequestsHelper;
 
 
 class LoggedInCustomer extends \Magento\Framework\View\Element\Template
@@ -16,6 +17,7 @@ class LoggedInCustomer extends \Magento\Framework\View\Element\Template
     protected $request;
     protected $registry;
     public $codesHelper;
+    public $requestsHelper;
 
     /**
      * Construct
@@ -30,6 +32,7 @@ class LoggedInCustomer extends \Magento\Framework\View\Element\Template
         \Magento\Framework\App\Request\Http $request, 
         \Magento\Framework\Registry $registry,
         CodesHelper $codesHelper,
+        RequestsHelper $requestsHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -38,6 +41,7 @@ class LoggedInCustomer extends \Magento\Framework\View\Element\Template
         $this->request = $request;
         $this->registry = $registry;
         $this->codesHelper = $codesHelper;
+        $this->requestsHelper = $requestsHelper;
     }
 
     public function getCurrentPageEvent()

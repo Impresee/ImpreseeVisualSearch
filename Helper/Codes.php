@@ -76,10 +76,6 @@ class Codes extends AbstractHelper
     {
         return $this->scopeConfig->getValue("impresee/api_access/access_token_secret", $store);
     }
-    public function getRegisterEventsUrl()
-    {
-        return 'https://api.impresee.com/ImpreseeSearch/api/v3/search/register_magento/';
-    }
     public function getRegisterEventsAction()
     {
         return 'magento_2_0';

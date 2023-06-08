@@ -7,6 +7,7 @@ namespace ImpreseeAI\ImpreseeVisualSearch\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Psr\Log\LoggerInterface;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Requests as RequestsHelper;
 
 abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
 {
@@ -16,13 +17,15 @@ abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
    * @var ImpreseeAI\ImpreseeVisualSearch\Helper\Codes
    */
     protected $_codesHelper;
-    protected $_action;
+    protected $_requestsHelper;
+    protected $_event;
 
-    public function __construct(LoggerInterface $logger, CodesHelper $codes, $action)
+    public function __construct(LoggerInterface $logger, CodesHelper $codes, RequestsHelper $requestsHelper, $event)
     {
         $this->logger = $logger;
         $this->_codesHelper = $codes;
-        $this->_action = $action;
+        $this->_event = $event;
+        $this->_requestsHelper = $requestsHelper;
     }
 
     abstract protected function buildEventUrl(\Magento\Framework\Event\Observer $observer);
@@ -32,23 +35,13 @@ abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
         try {
             $photo_app = $this->_codesHelper->getImpreseeUuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
             if (!$photo_app) return;
-            $server_data = $_SERVER;
             $url_data = $this->buildEventUrl($observer);
-            $parsed_client = $this->parseClient($server_data);
-            $url_data .= '&a='.urlencode($this->_action).'&evt='.urlencode($this->_codesHelper->getRegisterEventsAction()).'&'.$parsed_client;
+            $parsed_client = $this->_requestsHelper->parseClientData();
+            $url_data .= '&evt='.urlencode($this->_event).'&a='.urlencode($this->_codesHelper->getRegisterEventsAction()).'&'.$parsed_client;
             $this->logger->debug($url_data);
-            $this->callRegisterEventUrl($photo_app, $url_data);
+            $this->_requestsHelper->callRegisterEventUrl($photo_app, $url_data);
         } catch (\Exception $e) {
             $this->logger->debug($e->getMessage());
         }
-    }
-
-    private function callRegisterEventUrl($app, $url_data) {
-
-        $content = file($$this->_codesHelper->getRegisterEventsUrl().$app.'?'.$url_data);
-    }
-
-    private function parseClient($server_data) {
-        return 'ip='.urlencode($server_data['REMOTE_ADDR']).'&ua='.urlencode($server_data['HTTP_USER_AGENT']).'&store='.urlencode($server_data['HTTP_HOST']);
     }
 }

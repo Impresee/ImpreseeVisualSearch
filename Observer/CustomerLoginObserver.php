@@ -7,13 +7,14 @@ namespace ImpreseeAI\ImpreseeVisualSearch\Observer;
 use ImpreseeAI\ImpreseeVisualSearch\Observer\ImpreseeRegisterStoreEventObserver;
 use Psr\Log\LoggerInterface;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Requests as RequestsHelper;
 
 class CustomerLoginObserver extends ImpreseeRegisterStoreEventObserver
 {
 
-    public function __construct(LoggerInterface $logger, CodesHelper $codes)
+    public function __construct(LoggerInterface $logger, CodesHelper $codes, RequestsHelper $requests)
     {
-        parent::__construct($logger, $codes, 'LOGIN');
+        parent::__construct($logger, $codes, $requests, 'LOGIN');
     }
 
     protected function buildEventUrl(\Magento\Framework\Event\Observer $observer)

@@ -3,8 +3,16 @@
     <type name="Magento\Catalog\Model\Config">
         <plugin name="ImpreseeAI_ImpreseeVisualSearch::addCustomOptions" type="ImpreseeAI\ImpreseeVisualSearch\Plugin\Model\Config" disabled="false"/>
     </type>
+    <type name="Magento\CatalogSearch\Controller\Result\Index">
+        <plugin name="ImpreseeAI_ImpreseeVisualSearch::registerSearchFiltersIndex" 
+                type="ImpreseeAI\ImpreseeVisualSearch\Plugin\Search\ImpreseeSearchResultsIndexPlugin" 
+                sortOrder="1"
+                disabled="false"/>
+    </type>
     <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\CustomerRepositoryInterface"
             type="ImpreseeAI\ImpreseeVisualSearch\Model\Api\CustomerRepository" />
     <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\ResponseCustomerInterface"
             type="ImpreseeAI\ImpreseeVisualSearch\Model\Api\ResponseCustomer" />
+    <preference for="\Magento\CatalogSearch\Controller\Advanced\Result"
+            type="ImpreseeAI\ImpreseeVisualSearch\Controller\Search\ImpreseeSearchResults" />
 </config>
