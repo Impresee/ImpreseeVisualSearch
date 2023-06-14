@@ -35,7 +35,7 @@ abstract class ImpreseeSearchBasePlugin
             $impresee_code = $this->_codesHelper->getImpreseeUuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
             if (!$impresee_code) return null;
             $parsed_client = $this->_requestsHelper->parseClientData();
-            $url_data = 'q='.urlencode($queryText).'&evt='.urlencode(static::FILTER_SEARCH).'&a='.urlencode($this->_codesHelper->getRegisterEventsAction()).'&'.$parsed_client;
+            $url_data = 'evt='.urlencode(static::FILTER_SEARCH).'&a='.urlencode($this->_codesHelper->getRegisterEventsAction()).'&'.$parsed_client;
             foreach ($params as $key => $value) {
                 $url_data .= '&'.urlencode($key).'='.urlencode($value);
             }

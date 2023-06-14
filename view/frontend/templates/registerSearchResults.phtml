@@ -1,0 +1,14 @@
+<script type="text/javascript">
+    let searchImpreseeData = '';
+    let impreseeProducts = document.querySelectorAll('[data-product-id]');
+    let impreseeProductIds = [];
+    for(let product of Array.from(impreseeProducts)){
+        let productDataset = product.dataset;
+        if (productDataset) {
+            impreseeProductIds.push(productDataset.productId);
+        }
+    }
+    searchImpreseeData += '&pids=' + encodeURIComponent(impreseeProductIds.join('|'));
+    searchImpreseeData += '<?php echo $block->getParsedSearchAttributes();?>';
+    _wsse_register_event(searchImpreseeData, 'SEARCH_RESULTS');
+</script>

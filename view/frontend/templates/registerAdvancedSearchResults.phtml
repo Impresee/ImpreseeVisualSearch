@@ -1,0 +1,29 @@
+<script type="text/javascript">
+    function registerAdvancedResults(){
+        const advancedResultsScreen = '<?php echo $block->getScreenName();?>';
+        if (advancedResultsScreen === 'catalogsearch_advanced_result') {
+            let advancedSearchImpreseeData = '';
+            let advancedImpreseeProducts = document.querySelectorAll('[data-product-id]');
+            let advancedImpreseeProductIds = [];
+            for(let product of Array.from(advancedImpreseeProducts)){
+                let productDataset = product.dataset;
+                if (productDataset) {
+                    advancedImpreseeProductIds.push(productDataset.productId);
+                }
+            }
+            advancedSearchImpreseeData += '&pids=' + encodeURIComponent(advancedImpreseeProductIds.join('|'));
+            advancedSearchImpreseeData += '<?php echo $block->getParsedSearchAttributes();?>';
+            _wsse_register_event(advancedSearchImpreseeData, 'ADVANCED_SEARCH_RESULTS');
+        }
+    }
+    
+    if (
+        document.readyState === "complete" ||
+        document.readyState === "interactive"
+    ) {
+        // call on next available tick
+        setTimeout(registerAdvancedResults, 1);
+    } else {
+        document.addEventListener("DOMContentLoaded", registerAdvancedResults);
+    }
+</script>

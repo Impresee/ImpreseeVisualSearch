@@ -4,13 +4,14 @@ use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Requests as RequestsHelper;
 
 
-class LoggedInCustomer extends \Magento\Framework\View\Element\Template
+class PageViewEventTemplate extends \Magento\Framework\View\Element\Template
 {
     const VIEW_PRODUCT_EVENT = 'VIEW_PRODUCT';
     const VIEW_CATEGORY_EVENT = 'VIEW_CATEGORY';
     const VIEW_HOME_EVENT = 'VIEW_HOME';
     // Blog, Customer service, Q&A, etc
     const VIEW_CMS_EVENT = 'VIEW_OTHER';
+    const VIEW_SEARCH_RESULTS_EVENT = 'VIEW_SEARCH_RESULTS';
     protected $customerSession;
     protected $context;
     public $customerData;
@@ -18,6 +19,7 @@ class LoggedInCustomer extends \Magento\Framework\View\Element\Template
     protected $registry;
     public $codesHelper;
     public $requestsHelper;
+    public $screen;
 
     /**
      * Construct
@@ -42,6 +44,7 @@ class LoggedInCustomer extends \Magento\Framework\View\Element\Template
         $this->registry = $registry;
         $this->codesHelper = $codesHelper;
         $this->requestsHelper = $requestsHelper;
+        $this->screen = '';
     }
 
     public function getCurrentPageEvent()
@@ -55,9 +58,11 @@ class LoggedInCustomer extends \Magento\Framework\View\Element\Template
         if ($this->request->getFullActionName() == 'cms_index_index') {
             return static::VIEW_HOME_EVENT;
         }
-        if ($this->request->getFullActionName() == 'cms_page_view') {
-            return static::VIEW_CMS_EVENT;
+        if ($this->request->getFullActionName() == 'catalogsearch_result_index') {
+            return static::VIEW_SEARCH_RESULTS_EVENT;
         }
+        $this->screen = $this->request->getFullActionName();
+        return static::VIEW_CMS_EVENT;
     }
 
     public function getCurrentCategory()

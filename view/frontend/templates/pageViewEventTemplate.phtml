@@ -3,6 +3,7 @@
         'id':'<?php echo $block->customerData->getId(); ?>' || '',
     }
     window._wsse_page_type_event = '<?php echo $block->getCurrentPageEvent(); ?>';
+    let impreseeScreen = '<?php echo $block->screen; ?>';
     
     function _wsse_register_event(extraData, event) {
         const impreseeRegisterUrl = '<?php echo $block->requestsHelper->getRegisterEventsUrl(); ?>';
@@ -27,23 +28,26 @@
         }
     }
 
-    let data = '';
+    let impreseeData = '';
     if (window._wsse_page_type_event === 'VIEW_PRODUCT') {
-        const productSku = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getSku() : ''; ?>';
-        const productId = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getId() : ''; ?>';
-        const productName = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getName() : ''; ?>';
-        data += '&pid=' + encodeURIComponent(productId);
-        data += '&sku=' + encodeURIComponent(productSku);
-        data += '&pna=' + encodeURIComponent(productName);
+        const _wsee_productSku = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getSku() : ''; ?>';
+        const _wsee_productId = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getId() : ''; ?>';
+        const _wsee_productName = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getName() : ''; ?>';
+        impreseeData += '&pid=' + encodeURIComponent(_wsee_productId);
+        impreseeData += '&sku=' + encodeURIComponent(_wsee_productSku);
+        impreseeData += '&pna=' + encodeURIComponent(_wsee_productName);
     }
     else if (window._wsse_page_type_event === 'VIEW_CATEGORY') {
-        const category = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getName() : ''; ?>';
-        const categoryId = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getId() : ''; ?>';
-        const categoryUrl = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getUrl() : ''; ?>';
-        data += '&cat=' + encodeURIComponent(category);
-        data += '&catid=' + encodeURIComponent(categoryId);
-        data += '&caturl=' + encodeURIComponent(categoryUrl);
+        const _wsee_category = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getName() : ''; ?>';
+        const _wsee_categoryId = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getId() : ''; ?>';
+        const _wsee_categoryUrl = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getUrl() : ''; ?>';
+        impreseeData += '&cat=' + encodeURIComponent(_wsee_category);
+        impreseeData += '&catid=' + encodeURIComponent(_wsee_categoryId);
+        impreseeData += '&caturl=' + encodeURIComponent(_wsee_categoryUrl);
+    }
+    else if (impreseeScreen) {
+        impreseeData += '&scr=' + encodeURIComponent(impreseeScreen);
     }
 
-    _wsse_register_event(data, window._wsse_page_type_event);
+    _wsse_register_event(impreseeData, window._wsse_page_type_event);
 </script>

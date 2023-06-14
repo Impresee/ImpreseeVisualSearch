@@ -13,6 +13,4 @@
             type="ImpreseeAI\ImpreseeVisualSearch\Model\Api\CustomerRepository" />
     <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\ResponseCustomerInterface"
             type="ImpreseeAI\ImpreseeVisualSearch\Model\Api\ResponseCustomer" />
-    <preference for="\Magento\CatalogSearch\Controller\Advanced\Result"
-            type="ImpreseeAI\ImpreseeVisualSearch\Controller\Search\ImpreseeSearchResults" />
 </config>
