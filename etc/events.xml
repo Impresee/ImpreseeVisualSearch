@@ -23,6 +23,20 @@
     <event name="customer_register_success">
         <observer name="impreseeRegisterObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\CustomerCreateAccountObserver" />
     </event>
+    <!-- Wishlist -->
+    <event name="wishlist_add_product">
+        <observer name="impreseeRegsiterAddToWishlistObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\AddToWishlistObserver" />
+    </event>
+    <!-- Compare -->
+    <event name="catalog_product_compare_add_product">
+        <observer name="impreseeRegsiterAddToCompareObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\AddToCompareObserver" />
+    </event>
+    <event name="catalog_product_compare_remove_product">
+        <observer name="impreseeRegsiterRemoveFromCompareObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\RemoveFromCompareObserver" />
+    </event>
+    <event name="catalog_product_compare_item_collection_clear">
+        <observer name="impreseeRegsiterClearCompareObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ClearCompareListObserver" />
+    </event>
     <!--Changes in attribute or stock-->
     <event name="catalog_product_save_after">
         <observer name="impreseeChangeAttributesObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductStockChangeObserver" />

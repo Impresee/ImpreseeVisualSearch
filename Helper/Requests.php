@@ -6,16 +6,19 @@ namespace ImpreseeAI\ImpreseeVisualSearch\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Setup;
 
 class Requests extends AbstractHelper
 {
+    private $_setup;
     /**
      * General constructor.
      * @param Context $context
      */
-    public function __construct(Context $context)
+    public function __construct(Context $context, Setup $setup)
     {
         parent::__construct($context);
+        $this->_setup = $setup;
     }
 
     public function parseClientData() {
@@ -24,7 +27,8 @@ class Requests extends AbstractHelper
     }
     public function getRegisterEventsUrl()
     {
-        return 'https://api.impresee.com/ImpreseeSearch/api/v3/search/register_magento/';
+        $baseUrl = $this->_setup->getIsDebug() ? 'https://dev2.impresee.com' : 'https://api.impresee.com';
+        return $baseUrl.'/ImpreseeSearch/api/v3/search/register_magento/';
     }
     public function callRegisterEventUrl($app, $url_data) {
 
