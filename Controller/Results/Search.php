@@ -212,7 +212,7 @@ class Search extends Action
             $url = $this->_codesHelper->getSketchUrl($store);
         }
         if ($type =="photo") {
-            $url = $this->_codesHelper->getPhotoUrl($store);
+            $url = $this->_codesHelper->getImpreseeUuid($store);
         }
         return $this->_codesHelper->getCode($url);
     }

@@ -26,7 +26,7 @@ class ConversionObserver implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         try {
-            $photo_app = $this->_codesHelper->getPhotoUrl(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+            $photo_app = $this->_codesHelper->getImpreseeUuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
             if (!$photo_app) return;
             $action = 'CONVERSION';
             $event_type = 'magento_2_0';
@@ -53,6 +53,7 @@ class ConversionObserver implements ObserverInterface
     private function callConversionUrl($app, $url_data) {
 
         $register_conversion_endpoint = 'https://api.impresee.com/ImpreseeSearch/api/v3/search/register_magento/';
+        $this->logger->debug($register_conversion_endpoint.$app.'?'.$url_data);
         $content = file($register_conversion_endpoint.$app.'?'.$url_data);
     }
 

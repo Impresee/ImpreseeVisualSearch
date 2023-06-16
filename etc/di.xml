@@ -3,8 +3,4 @@
     <type name="Magento\Catalog\Model\Config">
         <plugin name="ImpreseeAI_ImpreseeVisualSearch::addCustomOptions" type="ImpreseeAI\ImpreseeVisualSearch\Plugin\Model\Config" />
     </type>
-    <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\CustomerRepositoryInterface"
-            type="ImpreseeAI\ImpreseeVisualSearch\Model\Api\CustomerRepository" />
-    <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\ResponseCustomerInterface"
-            type="ImpreseeAI\ImpreseeVisualSearch\Model\Api\ResponseCustomer" />
 </config>

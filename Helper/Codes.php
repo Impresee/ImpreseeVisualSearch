@@ -42,7 +42,7 @@ class Codes extends AbstractHelper
      * @param string with the storeid
      * @return string with the photo search code for a store
      */
-    public function getPhotoUrl($store)
+    public function getImpreseeUuid($store)
     {
         return $this->scopeConfig->getValue("impresee/general/photo_url", $store);
     }

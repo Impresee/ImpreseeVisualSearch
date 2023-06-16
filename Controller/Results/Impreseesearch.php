@@ -115,7 +115,7 @@ class Impreseesearch extends Action
             $this->_service = $this->_codesHelper->getSketchUrl($storeScope);
         }
         if ($this->_typeOfSearch == "photo") {
-            $this->_service = $this->_codesHelper->getPhotoUrl($storeScope);
+            $this->_service = $this->_codesHelper->getImpreseeUuid($storeScope);
         }
     }
   /**
