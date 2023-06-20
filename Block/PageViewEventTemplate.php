@@ -65,6 +65,23 @@ class PageViewEventTemplate extends \Magento\Framework\View\Element\Template
         return static::VIEW_CMS_EVENT;
     }
 
+    public function getBaseUrlData(){
+        $params = $this->request->getParams();
+        $url_data = '';
+        foreach ($params as $key => $value) {
+            if (gettype($value) == 'array')
+            {
+                $url_data .= '&'.urlencode($key).'='.urlencode(join('|', $value));
+            }
+            else
+            {
+                $url_data .= '&'.urlencode($key).'='.urlencode($value);
+            }
+            
+        }
+        return $url_data;
+    }
+
     public function getCurrentCategory()
     {        
         return $this->registry->registry('current_category');

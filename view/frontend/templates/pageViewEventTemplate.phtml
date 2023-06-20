@@ -48,6 +48,7 @@
     else if (impreseeScreen) {
         impreseeData += '&scr=' + encodeURIComponent(impreseeScreen);
     }
+    impreseeData += '<?php echo $block->getBaseUrlData(); ?>';
 
     _wsse_register_event(impreseeData, window._wsse_page_type_event);
 </script>
