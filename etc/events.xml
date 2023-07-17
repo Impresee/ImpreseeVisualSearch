@@ -22,8 +22,4 @@
     <event name="customer_register_success">
         <observer name="impreseeRegisterObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\CustomerCreateAccountObserver" />
     </event>
-    <!--Changes in attribute or stock-->
-    <event name="catalog_product_save_after">
-        <observer name="impreseeChangeAttributesObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductStockChangeObserver" />
-    </event>
 </config>
