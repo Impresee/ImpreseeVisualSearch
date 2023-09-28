@@ -53,6 +53,7 @@ class ConversionObserver implements ObserverInterface
     private function callConversionUrl($app, $url_data) {
 
         $register_conversion_endpoint = 'https://api.impresee.com/ImpreseeSearch/api/v3/search/register_magento/';
+        $this->logger->debug($register_conversion_endpoint.$app.'?'.$url_data);
         $content = file($register_conversion_endpoint.$app.'?'.$url_data);
     }
 
