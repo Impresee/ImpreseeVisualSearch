@@ -5,8 +5,11 @@
  */
 namespace ImpreseeAI\ImpreseeVisualSearch\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use \Magento\Framework\HTTP\Header;
 use Psr\Log\LoggerInterface;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use Magento\Customer\Model\Session as CustomerSession;
 
 abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
 {
@@ -18,12 +21,20 @@ abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
    */
     protected $_codesHelper;
     protected $_action;
+    private $_remoteAddress;
+    private $_httpHeader;
+    private $_customerSession;
 
-    public function __construct(LoggerInterface $logger, CodesHelper $codes, $action)
+    public function __construct(LoggerInterface $logger, CodesHelper $codes,
+        Header $httpHeader, RemoteAddress $remoteAddress,
+        CustomerSession $customerSession, $action)
     {
         $this->logger = $logger;
         $this->_codesHelper = $codes;
         $this->_action = $action;
+        $this->_remoteAddress = $remoteAddress;
+        $this->_httpHeader = $httpHeader;
+        $this->_customerSession = $customerSession;
     }
 
     abstract protected function buildEventUrl(\Magento\Framework\Event\Observer $observer);
@@ -37,6 +48,11 @@ abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
             $url_data = $this->buildEventUrl($observer);
             $parsed_client = $this->parseClient($server_data);
             $url_data .= '&a='.urlencode($this->_action).'&evt='.urlencode(static::EVENT_TYPE).'&'.$parsed_client;
+            // checks customer is logged in 
+            if ($this->_customerSession->isLoggedIn()) {
+                $customer_id = $this->_customerSession->getCustomerId();
+                $url_data .= '&cid='.urlencode($customer_id);
+            }
             $this->logger->debug($url_data);
             $this->callRegisterEventUrl($photo_app, $url_data);
         } catch (\Exception $e) {
@@ -51,6 +67,6 @@ abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
     }
 
     private function parseClient($server_data) {
-        return 'ip='.urlencode($server_data['REMOTE_ADDR']).'&ua='.urlencode($server_data['HTTP_USER_AGENT']).'&store='.urlencode($server_data['HTTP_HOST']);
+        return 'ip='.urlencode($this->_remoteAddress->getRemoteAddress()).'&ua='.urlencode($this->_httpHeader->getHttpUserAgent()).'&store='.urlencode($server_data['HTTP_HOST']);
     }
 }
