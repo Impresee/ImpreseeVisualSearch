@@ -4,13 +4,14 @@
  *   provided by Impresee
  */
 namespace ImpreseeAI\ImpreseeVisualSearch\Observer;
-use Magento\Framework\Event\ObserverInterface;
+use ImpreseeAI\ImpreseeVisualSearch\Observer\ImpreseeRegisterStoreEventObserver;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\HTTP\Header;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
+use ImpreseeAI\ImpreseeVisualSearch\Helper\Requests as RequestsHelper;
 
-class ConversionObserver implements ObserverInterface
+class ConversionObserver extends ImpreseeRegisterStoreEventObserver
 {
     protected $logger;
     /**
@@ -30,7 +31,7 @@ class ConversionObserver implements ObserverInterface
         $this->_httpHeader = $httpHeader;
     }
 
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    protected function buildEventUrl(\Magento\Framework\Event\Observer $observer)
     {
         try {
             $photo_app = $this->_codesHelper->getImpreseeUuid(\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
