@@ -7,14 +7,18 @@ namespace ImpreseeAI\ImpreseeVisualSearch\Observer;
 use ImpreseeAI\ImpreseeVisualSearch\Observer\ImpreseeRegisterStoreEventObserver;
 use Psr\Log\LoggerInterface;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
-use ImpreseeAI\ImpreseeVisualSearch\Helper\Requests as RequestsHelper;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use \Magento\Framework\HTTP\Header;
+use Magento\Customer\Model\Session as CustomerSession;
 
 class AddToWishlistObserver extends ImpreseeRegisterStoreEventObserver
 {
 
-    public function __construct(LoggerInterface $logger, CodesHelper $codes, RequestsHelper $requests)
+    public function __construct(LoggerInterface $logger, CodesHelper $codes,
+     Header $httpHeader, RemoteAddress $remoteAddress,
+     CustomerSession $customerSession)
     {
-        parent::__construct($logger, $codes, $requests, 'ADD_TO_WISHLIST');
+        parent::__construct($logger, $codes, $httpHeader, $remoteAddress, $customerSession, 'ADD_TO_WISHLIST');
     }
 
     protected function buildEventUrl(\Magento\Framework\Event\Observer $observer)
