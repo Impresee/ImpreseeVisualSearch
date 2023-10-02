@@ -6,10 +6,10 @@
 namespace ImpreseeAI\ImpreseeVisualSearch\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
-use \Magento\Framework\HTTP\Header;
+use Magento\Framework\HTTP\Header;
+use Magento\Customer\Model\Session as CustomerSession;
 use Psr\Log\LoggerInterface;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
-use Magento\Customer\Model\Session as CustomerSession;
 
 abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
 {

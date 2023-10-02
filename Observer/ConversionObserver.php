@@ -6,6 +6,8 @@
 namespace ImpreseeAI\ImpreseeVisualSearch\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Framework\HTTP\Header;
 use ImpreseeAI\ImpreseeVisualSearch\Helper\Codes as CodesHelper;
 
 class ConversionObserver implements ObserverInterface
@@ -16,11 +18,16 @@ class ConversionObserver implements ObserverInterface
    * @var ImpreseeAI\ImpreseeVisualSearch\Helper\Codes
    */
     protected $_codesHelper;
+    private $_remoteAddress;
+    private $_httpHeader;
 
-    public function __construct(LoggerInterface $logger, CodesHelper $codes)
+    public function __construct(LoggerInterface $logger, CodesHelper $codes,
+        Header $httpHeader, RemoteAddress $remoteAddress)
     {
         $this->logger = $logger;
         $this->_codesHelper = $codes;
+        $this->_remoteAddress = $remoteAddress;
+        $this->_httpHeader = $httpHeader;
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -93,6 +100,6 @@ class ConversionObserver implements ObserverInterface
     }
 
     private function parseClient($server_data) {
-        return 'ip='.urlencode($server_data['REMOTE_ADDR']).'&ua='.urlencode($server_data['HTTP_USER_AGENT']).'&store='.urlencode($server_data['HTTP_HOST']);
+        return 'ip='.urlencode($this->_remoteAddress->getRemoteAddress()).'&ua='.urlencode($this->_httpHeader->getHttpUserAgent()).'&store='.urlencode($server_data['HTTP_HOST']);
     }
 }
