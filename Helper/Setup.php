@@ -17,7 +17,7 @@ class Setup extends AbstractHelper
     public function __construct(Context $context)
     {
         parent::__construct($context);
-        $this->_isDebug = TRUE;
+        $this->_isDebug = FALSE;
     }
 
     public function getIsDebug()

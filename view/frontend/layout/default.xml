@@ -4,13 +4,19 @@
     <script src="ImpreseeAI_ImpreseeVisualSearch::js/add_to_cart.js"/>
   </head>
   <body>
-    <referenceBlock name="head.additional">
-        <block class="ImpreseeAI\ImpreseeVisualSearch\Block\PageViewEventTemplate" name="page_view_event"
-          template="ImpreseeAI_ImpreseeVisualSearch::pageViewEventTemplate.phtml" cacheable="false"/>
-        <block class="ImpreseeAI\ImpreseeVisualSearch\Block\LoggedInCustomer" name="logged_in_customer"
-          template="ImpreseeAI_ImpreseeVisualSearch::loggedInCustomer.phtml" cacheable="false"/>
-    </referenceBlock>
     <referenceContainer name="content">
+        <block class="ImpreseeAI\ImpreseeVisualSearch\Block\ImpreseeInViewEventTemplate" name="impresee_in_view_event"
+          template="ImpreseeAI_ImpreseeVisualSearch::impreseeInViewEventTemplate.phtml">
+          <arguments>
+              <argument name="jsLayout" xsi:type="array">
+                  <item name="components" xsi:type="array">
+                      <item name="impreseeInViewEventData" xsi:type="array">
+                          <item name="component" xsi:type="string">ImpreseeAI_ImpreseeVisualSearch/js/view/impresee-in-view-event-data</item>
+                      </item>
+                  </item>
+              </argument>
+          </arguments>
+        </block>
         <block class="ImpreseeAI\ImpreseeVisualSearch\Block\RegisterAdvancedSearchResultsBlock" name="impresee_register_advanced_search_results" template="ImpreseeAI_ImpreseeVisualSearch::registerAdvancedSearchResults.phtml" />
     </referenceContainer> 
   </body>

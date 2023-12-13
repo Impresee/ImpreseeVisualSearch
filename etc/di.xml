@@ -9,6 +9,13 @@
                 sortOrder="1"
                 disabled="false"/>
     </type>
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="impreseeInViewEventData" xsi:type="string">ImpreseeAI\ImpreseeVisualSearch\CustomerData\ImpreseeInViewEventData</item>
+            </argument>
+        </arguments>
+    </type>
     <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\CustomerRepositoryInterface"
             type="ImpreseeAI\ImpreseeVisualSearch\Model\Api\CustomerRepository" />
     <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\ResponseCustomerInterface"
