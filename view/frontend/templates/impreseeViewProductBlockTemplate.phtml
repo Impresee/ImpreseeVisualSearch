@@ -1,0 +1,18 @@
+<script type="text/javascript">
+    window._wsse_page_type_event = '<?php echo $block->getCurrentPageEvent(); ?>';
+    let impreseeScreen = '<?php echo $block->screen; ?>';
+
+    window._wsse_impresee_data = '';
+    if (window._wsse_page_type_event === 'VIEW_PRODUCT') {
+        const _wsee_productSku = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getSku() : ''; ?>';
+        const _wsee_productId = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getId() : ''; ?>';
+        const _wsee_productName = '<?php echo $block->getCurrentProduct() ? $block->getCurrentProduct()->getName() : ''; ?>';
+        window._wsse_impresee_data += '&pid=' + encodeURIComponent(_wsee_productId);
+        window._wsse_impresee_data += '&sku=' + encodeURIComponent(_wsee_productSku);
+        window._wsse_impresee_data += '&pna=' + encodeURIComponent(_wsee_productName);
+    }
+    else if (impreseeScreen) {
+        window._wsse_impresee_data += '&scr=' + encodeURIComponent(impreseeScreen);
+    }
+    window._wsse_impresee_data += '<?php echo $block->getBaseUrlData(); ?>';
+</script>

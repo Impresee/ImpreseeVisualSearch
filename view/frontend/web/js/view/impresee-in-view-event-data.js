@@ -38,33 +38,8 @@ define([
             'email': impreseeInViewData.customer.email || '',
             'customer_group': impreseeInViewData.customer.customer_group || '',
         }
-        window._wsse_page_type_event = impreseeInViewData.page_type_event || '';
-        let impreseeScreen = impreseeInViewData.screen || '';
-        let impreseeData = '';
-        if (impreseeInViewData.page_type_event === 'VIEW_PRODUCT') {
-            const product = impreseeInViewData.product;
-            const _wsee_productSku = product.sku || '';
-            const _wsee_productId = product.id || '';
-            const _wsee_productName = product.name || '';
-            impreseeData += '&pid=' + encodeURIComponent(_wsee_productId);
-            impreseeData += '&sku=' + encodeURIComponent(_wsee_productSku);
-            impreseeData += '&pna=' + encodeURIComponent(_wsee_productName);
-        }
-        else if (impreseeInViewData.page_type_event === 'VIEW_CATEGORY') {
-            const category = impreseeInViewData.category;
-            const _wsee_category = category.name || '';
-            const _wsee_categoryId = category.id || '';
-            const _wsee_categoryUrl = category.url || '';
-            impreseeData += '&cat=' + encodeURIComponent(_wsee_category);
-            impreseeData += '&catid=' + encodeURIComponent(_wsee_categoryId);
-            impreseeData += '&caturl=' + encodeURIComponent(_wsee_categoryUrl);
-        }
-        else if (impreseeScreen) {
-            impreseeData += '&scr=' + encodeURIComponent(impreseeScreen);
-        }
-        impreseeData += impreseeInViewData.base_url || '';
 
-        _wsse_register_event(impreseeData, window._wsse_page_type_event, impreseeInViewData);
+        _wsse_register_event(window._wsse_impresee_data, window._wsse_page_type_event, impreseeInViewData);
     }
 
     return Component.extend({

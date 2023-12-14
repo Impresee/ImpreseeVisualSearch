@@ -1,0 +1,18 @@
+<script type="text/javascript">
+    window._wsse_page_type_event = '<?php echo $block->getCurrentPageEvent(); ?>';
+    let impreseeScreen = '<?php echo $block->screen; ?>';
+
+    window._wsse_impresee_data = '';
+    if (window._wsse_page_type_event === 'VIEW_CATEGORY') {
+        const _wsee_category = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getName() : ''; ?>';
+        const _wsee_categoryId = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getId() : ''; ?>';
+        const _wsee_categoryUrl = '<?php echo $block->getCurrentCategory() ? $block->getCurrentCategory()->getUrl() : ''; ?>';
+        window._wsse_impresee_data += '&cat=' + encodeURIComponent(_wsee_category);
+        window._wsse_impresee_data += '&catid=' + encodeURIComponent(_wsee_categoryId);
+        window._wsse_impresee_data += '&caturl=' + encodeURIComponent(_wsee_categoryUrl);
+    }
+    else if (impreseeScreen) {
+        window._wsse_impresee_data += '&scr=' + encodeURIComponent(impreseeScreen);
+    }
+    window._wsse_impresee_data += '<?php echo $block->getBaseUrlData(); ?>';
+</script>

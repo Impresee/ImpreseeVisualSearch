@@ -5,7 +5,7 @@
   </head>
   <body>
     <referenceContainer name="content">
-        <block class="ImpreseeAI\ImpreseeVisualSearch\Block\ImpreseeInViewEventTemplate" name="impresee_in_view_event"
+        <block class="ImpreseeAI\ImpreseeVisualSearch\Block\ImpreseeViewProductOrCategoryEventDataBlock" name="impresee_in_view_event"
           template="ImpreseeAI_ImpreseeVisualSearch::impreseeInViewEventTemplate.phtml">
           <arguments>
               <argument name="jsLayout" xsi:type="array">
@@ -18,6 +18,16 @@
           </arguments>
         </block>
         <block class="ImpreseeAI\ImpreseeVisualSearch\Block\RegisterAdvancedSearchResultsBlock" name="impresee_register_advanced_search_results" template="ImpreseeAI_ImpreseeVisualSearch::registerAdvancedSearchResults.phtml" />
-    </referenceContainer> 
+    </referenceContainer>
+    <referenceContainer name="product.info.main">
+      <block class="ImpreseeAI\ImpreseeVisualSearch\Block\ImpreseeViewProductOrCategoryEventDataBlock"
+        name="impresee_view_product" after="-" 
+        template="ImpreseeAI_ImpreseeVisualSearch::impreseeViewProductBlockTemplate.phtml" />
+    </referenceContainer>
+    <referenceContainer name="category.view.container">
+      <block class="ImpreseeAI\ImpreseeVisualSearch\Block\ImpreseeViewProductOrCategoryEventDataBlock"
+        name="impresee_view_category" after="-" 
+        template="ImpreseeAI_ImpreseeVisualSearch::impreseeViewCategoryBlockTemplate.phtml" />
+    </referenceContainer>
   </body>
 </page>
