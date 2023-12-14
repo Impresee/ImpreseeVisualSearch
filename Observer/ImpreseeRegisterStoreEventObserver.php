@@ -53,7 +53,6 @@ abstract class ImpreseeRegisterStoreEventObserver implements ObserverInterface
                 $customer_id = $this->_customerSession->getCustomerId();
                 $url_data .= '&cid='.urlencode($customer_id);
             }
-            $this->logger->debug($url_data);
             $this->callRegisterEventUrl($photo_app, $url_data);
         } catch (\Exception $e) {
             $this->logger->debug($e->getMessage());

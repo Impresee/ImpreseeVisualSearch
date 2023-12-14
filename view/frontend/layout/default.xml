@@ -5,7 +5,7 @@
   </head>
   <body>
     <referenceContainer name="content">
-        <block class="ImpreseeAI\ImpreseeVisualSearch\Block\ImpreseeViewProductOrCategoryEventDataBlock" name="impresee_in_view_event"
+        <block class="Magento\Catalog\Block\Product\View" name="impresee_in_view_event"
           template="ImpreseeAI_ImpreseeVisualSearch::impreseeInViewEventTemplate.phtml">
           <arguments>
               <argument name="jsLayout" xsi:type="array">

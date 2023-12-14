@@ -39,7 +39,6 @@ abstract class ImpreseeSearchBasePlugin
             foreach ($params as $key => $value) {
                 $url_data .= '&'.urlencode($key).'='.urlencode($value);
             }
-            $this->_logger->debug($url_data);
             $this->_requestsHelper->callRegisterEventUrl($impresee_code, $url_data);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_logger->debug($e->getMessage());

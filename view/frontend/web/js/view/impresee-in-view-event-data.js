@@ -8,7 +8,9 @@ define([
     'Magento_Customer/js/customer-data'
 ], function (Component, customerData) {
     'use strict';
-
+    let sections = ['impreseeInViewEventData'];
+    customerData.invalidate(sections);
+    customerData.reload(sections, true);
     function _wsse_register_event(extraData, action, impreseeInViewData) {
         const impreseeRegisterUrl = impreseeInViewData.register_url || '';
         const impreseeCode = impreseeInViewData.impresee_uuid;
@@ -21,8 +23,9 @@ define([
         data += '&evt=' + encodeURIComponent(impreseeEvent);
         data += '&fi=' + encodeURIComponent(from_impresee_text);
         data += '&fiv=' + encodeURIComponent(from_impresee_visual);
-        data += '&cusid=' + encodeURIComponent(impreseeInViewData.customer.id || '');
-        data += extraData;
+        data += '&cusid=' + encodeURIComponent(window._wsee_logged_customer.id || '');
+        data += '&url=' + encodeURIComponent(location.href); 
+        data += (extraData || '');
 
         if (impreseeCode) {
             var xmlHttp = new XMLHttpRequest();
@@ -39,7 +42,7 @@ define([
             'customer_group': impreseeInViewData.customer.customer_group || '',
         }
 
-        _wsse_register_event(window._wsse_impresee_data, window._wsse_page_type_event, impreseeInViewData);
+        _wsse_register_event(window._wsse_impresee_data, window._wsse_page_type_event  || 'VIEW_OTHER', impreseeInViewData);
     }
 
     return Component.extend({
@@ -50,10 +53,6 @@ define([
             this.impreseeInViewEventData.subscribe(function(impreseeInViewData){
                 _wsee_parse_data(impreseeInViewData)
             }, this);
-            let inViewData = this.impreseeInViewEventData();
-            if (Object.keys(inViewData).length !== 0) {
-                _wsee_parse_data(inViewData);
-            }
         }
             
     });
