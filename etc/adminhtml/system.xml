@@ -14,36 +14,29 @@
                     <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\Header</frontend_model>
                 </field>
             </group>
-            <group id="datasource" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Instructions</label>
-                <field id="datafeed_comment" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <frontend_model>ImpreseeAI\ImpreseeVisualSearch\Block\Adminhtml\DatafeedComment</frontend_model>
-                </field>
-            </group>
+
             <group id="api_access" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Access to Magento API</label>
-                <comment>Add Impresee as a new integration to have your search bar and insights updated with little delay. We'll use Magento's API thus reducing manual access to the database.</comment>
-                <field id="consumer_key" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Consumer key</label>
-                </field>
-                <field id="consumer_secret" translate="label" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Consumer Secret</label>
-                </field>
                 <field id="access_token" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Access token</label>
                 </field>
-                <field id="access_token_secret" translate="label" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Access token secret</label>
+
+                <field id="impresee_catalog_uuid" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Impresee catalog UUID</label>
+                    <comment>Catalog UUID given by Impresee, used to keep the catalog synchronized.</comment>
                 </field>
+
             </group>
+
             <group id="general" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Impresee configuration</label>
                 <field id="impresee_app_uuid" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Impresee UUID</label>
-                    <comment>UUID given by Impresee, used to track performance metrics for the store and search bar.</comment>
+                    <label>Impresee app UUID</label>
+                    <comment>App UUID given by Impresee, used to track performance metrics for the store and search bar.</comment>
                 </field>
+
             </group>
-            
+
         </section>
     </system>
 </config>

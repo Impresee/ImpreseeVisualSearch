@@ -23,4 +23,44 @@
     <event name="customer_register_success">
         <observer name="impreseeRegisterObserver" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\CustomerCreateAccountObserver" />
     </event>
+
+    <event name="catalog_product_save_commit_after">
+        <observer name="Impresee_product_observer" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductSaveAfter" />
+    </event>
+
+    <event name="catalog_category_change_products">
+        <observer name="Impresee_product_category_observer" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductCategorySaveAfter" />
+    </event>
+
+    <event name="catalog_product_attribute_update_before">
+        <observer name="Impresee_product_attribute_observer" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductAttributeSaveBefore" />
+    </event>
+
+    <event name="catalog_product_import_bunch_save_after">
+      <observer name="Impresee_products_import_observer_save" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductsImportSaveAfter" />
+    </event>
+
+    <event name="catalog_product_import_bunch_delete_after">
+      <observer name="Impresee_products_import_observer_delete" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ProductsImportSaveAfter" />
+    </event>
+
+    <event name="cataloginventory_stock_item_save_after">
+        <observer name="inventory_stock_save_after_observer" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\InventoryStockSaveAfter" />
+    </event>
+
+    <event name="stock_sources_save_after">
+        <observer name="Impresee_source_items_save_after" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\SourceItemsSaveAfter" />
+    </event>
+
+    <event name="stock_sources_import_bunch_save_after">
+        <observer name="Impresee_source_items_import_bunch_save_after" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\SourceItemsSaveAfter" />
+    </event>
+
+
+
+    <event name="admin_system_config_changed_section_impresee">
+        <observer name="impresee_config_save_after" instance="ImpreseeAI\ImpreseeVisualSearch\Observer\ImpreseeConfigSaveAfter" />
+    </event>
+
+
 </config>

@@ -4,8 +4,8 @@
         <plugin name="ImpreseeAI_ImpreseeVisualSearch::addCustomOptions" type="ImpreseeAI\ImpreseeVisualSearch\Plugin\Model\Config" disabled="false"/>
     </type>
     <type name="Magento\CatalogSearch\Controller\Result\Index">
-        <plugin name="ImpreseeAI_ImpreseeVisualSearch::registerSearchFiltersIndex" 
-                type="ImpreseeAI\ImpreseeVisualSearch\Plugin\Search\ImpreseeSearchResultsIndexPlugin" 
+        <plugin name="ImpreseeAI_ImpreseeVisualSearch::registerSearchFiltersIndex"
+                type="ImpreseeAI\ImpreseeVisualSearch\Plugin\Search\ImpreseeSearchResultsIndexPlugin"
                 sortOrder="1"
                 disabled="false"/>
     </type>
@@ -16,6 +16,17 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="ImpreseeAI\ImpreseeVisualSearch\Observer\ImpreseeCatalogObserver">
+        <arguments>
+            <argument name="productRepository" xsi:type="object">Magento\Catalog\Model\ProductRepository</argument>
+            <argument name="logger" xsi:type="object">Psr\Log\LoggerInterface</argument>
+            <argument name="codes" xsi:type="object">ImpreseeAI\ImpreseeVisualSearch\Helper\Codes</argument>
+            <argument name="clientFactory" xsi:type="object">GuzzleHttp\ClientFactory</argument>
+            <argument name="responseFactory" xsi:type="object">GuzzleHttp\Psr7\ResponseFactory</argument>
+        </arguments>
+    </type>
+
     <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\CustomerRepositoryInterface"
             type="ImpreseeAI\ImpreseeVisualSearch\Model\Api\CustomerRepository" />
     <preference for="ImpreseeAI\ImpreseeVisualSearch\Api\ResponseCustomerInterface"

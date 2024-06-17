@@ -36,6 +36,7 @@ class Codes extends AbstractHelper
     {
         return $this->scopeConfig->getValue("impresee/general/sketch_url", $store);
     }
+
     /**
      *   Get photo app code saved on config. Provided by impresee
      *   (Needed to make a photo search)
@@ -46,6 +47,17 @@ class Codes extends AbstractHelper
     {
         return $this->scopeConfig->getValue("impresee/general/impresee_app_uuid", $store);
     }
+
+    /**
+     *   Get catalog uuid saved on config. Provided by impresee
+     * @param string with the storeid
+     * @return string with the Impresee catalog uuid
+     */
+    public function getImpreseeCatalogUuid($store = null)
+    {
+    return $this->scopeConfig->getValue("impresee/general/impresee_catalog_uuid", $store);
+    }
+
     /**
      * Fetch the Impresee app code from a Impresee service url
      * @param string with the URL
