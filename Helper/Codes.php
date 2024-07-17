@@ -55,7 +55,7 @@ class Codes extends AbstractHelper
      */
     public function getImpreseeCatalogUuid($store = null)
     {
-    return $this->scopeConfig->getValue("impresee/general/impresee_catalog_uuid", $store);
+    return $this->scopeConfig->getValue("impresee/api_access/impresee_catalog_uuid", $store);
     }
 
     /**
