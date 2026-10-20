@@ -53,9 +53,9 @@ class Codes extends AbstractHelper
      * @param string with the storeid
      * @return string with the Impresee catalog uuid
      */
-    public function getImpreseeCatalogUuid($store = null)
+    public function getImpreseeCatalogUuid($store = null, $scopeId = null)
     {
-    return $this->scopeConfig->getValue("impresee/api_access/impresee_catalog_uuid", $store);
+        return $this->scopeConfig->getValue("impresee/api_access/impresee_catalog_uuid", $store, $scopeId);
     }
 
     /**
@@ -80,9 +80,9 @@ class Codes extends AbstractHelper
     {
         return $this->scopeConfig->getValue("impresee/api_access/consumer_secret", $store);
     }
-    public function getAccessToken($store)
+    public function getAccessToken($store, $scopeId = null)
     {
-        return $this->scopeConfig->getValue("impresee/api_access/access_token", $store);
+        return $this->scopeConfig->getValue("impresee/api_access/access_token", $store, $scopeId);
     }
     public function getAccessTokenSecret($store)
     {
